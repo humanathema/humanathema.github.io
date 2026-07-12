@@ -1,53 +1,185 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kaha Tahi</title>
-  <meta name="description" content="Kaha Tahi Ltd — a Palmerston North social enterprise. Property services, automotive, and whatever comes next.">
-  <link rel="icon" type="image/png" href="/logo.png">
-  <style>
-    :root {
-      --ink: #1e3a5f;
-      --accent: #c8722d;
-      --paper: #f4f1ea;
-    }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 28px;
-      background: var(--paper);
-      color: var(--ink);
-      font-family: Georgia, 'Times New Roman', serif;
-      text-align: center;
-      padding: 40px 24px;
-    }
-    img.logo { width: min(260px, 60vw); height: auto; }
-    h1 { font-size: 2.4rem; letter-spacing: 0.06em; font-weight: normal; }
-    p.tag { font-size: 1.05rem; color: var(--ink); opacity: 0.75; max-width: 34em; line-height: 1.6; }
-    nav { display: flex; gap: 22px; margin-top: 8px; }
-    nav a {
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 0.95rem;
-      letter-spacing: 0.04em;
-      border-bottom: 1px solid transparent;
-    }
-    nav a:hover { border-bottom-color: var(--accent); }
-    footer { margin-top: 30px; font-size: 0.8rem; opacity: 0.5; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
 </head>
 <body>
-  <img class="logo" src="/logo.png" alt="Kaha Tahi logo — a tree branching outward within a geometric star">
-  <h1>Kaha Tahi</h1>
-  <p class="tag">A Palmerston North social enterprise — strength together, branching into whatever the mahi needs.</p>
-  <nav>
-    <a href="https://accounts.kahatahi.co.nz">Accounts</a>
+<x-dc>
+<helmet>
+  <style>
+    body { margin: 0; background: oklch(0.16 0.02 250); }
+    a { color: oklch(0.78 0.1 60); text-decoration: none; }
+    a:hover { color: oklch(0.85 0.1 60); }
+    ::selection { background: oklch(0.35 0.04 250); }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600&family=Archivo+Black&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+  <link rel="manifest" href="/favicon/site.webmanifest" />
+</helmet>
+
+<div style="font-family:'Inter',sans-serif; background:oklch(0.16 0.02 250); color:oklch(0.92 0.01 250); min-height:100vh;">
+
+  <!-- NAV -->
+  <nav style="display:flex; align-items:center; justify-content:space-between; padding:18px 48px; border-bottom:1px solid oklch(0.26 0.02 250);">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <div style="width:42px; height:42px; border-radius:8px; background:oklch(0.98 0.005 90); display:flex; align-items:center; justify-content:center; overflow:hidden;">
+        <img src="assets/logo.png" alt="Kaha Tahi" style="width:34px; height:34px; object-fit:contain;" />
+      </div>
+      <span style="font-family:'Archivo Black',sans-serif; font-size:20px; font-weight:400; letter-spacing:0.01em; text-transform:uppercase;">Kaha Tahi <span style="font-family:'Inter',sans-serif; font-weight:600; text-transform:none; font-size:15px;">Ltd.</span></span>
+    </div>
+    <div style="display:flex; gap:36px; align-items:center;">
+      <a href="#services" style="font-size:15px; color:oklch(0.85 0.01 250);">Services</a>
+      <a href="#journal" style="font-size:15px; color:oklch(0.85 0.01 250);">Journal</a>
+      <a href="#contact" style="font-size:15px; color:oklch(0.85 0.01 250);">Contact</a>
+      <a href="https://accounts.kahatahi.co.nz" style="font-size:14px; font-weight:600; background:oklch(0.68 0.11 55); color:oklch(0.14 0.02 60); padding:10px 20px; border-radius:8px;">Sign in</a>
+    </div>
   </nav>
-  <footer>© Kaha Tahi Ltd</footer>
+
+  <!-- HERO -->
+  <section style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:64px; align-items:center; padding:100px 48px; max-width:1280px; margin:0 auto;">
+    <div>
+      <p style="font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.7 0.1 55); margin:0 0 20px;">A social enterprise</p>
+      <h1 style="font-family:'Fraunces',serif; font-size:52px; line-height:1.1; font-weight:500; margin:0 0 24px; text-wrap:pretty;">Practical work, done well, in service of our community.</h1>
+      <p style="font-size:18px; line-height:1.6; color:oklch(0.75 0.01 250); max-width:46ch; margin:0 0 36px; text-wrap:pretty;">Tutoring, property maintenance, automotive services, labour hire, and accounting software built by us, for teams like ours.</p>
+      <div style="display:flex; gap:16px;">
+        <a href="#contact" style="font-size:15px; font-weight:600; background:oklch(0.68 0.11 55); color:oklch(0.14 0.02 60); padding:14px 28px; border-radius:8px;">Get in touch</a>
+        <a href="#services" style="font-size:15px; font-weight:600; border:1px solid oklch(0.4 0.02 250); color:oklch(0.92 0.01 250); padding:14px 28px; border-radius:8px;">Our services</a>
+      </div>
+    </div>
+    <div style="background:{{ heroTileTone }}; border-radius:20px; padding:56px; position:relative; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; box-shadow:0 30px 60px -20px oklch(0.08 0.02 250 / 0.6); overflow:hidden;">
+      <sc-if value="{{ showServiceBranches }}" hint-placeholder-val="{{ true }}">
+        <svg viewBox="0 0 400 400" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
+          <sc-for list="{{ branches }}" as="b" hint-placeholder-count="4">
+            <line x1="200" y1="200" x2="{{ b.x }}" y2="{{ b.y }}" stroke="oklch(0.62 0.09 55)" stroke-width="1.5" stroke-dasharray="3 5" />
+            <circle cx="{{ b.x }}" cy="{{ b.y }}" r="4" fill="oklch(0.55 0.11 55)" />
+          </sc-for>
+        </svg>
+        <sc-for list="{{ branches }}" as="b" hint-placeholder-count="4">
+          <div style="position:absolute; left:{{ b.leftPct }}; top:{{ b.topPct }}; transform:translate(-50%,-50%); background:oklch(0.16 0.02 250); color:oklch(0.94 0.01 250); font-size:12px; font-weight:600; padding:7px 13px; border-radius:20px; white-space:nowrap; box-shadow:0 6px 14px -6px oklch(0.08 0.02 250 / 0.5);">{{ b.label }}</div>
+        </sc-for>
+      </sc-if>
+      <img src="assets/logo.png" alt="Kaha Tahi Ltd." style="width:60%; max-width:300px; object-fit:contain; position:relative; z-index:1;" />
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section id="services" style="padding:80px 48px; max-width:1280px; margin:0 auto;">
+    <h2 style="font-family:'Fraunces',serif; font-size:34px; font-weight:500; margin:0 0 12px;">What we do</h2>
+    <p style="font-size:16px; color:oklch(0.7 0.01 250); margin:0 0 40px; max-width:60ch;">Three service lines, one team.</p>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+      <sc-for list="{{ services }}" as="s" hint-placeholder-count="3">
+        <div>
+          <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin-bottom:18px;">
+            <img src="{{ s.image }}" alt="{{ s.title }}" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;" />
+          </div>
+          <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; border-top:2px solid oklch(0.68 0.11 55); padding-top:14px;">{{ s.title }}</h3>
+          <p style="font-size:14px; line-height:1.55; color:oklch(0.68 0.01 250); margin:0;">{{ s.desc }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ACCOUNTING SOFTWARE -->
+  <section style="padding:80px 48px; max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; border-top:1px solid oklch(0.26 0.02 250);">
+    <div style="border-radius:16px; overflow:hidden; aspect-ratio:16/10;">
+      <img src="assets/accounts-screenshot.png" alt="Kaha Tahi accounting software — Chart of Accounts" style="width:100%; height:100%; object-fit:cover; object-position:top left; display:block;" />
+    </div>
+    <div>
+      <p style="font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.7 0.1 55); margin:0 0 16px;">Built in-house</p>
+      <h2 style="font-family:'Fraunces',serif; font-size:32px; font-weight:500; margin:0 0 18px;">Accounting software, made for teams like ours</h2>
+      <p style="font-size:16px; line-height:1.6; color:oklch(0.72 0.01 250); margin:0 0 20px; max-width:48ch;">We kept hitting the same wall with off-the-shelf tools built for accountants, not tradies — so we built our own. Import your bank statements straight from a CSV, code transactions in seconds with a smart categoriser that learns from you, run payroll with PAYE and KiwiSaver handled automatically, and send invoices that look like they came from a real business.</p>
+      <ul style="list-style:none; padding:0; margin:0 0 28px; display:flex; flex-direction:column; gap:8px; font-size:15px; color:oklch(0.82 0.01 250);">
+        <li>✓ Bank statement CSV import — no bank login required to get started</li>
+        <li>✓ GST tracked automatically through every transaction, not just formal invoices</li>
+        <li>✓ Payroll with PAYE, KiwiSaver, and IRD payday filing exports</li>
+        <li>✓ Invoices and bills with your own logo, sent as PDF</li>
+      </ul>
+      <a href="https://accounts.kahatahi.co.nz" style="font-size:15px; font-weight:600; background:oklch(0.68 0.11 55); color:oklch(0.14 0.02 60); padding:14px 28px; border-radius:8px; display:inline-block;">Sign up / sign in →</a>
+    </div>
+  </section>
+
+  <!-- JOURNAL -->
+  <section id="journal" style="padding:80px 48px; max-width:1280px; margin:0 auto; border-top:1px solid oklch(0.26 0.02 250);">
+    <h2 style="font-family:'Fraunces',serif; font-size:34px; font-weight:500; margin:0 0 12px;">Journal</h2>
+    <p style="font-size:16px; color:oklch(0.7 0.01 250); margin:0 0 40px; max-width:60ch;">Notes on the work, the community, and building things properly.</p>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:28px;">
+      <sc-for list="{{ posts }}" as="post" hint-placeholder-count="3">
+        <div>
+          <div style="aspect-ratio:16/10; border-radius:10px; background:oklch(0.24 0.02 250); margin-bottom:16px; display:flex; align-items:center; justify-content:center;">
+            <span style="font-family:monospace; font-size:11px; color:oklch(0.6 0.01 250);">image</span>
+          </div>
+          <p style="font-size:13px; color:oklch(0.6 0.01 250); margin:0 0 6px;">{{ post.date }}</p>
+          <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; line-height:1.4;">{{ post.title }}</h3>
+          <p style="font-size:14px; line-height:1.5; color:oklch(0.68 0.01 250); margin:0;">{{ post.excerpt }}</p>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- CONTACT / FOOTER -->
+  <section id="contact" style="padding:80px 48px; max-width:1280px; margin:0 auto; border-top:1px solid oklch(0.26 0.02 250);">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:64px;">
+      <div>
+        <h2 style="font-family:'Fraunces',serif; font-size:32px; font-weight:500; margin:0 0 18px;">Get in touch</h2>
+        <p style="font-size:16px; line-height:1.6; color:oklch(0.72 0.01 250); margin:0 0 28px; max-width:44ch;">Enquiries about tutoring, property maintenance, automotive work, labour hire, or the accounting software — reach out any time.</p>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:16px;">
+          <a href="mailto:contact@kahatahi.co.nz">contact@kahatahi.co.nz</a>
+          <a href="tel:0210774631">Tobias — 021 077 4631</a>
+          <a href="tel:0223528716">Jono — 022 352 8716</a>
+        </div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:14px;">
+        <input placeholder="Name" style="background:oklch(0.21 0.02 250); border:1px solid oklch(0.32 0.02 250); border-radius:8px; padding:14px 16px; color:inherit; font-size:15px; font-family:inherit;" />
+        <input placeholder="Email" style="background:oklch(0.21 0.02 250); border:1px solid oklch(0.32 0.02 250); border-radius:8px; padding:14px 16px; color:inherit; font-size:15px; font-family:inherit;" />
+        <textarea placeholder="What can we help with?" rows="4" style="background:oklch(0.21 0.02 250); border:1px solid oklch(0.32 0.02 250); border-radius:8px; padding:14px 16px; color:inherit; font-size:15px; font-family:inherit; resize:vertical;"></textarea>
+        <button style="background:oklch(0.68 0.11 55); color:oklch(0.14 0.02 60); border:none; border-radius:8px; padding:14px; font-size:15px; font-weight:600; font-family:inherit; cursor:pointer;">Send enquiry</button>
+      </div>
+    </div>
+  </section>
+
+  <footer style="padding:32px 48px; border-top:1px solid oklch(0.26 0.02 250); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+    <span style="font-size:13px; color:oklch(0.55 0.01 250);">© 2026 Kaha Tahi Ltd.</span>
+    <div style="display:flex; gap:24px; align-items:center;">
+      <a href="https://accounts.kahatahi.co.nz/privacy.html" style="font-size:13px; color:oklch(0.55 0.01 250);">Privacy Policy</a>
+      <a href="https://accounts.kahatahi.co.nz/terms.html" style="font-size:13px; color:oklch(0.55 0.01 250);">Terms of Service</a>
+      <span style="font-size:13px; color:oklch(0.55 0.01 250);">Aotearoa New Zealand</span>
+    </div>
+  </footer>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000},&quot;showServiceBranches&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;heroTileTone&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;oklch(0.965 0.015 80)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;oklch(0.965 0.015 80)&quot;,&quot;oklch(0.98 0.005 90)&quot;,&quot;oklch(0.93 0.02 85)&quot;],&quot;section&quot;:&quot;Hero&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      showServiceBranches: this.props.showServiceBranches ?? true,
+      heroTileTone: this.props.heroTileTone ?? 'oklch(0.965 0.015 80)',
+      branches: [
+        { label: 'Tutoring', x: 60, y: 70, leftPct: '15%', topPct: '17.5%' },
+        { label: 'Property & Labour', x: 340, y: 70, leftPct: '85%', topPct: '17.5%' },
+        { label: 'Automotive & Equipment', x: 60, y: 330, leftPct: '15%', topPct: '82.5%' },
+        { label: 'Accounting Software', x: 340, y: 330, leftPct: '85%', topPct: '82.5%' },
+      ],
+      services: [
+        { title: 'Tutoring', desc: 'One-on-one and small group tuition supporting local learners.', image: 'assets/tutoring.png' },
+        { title: 'Property Maintenance & Labour Hire', desc: 'Repairs, upkeep and reliable trained crews for homes and small sites.', image: 'assets/property-labour.png' },
+        { title: 'Automotive & Equipment', desc: 'Servicing, repair and equipment work carried out by our qualified team.', image: 'assets/automotive-equipment.png' },
+      ],
+      posts: [
+        { date: '2 July 2026', title: 'How we approach a maintenance job', excerpt: 'A look at how our crews scope and run a typical property job.' },
+        { date: '18 June 2026', title: 'Why we built our own accounting software', excerpt: 'The gap we kept hitting with off-the-shelf tools, and what we did about it.' },
+        { date: '4 June 2026', title: 'Notes from the tutoring programme', excerpt: 'Early results and what we\'re learning from our first cohort.' },
+      ],
+    };
+  }
+}
+</script>
 </body>
 </html>
