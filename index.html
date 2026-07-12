@@ -44,7 +44,7 @@
   <!-- HERO -->
   <section style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:64px; align-items:center; padding:100px 48px; max-width:1280px; margin:0 auto;">
     <div>
-      <p style="font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.7 0.1 55); margin:0 0 20px;">A social enterprise</p>
+      <p style="font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.7 0.1 55); margin:0 0 20px;">A Palmerston North social enterprise</p>
       <h1 style="font-family:'Fraunces',serif; font-size:52px; line-height:1.1; font-weight:500; margin:0 0 24px; text-wrap:pretty;">Practical work, done well, in service of our community.</h1>
       <p style="font-size:18px; line-height:1.6; color:oklch(0.75 0.01 250); max-width:46ch; margin:0 0 36px; text-wrap:pretty;">Tutoring, property maintenance, automotive services, labour hire, and accounting software built by us, for teams like ours.</p>
       <div style="display:flex; gap:16px;">
@@ -52,19 +52,8 @@
         <a href="#services" style="font-size:15px; font-weight:600; border:1px solid oklch(0.4 0.02 250); color:oklch(0.92 0.01 250); padding:14px 28px; border-radius:8px;">Our services</a>
       </div>
     </div>
-    <div style="background:{{ heroTileTone }}; border-radius:20px; padding:56px; position:relative; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; box-shadow:0 30px 60px -20px oklch(0.08 0.02 250 / 0.6); overflow:hidden;">
-      <sc-if value="{{ showServiceBranches }}" hint-placeholder-val="{{ true }}">
-        <svg viewBox="0 0 400 400" style="position:absolute; inset:0; width:100%; height:100%; pointer-events:none;">
-          <sc-for list="{{ branches }}" as="b" hint-placeholder-count="4">
-            <line x1="200" y1="200" x2="{{ b.x }}" y2="{{ b.y }}" stroke="oklch(0.62 0.09 55)" stroke-width="1.5" stroke-dasharray="3 5" />
-            <circle cx="{{ b.x }}" cy="{{ b.y }}" r="4" fill="oklch(0.55 0.11 55)" />
-          </sc-for>
-        </svg>
-        <sc-for list="{{ branches }}" as="b" hint-placeholder-count="4">
-          <div style="position:absolute; left:{{ b.leftPct }}; top:{{ b.topPct }}; transform:translate(-50%,-50%); background:oklch(0.16 0.02 250); color:oklch(0.94 0.01 250); font-size:12px; font-weight:600; padding:7px 13px; border-radius:20px; white-space:nowrap; box-shadow:0 6px 14px -6px oklch(0.08 0.02 250 / 0.5);">{{ b.label }}</div>
-        </sc-for>
-      </sc-if>
-      <img src="assets/logo.png" alt="Kaha Tahi Ltd." style="width:60%; max-width:300px; object-fit:contain; position:relative; z-index:1;" />
+    <div style="background:{{ heroTileTone }}; border-radius:20px; padding:32px; position:relative; aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; box-shadow:0 30px 60px -20px oklch(0.08 0.02 250 / 0.6); overflow:hidden;">
+      <img src="assets/logo.png" alt="Kaha Tahi Ltd." style="width:88%; max-width:460px; object-fit:contain; position:relative; z-index:1;" />
     </div>
   </section>
 
@@ -155,18 +144,11 @@
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000},&quot;showServiceBranches&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;heroTileTone&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;oklch(0.965 0.015 80)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;oklch(0.965 0.015 80)&quot;,&quot;oklch(0.98 0.005 90)&quot;,&quot;oklch(0.93 0.02 85)&quot;],&quot;section&quot;:&quot;Hero&quot;}}">
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000},&quot;heroTileTone&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;oklch(0.965 0.015 80)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;oklch(0.965 0.015 80)&quot;,&quot;oklch(0.98 0.005 90)&quot;,&quot;oklch(0.93 0.02 85)&quot;],&quot;section&quot;:&quot;Hero&quot;}}">
 class Component extends DCLogic {
   renderVals() {
     return {
-      showServiceBranches: this.props.showServiceBranches ?? true,
       heroTileTone: this.props.heroTileTone ?? 'oklch(0.965 0.015 80)',
-      branches: [
-        { label: 'Tutoring', x: 60, y: 70, leftPct: '15%', topPct: '17.5%' },
-        { label: 'Property & Labour', x: 340, y: 70, leftPct: '85%', topPct: '17.5%' },
-        { label: 'Automotive & Equipment', x: 60, y: 330, leftPct: '15%', topPct: '82.5%' },
-        { label: 'Accounting Software', x: 340, y: 330, leftPct: '85%', topPct: '82.5%' },
-      ],
       services: [
         { title: 'Tutoring', desc: 'One-on-one and small group tuition supporting local learners.', image: 'assets/tutoring.png' },
         { title: 'Property Maintenance & Labour Hire', desc: 'Repairs, upkeep and reliable trained crews for homes and small sites.', image: 'assets/property-labour.png' },
