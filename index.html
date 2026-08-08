@@ -95,27 +95,15 @@
     </div>
   </nav>
 
-  <!-- HERO -->
-  <section style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:64px; align-items:center; padding:100px 48px; max-width:1280px; margin:0 auto;">
-    <div>
-      <p style="font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.7 0.1 55); margin:0 0 20px;">A Palmerston North social enterprise</p>
-      <h1 style="font-family:'Fraunces',serif; font-size:52px; line-height:1.1; font-weight:500; margin:0 0 24px; text-wrap:pretty;">Practical work, done well, in service of our community.</h1>
-      <p style="font-size:18px; line-height:1.6; color:oklch(0.75 0.01 250); max-width:46ch; margin:0 0 36px; text-wrap:pretty;">Tutoring, property maintenance, automotive services, labour hire, and accounting software built by us, for teams like ours.</p>
-      <div style="display:flex; gap:16px;">
-        <a href="#contact" style="font-size:15px; font-weight:600; background:oklch(0.68 0.11 55); color:oklch(0.14 0.02 60); padding:14px 28px; border-radius:8px;">Get in touch</a>
-        <a href="#services" style="font-size:15px; font-weight:600; border:1px solid oklch(0.4 0.02 250); color:oklch(0.92 0.01 250); padding:14px 28px; border-radius:8px;">Our services</a>
-      </div>
-    </div>
-    <div style="text-align:center;">
-      <img src="assets/logo-tree.png" alt="Kaha Tahi Ltd." style="width:100%; max-width:400px; border-radius:20px; display:block; margin:0 auto;" />
-      <div style="text-align:center; margin-top:20px; font-family:'Kaha Sans','Archivo Black',sans-serif; font-size:28px; letter-spacing:0.02em; text-transform:uppercase; color:oklch(0.92 0.01 250);">Kaha Tahi</div>
-    </div>
+  <!-- INTRO STRIP (short, replaces the old full-height hero as the first thing visitors see) -->
+  <section style="padding:44px 48px 8px; max-width:1280px; margin:0 auto;">
+    <p style="font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.7 0.1 55); margin:0 0 14px;">A Palmerston North social enterprise</p>
+    <h1 style="font-family:'Fraunces',serif; font-size:38px; line-height:1.15; font-weight:500; margin:0 0 14px; text-wrap:pretty; max-width:26ch;">Practical work, done well, in service of our community.</h1>
+    <p style="font-size:16px; line-height:1.6; color:oklch(0.75 0.01 250); max-width:60ch; margin:0;">Tutoring, property maintenance, automotive services, labour hire, and accounting software built by us, for teams like ours.</p>
   </section>
 
-  <!-- SERVICES -->
-  <section id="services" style="padding:80px 48px; max-width:1280px; margin:0 auto;">
-    <h2 style="font-family:'Fraunces',serif; font-size:34px; font-weight:500; margin:0 0 12px;">What we do</h2>
-    <p style="font-size:16px; color:oklch(0.7 0.01 250); margin:0 0 40px; max-width:60ch;">Three service lines, one team.</p>
+  <!-- SERVICES (moved above the fold — this is what most visitors are actually looking for) -->
+  <section id="services" style="padding:36px 48px 80px; max-width:1280px; margin:0 auto;">
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
       <sc-for list="{{ services }}" as="s" hint-placeholder-count="3">
         <div>
@@ -126,6 +114,22 @@
           <p style="font-size:14px; line-height:1.55; color:oklch(0.68 0.01 250); margin:0;">{{ s.desc }}</p>
         </div>
       </sc-for>
+    </div>
+    <div style="display:flex; gap:16px; margin-top:44px;">
+      <a href="#contact" style="font-size:15px; font-weight:600; background:oklch(0.68 0.11 55); color:oklch(0.14 0.02 60); padding:14px 28px; border-radius:8px;">Get in touch</a>
+      <a href="https://accounts.kahatahi.co.nz" style="font-size:15px; font-weight:600; border:1px solid oklch(0.4 0.02 250); color:oklch(0.92 0.01 250); padding:14px 28px; border-radius:8px;">Our accounting software</a>
+    </div>
+  </section>
+
+  <!-- BRAND / LOGO MOMENT (kept, but now a secondary section rather than the entire first impression) -->
+  <section style="padding:60px 48px; max-width:1280px; margin:0 auto; border-top:1px solid oklch(0.26 0.02 250); display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center;">
+    <div style="text-align:center;">
+      <img src="assets/logo-tree.png" alt="Kaha Tahi Ltd." style="width:100%; max-width:280px; border-radius:20px; display:block; margin:0 auto;" />
+      <div style="text-align:center; margin-top:16px; font-family:'Kaha Sans','Archivo Black',sans-serif; font-size:22px; letter-spacing:0.02em; text-transform:uppercase; color:oklch(0.92 0.01 250);">Kaha Tahi</div>
+    </div>
+    <div>
+      <p style="font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.7 0.1 55); margin:0 0 14px;">Who we are</p>
+      <p style="font-size:17px; line-height:1.65; color:oklch(0.78 0.01 250); margin:0; max-width:48ch;">Kaha Tahi is a Palmerston North social enterprise — a small team doing practical, hands-on work in service of our community, and building the tools we wished existed for businesses like ours along the way.</p>
     </div>
   </section>
 
