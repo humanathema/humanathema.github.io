@@ -102,6 +102,27 @@
     </div>
   </section>
 
+  
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000},&quot;heroTileTone&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;oklch(0.965 0.015 80)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;oklch(0.965 0.015 80)&quot;,&quot;oklch(0.98 0.005 90)&quot;,&quot;oklch(0.93 0.02 85)&quot;],&quot;section&quot;:&quot;Hero&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      heroTileTone: this.props.heroTileTone ?? 'oklch(0.965 0.015 80)',
+      services: [
+        { title: 'Tutoring', desc: 'One-on-one and small group tuition supporting local learners.', image: 'assets/tutoring.png' },
+        { title: 'Property Maintenance & Labour Hire', desc: 'Repairs, upkeep and reliable trained crews for homes and small sites.', image: 'assets/property-labour.png' },
+        { title: 'Automotive & Equipment', desc: 'Servicing, repair and equipment work carried out by our qualified team.', image: 'assets/automotive-equipment.png' },
+      ],
+      posts: [
+        { date: '2 July 2026', title: 'How we approach a maintenance job', excerpt: 'A look at how our crews scope and run a typical property job.' },
+        { date: '18 June 2026', title: 'Why we built our own accounting software', excerpt: 'The gap we kept hitting with off-the-shelf tools, and what we did about it.' },
+        { date: '4 June 2026', title: 'Notes from the tutoring programme', excerpt: 'Early results and what we\'re learning from our first cohort.' },
+      ],
+    };
+  }
+}
+</script>
+
   <!-- SERVICES (moved above the fold — this is what most visitors are actually looking for) -->
   <section id="services" style="padding:32px 48px 80px; max-width:1280px; margin:0 auto;">
     <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
@@ -196,25 +217,6 @@
 </div>
 
 </x-dc>
-<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:1000},&quot;heroTileTone&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;oklch(0.965 0.015 80)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;oklch(0.965 0.015 80)&quot;,&quot;oklch(0.98 0.005 90)&quot;,&quot;oklch(0.93 0.02 85)&quot;],&quot;section&quot;:&quot;Hero&quot;}}">
-class Component extends DCLogic {
-  renderVals() {
-    return {
-      heroTileTone: this.props.heroTileTone ?? 'oklch(0.965 0.015 80)',
-      services: [
-        { title: 'Tutoring', desc: 'One-on-one and small group tuition supporting local learners.', image: 'assets/tutoring.png' },
-        { title: 'Property Maintenance & Labour Hire', desc: 'Repairs, upkeep and reliable trained crews for homes and small sites.', image: 'assets/property-labour.png' },
-        { title: 'Automotive & Equipment', desc: 'Servicing, repair and equipment work carried out by our qualified team.', image: 'assets/automotive-equipment.png' },
-      ],
-      posts: [
-        { date: '2 July 2026', title: 'How we approach a maintenance job', excerpt: 'A look at how our crews scope and run a typical property job.' },
-        { date: '18 June 2026', title: 'Why we built our own accounting software', excerpt: 'The gap we kept hitting with off-the-shelf tools, and what we did about it.' },
-        { date: '4 June 2026', title: 'Notes from the tutoring programme', excerpt: 'Early results and what we\'re learning from our first cohort.' },
-      ],
-    };
-  }
-}
-</script>
 
   
 </body>
