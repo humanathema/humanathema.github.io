@@ -14,19 +14,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
 <style>:root{color-scheme:light;}</style>
-<style>
-  img[alt="Kaha Tahi Ltd."] {
-    position: fixed;
-    top: 08px;
-    left: 08px;
-    width: 200px;
-    height: 200px;
-    z-index: 9999;
-    object-fit: contain;
-    background: transparent;
-    pointer-events: none;
-  }
-</style>
 
 <title>Kaha Tahi Ltd — Property Maintenance, Automotive &amp; Accounting Software | Palmerston North</title>
 <meta name="description" content="Kaha Tahi Ltd is a Palmerston North social enterprise offering property maintenance, automotive servicing, tutoring, and labour hire — plus the accounting software we built to run our own books, now available to other small NZ businesses.">
@@ -83,6 +70,23 @@
     a:hover { color: oklch(0.85 0.1 60); }
     ::selection { background: oklch(0.35 0.04 250); }
   </style>
+  <style>
+    /* Mobile: stack every multi-column grid to a single column and ease off the side padding.
+       Uses !important because the page's layout is all inline styles, which otherwise beat
+       a normal stylesheet rule regardless of selector. */
+    @media (max-width: 768px) {
+      #intro { grid-template-columns: 1fr !important; gap: 24px !important; }
+      #services-grid { grid-template-columns: 1fr !important; }
+      #accounting { grid-template-columns: 1fr !important; gap: 32px !important; }
+      #journal-grid { grid-template-columns: 1fr !important; }
+      #contact-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+
+      nav { padding: 14px 20px !important; }
+      nav > div { gap: 14px !important; flex-wrap: wrap; justify-content: flex-end; }
+
+      section, footer { padding-left: 20px !important; padding-right: 20px !important; }
+    }
+  </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600&family=Archivo+Black&display=swap" rel="stylesheet">
   <style>
@@ -114,7 +118,7 @@
   </nav>
 
   <!-- INTRO (single compact block: headline + small logo badge — no separate brand section, no repeated service list) -->
-  <section style="padding:40px 48px 4px; max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr auto; gap:40px; align-items:start;">
+  <section id="intro" style="padding:40px 48px 4px; max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr auto; gap:40px; align-items:start;">
     
     <div style="padding-top:2px;">
       <img src="assets/logo-tree.png" alt="Kaha Tahi Ltd." style="width:200px; height:200px; object-fit:contain; padding:10px; display:block;" />
@@ -148,7 +152,7 @@ class Component extends DCLogic {
 
   <!-- SERVICES (moved above the fold — this is what most visitors are actually looking for) -->
   <section id="services" style="padding:32px 48px 80px; max-width:1280px; margin:0 auto;">
-    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+    <div id="services-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
       <sc-for list="{{ services }}" as="s" hint-placeholder-count="3">
         <div>
           <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; border-top:2px solid oklch(0.68 0.11 55); padding-top:14px;">{{ s.title }}</h3>
@@ -166,7 +170,7 @@ class Component extends DCLogic {
   </section>
 
   <!-- ACCOUNTING SOFTWARE -->
-  <section style="padding:80px 48px; max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; border-top:1px solid oklch(0.26 0.02 250);">
+  <section id="accounting" style="padding:80px 48px; max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; border-top:1px solid oklch(0.26 0.02 250);">
     <div style="border-radius:16px; overflow:hidden; aspect-ratio:16/10;">
       <img src="assets/accounts-screenshot.png" alt="Kaha Tahi accounting software — Chart of Accounts" style="width:100%; height:100%; object-fit:cover; object-position:top left; display:block;" />
     </div>
@@ -193,7 +197,7 @@ class Component extends DCLogic {
   <section id="journal" style="padding:80px 48px; max-width:1280px; margin:0 auto; border-top:1px solid oklch(0.26 0.02 250);">
     <h2 style="font-family:'Fraunces',serif; font-size:34px; font-weight:500; margin:0 0 12px;">Journal</h2>
     <p style="font-size:16px; color:oklch(0.7 0.01 250); margin:0 0 40px; max-width:60ch;">Notes on the work, the community, and building things properly.</p>
-    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:28px;">
+    <div id="journal-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:28px;">
       <sc-for list="{{ posts }}" as="post" hint-placeholder-count="3">
         <div>
           <div style="aspect-ratio:16/10; border-radius:10px; background:oklch(0.24 0.02 250); margin-bottom:16px; display:flex; align-items:center; justify-content:center;">
@@ -209,7 +213,7 @@ class Component extends DCLogic {
 
   <!-- CONTACT / FOOTER -->
   <section id="contact" style="padding:80px 48px; max-width:1280px; margin:0 auto; border-top:1px solid oklch(0.26 0.02 250);">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:64px;">
+    <div id="contact-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:64px;">
       <div>
         <h2 style="font-family:'Fraunces',serif; font-size:32px; font-weight:500; margin:0 0 18px;">Get in touch</h2>
         <p style="font-size:16px; line-height:1.6; color:oklch(0.72 0.01 250); margin:0 0 28px; max-width:44ch;">Enquiries about tutoring, property maintenance, automotive work, labour hire, or the accounting software — reach out any time.</p>
