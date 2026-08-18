@@ -12,8 +12,8 @@
   </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light">
-<style>:root{color-scheme:light;}</style>
+<meta name="color-scheme" content="dark">
+<style>:root{color-scheme:dark;}</style>
 
 <title>Kaha Tahi Ltd — Property Maintenance, Automotive &amp; Accounting Software | Palmerston North</title>
 <meta name="description" content="Kaha Tahi Ltd is a Palmerston North social enterprise offering property maintenance, automotive servicing, tutoring, and labour hire — plus the accounting software we built to run our own books, now available to other small NZ businesses.">
@@ -33,7 +33,8 @@
 <meta name="twitter:description" content="Property maintenance, automotive servicing, tutoring, labour hire, and accounting software built by us, for teams like ours.">
 <meta name="twitter:image" content="https://kahatahi.co.nz/assets/webasset.png">
 
-<meta name="theme-color" content="#0a0e18">
+<!-- Approx hex of the new oklch(0.16 0.05 255) shell, for browser chrome (address bar / task switcher) -->
+<meta name="theme-color" content="#010d22">
 
 <script type="application/ld+json">
 {
@@ -65,10 +66,10 @@
 <x-dc>
 <helmet>
   <style>
-    body { margin: 0; background: oklch(0.16 0.02 250); }
-    a { color: oklch(0.78 0.1 60); text-decoration: none; }
-    a:hover { color: oklch(0.85 0.1 60); }
-    ::selection { background: oklch(0.35 0.04 250); }
+    body { margin: 0; background: oklch(0.16 0.05 255); }
+    a { color: oklch(0.82 0.03 255); text-decoration: none; }
+    a:hover { color: oklch(0.9 0.03 255); }
+    ::selection { background: oklch(0.36 0.06 255); }
   </style>
   <style>
     /* Mobile: stack every multi-column grid to a single column and ease off the side padding.
@@ -105,15 +106,15 @@
   <link rel="manifest" href="/favicon/site.webmanifest" />
 </helmet>
 
-<div style="font-family:'Inter',sans-serif; background:oklch(0.16 0.02 250); color:oklch(0.92 0.01 250); min-height:100vh;">
+<div style="font-family:'Inter',sans-serif; background:oklch(0.16 0.05 255); color:oklch(0.92 0.01 250); min-height:100vh;">
 
   <!-- NAV (lean utility bar — brand mark lives in the intro block below, not duplicated here) -->
-  <nav style="display:flex; align-items:center; justify-content:flex-end; padding:16px 48px; border-bottom:1px solid oklch(0.26 0.02 250);">
+  <nav style="display:flex; align-items:center; justify-content:flex-end; padding:16px 48px; border-bottom:1px solid oklch(0.28 0.05 255);">
     <div style="display:flex; gap:36px; align-items:center;">
       <a href="#services" style="font-size:15px; color:oklch(0.85 0.01 250);">Services</a>
       <a href="#journal" style="font-size:15px; color:oklch(0.85 0.01 250);">Journal</a>
       <a href="#contact" style="font-size:15px; color:oklch(0.85 0.01 250);">Contact</a>
-      <a href="https://accounts.kahatahi.co.nz" style="font-size:14px; font-weight:600; background:oklch(0.68 0.11 55); color:oklch(0.14 0.02 60); padding:10px 20px; border-radius:8px;">Sign in</a>
+      <a href="https://accounts.kahatahi.co.nz" style="font-size:14px; font-weight:600; background:oklch(0.70 0.14 55); color:oklch(0.14 0.03 60); padding:10px 20px; border-radius:8px;">Sign in</a>
     </div>
   </nav>
 
@@ -124,7 +125,7 @@
       <img src="assets/logo-tree.png" alt="Kaha Tahi Ltd." style="width:200px; height:200px; object-fit:contain; padding:10px; display:block;" />
     </div>
     <div>
-      <p style="font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.7 0.1 55); margin:0 0 10px;">A Palmerston North social enterprise</p>
+      <p style="font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.72 0.13 55); margin:0 0 10px;">A Palmerston North social enterprise</p>
       <h1 style="font-family:'Fraunces',serif; font-size:26px; line-height:1.3; font-weight:500; margin:0 0 16px; text-wrap:pretty; max-width:52ch;">Professional services supporting the Palmerston North community and businesses.</h1>
     </div>
   </section>
@@ -155,7 +156,7 @@ class Component extends DCLogic {
     <div id="services-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
       <sc-for list="{{ services }}" as="s" hint-placeholder-count="3">
         <div>
-          <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; border-top:2px solid oklch(0.68 0.11 55); padding-top:14px;">{{ s.title }}</h3>
+          <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; border-top:2px solid oklch(0.4 0.03 255); padding-top:14px;">{{ s.title }}</h3>
           <p style="font-size:14px; line-height:1.55; color:oklch(0.68 0.01 250); margin:0;">{{ s.desc }}</p>
           <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin-bottom:18px;">
             <img src="{{ s.image }}" alt="{{ s.title }}" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;" />
@@ -164,18 +165,38 @@ class Component extends DCLogic {
       </sc-for>
     </div>
     <div style="display:flex; gap:16px; margin-top:44px;">
-      <a href="#contact" style="font-size:15px; font-weight:600; background:oklch(0.68 0.11 55); color:oklch(0.14 0.02 60); padding:14px 28px; border-radius:8px;">Get in touch</a>
-      <a href="https://accounts.kahatahi.co.nz" style="font-size:15px; font-weight:600; border:1px solid oklch(0.4 0.02 250); color:oklch(0.92 0.01 250); padding:14px 28px; border-radius:8px;">Our accounting software</a>
+      <a href="#contact" style="font-size:15px; font-weight:600; background:oklch(0.70 0.14 55); color:oklch(0.14 0.03 60); padding:14px 28px; border-radius:8px;">Get in touch</a>
+      <a href="https://accounts.kahatahi.co.nz" style="font-size:15px; font-weight:600; border:1px solid oklch(0.4 0.03 255); color:oklch(0.92 0.01 250); padding:14px 28px; border-radius:8px;">Our accounting software</a>
     </div>
   </section>
 
   <!-- ACCOUNTING SOFTWARE -->
-  <section id="accounting" style="padding:80px 48px; max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; border-top:1px solid oklch(0.26 0.02 250);">
-    <div style="border-radius:16px; overflow:hidden; aspect-ratio:16/10;">
-      <img src="assets/accounts-screenshot.png" alt="Kaha Tahi accounting software — Chart of Accounts" style="width:100%; height:100%; object-fit:cover; object-position:top left; display:block;" />
+  <section id="accounting" style="padding:80px 48px; max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; border-top:1px solid oklch(0.28 0.05 255);">
+    <div>
+      <div style="border-radius:16px; overflow:hidden; aspect-ratio:16/10; border:1px solid oklch(0.28 0.05 255);">
+        <img src="assets/accounts-screenshot.png" alt="Kaha Tahi accounting software — Chart of Accounts" style="width:100%; height:100%; object-fit:cover; object-position:top left; display:block;" />
+      </div>
+
+      <!-- Paper-white document preview — a deliberate, sparing quote of the letterhead/invoice
+           stationery, dropped onto the dark shell rather than repainting the page cream. -->
+      <div style="background:#FBF9F2; border-radius:8px; padding:16px; margin-top:20px; box-shadow:0 8px 24px rgba(0,0,0,0.35); max-width:320px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0F1E3D; padding-bottom:8px; margin-bottom:10px;">
+          <span style="font-size:11px; font-weight:600; color:#0F1E3D; letter-spacing:0.03em;">KAHA TAHI</span>
+          <span style="font-size:10px; color:#8A8570;">INV-0064</span>
+        </div>
+        <p style="font-size:11px; color:#6B6656; margin:0 0 2px;">Bill to</p>
+        <p style="font-size:12px; color:#2B2A26; margin:0 0 10px; font-weight:500;">Lian</p>
+        <div style="display:flex; justify-content:space-between; font-size:11px; color:#6B6656; padding:4px 0;">
+          <span>Lucas tutoring</span><span>$44.00</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:8px; padding-top:8px; border-top:1px solid #DAD5C4;">
+          <span style="font-size:12px; font-weight:500; color:#0F1E3D;">Total due</span>
+          <span style="font-size:14px; font-weight:600; color:#0F1E3D;">$44.00</span>
+        </div>
+      </div>
     </div>
     <div>
-      <p style="font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.7 0.1 55); margin:0 0 16px;">Built in-house</p>
+      <p style="font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.72 0.13 55); margin:0 0 16px;">Built in-house</p>
       <h2 style="font-family:'Fraunces',serif; font-size:32px; font-weight:500; margin:0 0 18px;">Accounting software, made for teams like ours</h2>
       <p style="font-size:16px; line-height:1.6; color:oklch(0.72 0.01 250); margin:0 0 20px; max-width:48ch;">We kept hitting the same wall with off-the-shelf tools built for accountants, not tradies — so we built our own. Import your bank statements straight from a CSV, code transactions in seconds with a smart categoriser that learns from you, run payroll with PAYE and KiwiSaver handled automatically, and send invoices that look like they came from a real business.</p>
       <ul style="list-style:none; padding:0; margin:0 0 28px; display:flex; flex-direction:column; gap:8px; font-size:15px; color:oklch(0.82 0.01 250);">
@@ -189,18 +210,18 @@ class Component extends DCLogic {
         <strong style="color:oklch(0.85 0.01 250);">$10/month</strong> above that — no tiers, no per-user fees.
         Seasonal or just starting out? <a href="https://accounts.kahatahi.co.nz" style="text-decoration:underline;">ask about discounted pricing</a> once you're signed in.
       </p>
-      <a href="https://accounts.kahatahi.co.nz" style="font-size:15px; font-weight:600; background:oklch(0.68 0.11 55); color:oklch(0.14 0.02 60); padding:14px 28px; border-radius:8px; display:inline-block;">Sign up / sign in →</a>
+      <a href="https://accounts.kahatahi.co.nz" style="font-size:15px; font-weight:600; background:oklch(0.70 0.14 55); color:oklch(0.14 0.03 60); padding:14px 28px; border-radius:8px; display:inline-block;">Sign up / sign in →</a>
     </div>
   </section>
 
   <!-- JOURNAL -->
-  <section id="journal" style="padding:80px 48px; max-width:1280px; margin:0 auto; border-top:1px solid oklch(0.26 0.02 250);">
+  <section id="journal" style="padding:80px 48px; max-width:1280px; margin:0 auto; border-top:1px solid oklch(0.28 0.05 255);">
     <h2 style="font-family:'Fraunces',serif; font-size:34px; font-weight:500; margin:0 0 12px;">Journal</h2>
     <p style="font-size:16px; color:oklch(0.7 0.01 250); margin:0 0 40px; max-width:60ch;">Notes on the work, the community, and building things properly.</p>
     <div id="journal-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:28px;">
       <sc-for list="{{ posts }}" as="post" hint-placeholder-count="3">
         <div>
-          <div style="aspect-ratio:16/10; border-radius:10px; background:oklch(0.24 0.02 250); margin-bottom:16px; display:flex; align-items:center; justify-content:center;">
+          <div style="aspect-ratio:16/10; border-radius:10px; background:oklch(0.24 0.05 255); margin-bottom:16px; display:flex; align-items:center; justify-content:center;">
             <span style="font-family:monospace; font-size:11px; color:oklch(0.6 0.01 250);">image</span>
           </div>
           <p style="font-size:13px; color:oklch(0.6 0.01 250); margin:0 0 6px;">{{ post.date }}</p>
@@ -212,7 +233,7 @@ class Component extends DCLogic {
   </section>
 
   <!-- CONTACT / FOOTER -->
-  <section id="contact" style="padding:80px 48px; max-width:1280px; margin:0 auto; border-top:1px solid oklch(0.26 0.02 250);">
+  <section id="contact" style="padding:80px 48px; max-width:1280px; margin:0 auto; border-top:1px solid oklch(0.28 0.05 255);">
     <div id="contact-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:64px;">
       <div>
         <h2 style="font-family:'Fraunces',serif; font-size:32px; font-weight:500; margin:0 0 18px;">Get in touch</h2>
@@ -224,15 +245,15 @@ class Component extends DCLogic {
         </div>
       </div>
       <div style="display:flex; flex-direction:column; gap:14px;">
-        <input placeholder="Name" style="background:oklch(0.21 0.02 250); border:1px solid oklch(0.32 0.02 250); border-radius:8px; padding:14px 16px; color:inherit; font-size:15px; font-family:inherit;" />
-        <input placeholder="Email" style="background:oklch(0.21 0.02 250); border:1px solid oklch(0.32 0.02 250); border-radius:8px; padding:14px 16px; color:inherit; font-size:15px; font-family:inherit;" />
-        <textarea placeholder="What can we help with?" rows="4" style="background:oklch(0.21 0.02 250); border:1px solid oklch(0.32 0.02 250); border-radius:8px; padding:14px 16px; color:inherit; font-size:15px; font-family:inherit; resize:vertical;"></textarea>
-        <button style="background:oklch(0.68 0.11 55); color:oklch(0.14 0.02 60); border:none; border-radius:8px; padding:14px; font-size:15px; font-weight:600; font-family:inherit; cursor:pointer;">Send enquiry</button>
+        <input placeholder="Name" style="background:oklch(0.21 0.05 255); border:1px solid oklch(0.32 0.05 255); border-radius:8px; padding:14px 16px; color:inherit; font-size:15px; font-family:inherit;" />
+        <input placeholder="Email" style="background:oklch(0.21 0.05 255); border:1px solid oklch(0.32 0.05 255); border-radius:8px; padding:14px 16px; color:inherit; font-size:15px; font-family:inherit;" />
+        <textarea placeholder="What can we help with?" rows="4" style="background:oklch(0.21 0.05 255); border:1px solid oklch(0.32 0.05 255); border-radius:8px; padding:14px 16px; color:inherit; font-size:15px; font-family:inherit; resize:vertical;"></textarea>
+        <button style="background:oklch(0.70 0.14 55); color:oklch(0.14 0.03 60); border:none; border-radius:8px; padding:14px; font-size:15px; font-weight:600; font-family:inherit; cursor:pointer;">Send enquiry</button>
       </div>
     </div>
   </section>
 
-  <footer style="padding:32px 48px; border-top:1px solid oklch(0.26 0.02 250); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+  <footer style="padding:32px 48px; border-top:1px solid oklch(0.28 0.05 255); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
     <span style="font-size:13px; color:oklch(0.55 0.01 250);">© 2026 Kaha Tahi Ltd.</span>
     <div style="display:flex; gap:24px; align-items:center;">
       <a href="https://accounts.kahatahi.co.nz/privacy.html" style="font-size:13px; color:oklch(0.55 0.01 250);">Privacy Policy</a>
