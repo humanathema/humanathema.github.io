@@ -80,10 +80,15 @@
     .top-nav { padding: 14px 20px !important; }
     #accounting, #services { padding-left: 20px !important; padding-right: 20px !important; }
   }
+  #services-grid { align-items: start; }
   .svc-grid-card { text-decoration: none; color: inherit; display: block; }
-  .svc-grid-card h3 { transition: color .15s ease; }
+  .svc-grid-card h3 { transition: color .15s ease; min-height: 2.5em; }
+  .svc-grid-card > p { min-height: 4.2em; }
   .svc-grid-card:hover h3 { color: oklch(0.72 0.13 55); }
   .svc-grid-card:hover img { opacity: 0.92; }
+  @media (max-width: 768px) {
+    .svc-grid-card h3, .svc-grid-card > p { min-height: 0; }
+  }
 </style>
 </head>
 <body>
@@ -118,22 +123,22 @@
     <div id="services-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
       <a class="svc-grid-card" href="#pillar-tutoring">
         <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; border-top:2px solid oklch(0.4 0.03 255); padding-top:14px;">Tutoring</h3>
-        <p style="font-size:14px; line-height:1.55; color:oklch(0.68 0.01 250); margin:0;">One-on-one and small group tuition supporting local learners. Mathematics support for secondary and undergraduate.</p>
-        <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin:12px 0 18px;">
+        <p style="font-size:14px; line-height:1.55; color:oklch(0.68 0.01 250); margin:0;">One-on-one and small-group tuition for local learners. Maths support for secondary and undergraduate.</p>
+        <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin-bottom:18px;">
           <img src="/assets/tutoring.png" alt="Tutoring" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;" />
         </div>
       </a>
       <a class="svc-grid-card" href="#pillar-labour">
         <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; border-top:2px solid oklch(0.4 0.03 255); padding-top:14px;">Labour Hire</h3>
         <p style="font-size:14px; line-height:1.55; color:oklch(0.68 0.01 250); margin:0;">Trained, vetted crews and reliable hands for homes, sites and businesses — short or long term.</p>
-        <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin:12px 0 18px;">
+        <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin-bottom:18px;">
           <img src="/assets/property-labour.png" alt="Labour hire" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;" />
         </div>
       </a>
       <a class="svc-grid-card" href="#pillar-automotive">
         <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; border-top:2px solid oklch(0.4 0.03 255); padding-top:14px;">Automotive &amp; Equipment</h3>
         <p style="font-size:14px; line-height:1.55; color:oklch(0.68 0.01 250); margin:0;">Servicing, repair and equipment work carried out by our qualified team.</p>
-        <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin:12px 0 18px;">
+        <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin-bottom:18px;">
           <img src="/assets/automotive-equipment.png" alt="Automotive and equipment" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;" />
         </div>
       </a>
