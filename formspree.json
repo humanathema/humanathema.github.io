@@ -1,0 +1,10 @@
+{
+  "forms": {
+    "contact": {
+      "name": "Kaha Tahi website — contact",
+      "actions": [
+        { "type": "email", "to": "contact@kahatahi.co.nz" }
+      ]
+    }
+  }
+}
