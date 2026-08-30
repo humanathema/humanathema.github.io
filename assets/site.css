@@ -151,6 +151,27 @@ img { max-width: 100%; height: auto; display: block; }
 .hero .lede { margin-left: auto; margin-right: auto; }
 .hero-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-top: 32px; }
 
+/* Split hero: brand mark beside the headline (carried over from the earlier
+   redesign). Falls back to stacked + centred on narrow screens. */
+.hero-split { padding: 56px 0 56px; }
+.hero-split .wrap {
+  display: grid;
+  grid-template-columns: minmax(220px, 340px) 1fr;
+  gap: clamp(24px, 5vw, 72px);
+  align-items: center;
+}
+.hero-split .hero-mark { width: 100%; height: auto; display: block; border-radius: 20px; }
+.hero-split .hero-copy { text-align: left; }
+.hero-split .hero-copy .lede { margin-left: 0; margin-right: 0; }
+.hero-split .hero-actions { justify-content: flex-start; }
+@media (max-width: 800px) {
+  .hero-split .wrap { grid-template-columns: 1fr; justify-items: center; gap: 24px; }
+  .hero-split .hero-mark { max-width: 240px; }
+  .hero-split .hero-copy { text-align: center; }
+  .hero-split .hero-copy .lede { margin-left: auto; margin-right: auto; }
+  .hero-split .hero-actions { justify-content: center; }
+}
+
 /* ---- cards / grids ---- */
 
 .grid { display: grid; gap: 26px; }
