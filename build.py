@@ -45,6 +45,7 @@ NAV = """\
       <a href="/#services">Services</a>
       <a href="/membership/">Membership</a>
       <a href="/journal/"{journal_current}>Journal</a>
+      <a href="/booking/">Book a job</a>
       <a href="/#contact">Contact</a>
       <a class="btn" href="https://accounts.kahatahi.co.nz">Sign in</a>
     </div>
@@ -73,6 +74,13 @@ PAGE = """\
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light">
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18390096781"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){{dataLayer.push(arguments);}}
+  gtag('js', new Date());
+  gtag('config', 'AW-18390096781');
+</script>
 <title>{title} — Kaha Tahi Ltd</title>
 <meta name="description" content="{description}">
 <link rel="canonical" href="{canonical}">
