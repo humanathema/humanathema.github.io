@@ -1,35 +1,35 @@
 <!DOCTYPE html>
 <html lang="en-NZ">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18390096781"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'AW-18390096781');
+  </script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light">
-
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18390096781"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'AW-18390096781');
-</script>
+<meta name="color-scheme" content="dark">
 
 <title>Kaha Tahi Ltd — Property Maintenance, Automotive, Tutoring &amp; Accounting Software | Palmerston North</title>
-<meta name="description" content="Kaha Tahi Ltd is a Palmerston North social enterprise. Property maintenance, automotive care, and tutoring on affordable memberships, plus the accounting software we built to run our own books — now open to other small NZ businesses.">
+<meta name="description" content="Kaha Tahi Ltd is a Palmerston North social enterprise. Tutoring, labour hire, property maintenance and automotive care on affordable memberships, plus the accounting software we built to run our own books.">
 <link rel="canonical" href="https://kahatahi.co.nz/">
 <meta name="robots" content="index, follow">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Kaha Tahi Ltd">
-<meta property="og:title" content="Kaha Tahi Ltd — Practical work, done well, in service of our community">
-<meta property="og:description" content="A Palmerston North social enterprise: property maintenance, automotive care, and tutoring on affordable memberships, plus accounting software built by us, for teams like ours.">
+<meta property="og:title" content="Kaha Tahi Ltd — Professional services supporting the Palmerston North community and businesses">
+<meta property="og:description" content="A Palmerston North social enterprise: tutoring, labour hire, property maintenance, automotive care, and accounting software built by us, for teams like ours.">
 <meta property="og:url" content="https://kahatahi.co.nz/">
 <meta property="og:image" content="https://kahatahi.co.nz/assets/webasset.png">
 <meta property="og:locale" content="en_NZ">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Kaha Tahi Ltd — Palmerston North social enterprise">
-<meta name="twitter:description" content="Property maintenance, automotive care, tutoring, and accounting software — from a social enterprise that runs its services at cost.">
+<meta name="twitter:description" content="Tutoring, labour hire, property maintenance, automotive care, and accounting software — from a social enterprise that runs its services at cost.">
 <meta name="twitter:image" content="https://kahatahi.co.nz/assets/webasset.png">
+
 <meta name="theme-color" content="#010d22">
 
 <script type="application/ld+json">
@@ -40,7 +40,7 @@
   "url": "https://kahatahi.co.nz/",
   "logo": "https://kahatahi.co.nz/assets/logo.png",
   "image": "https://kahatahi.co.nz/assets/webasset.png",
-  "description": "A Palmerston North social enterprise offering property maintenance, automotive care, and tutoring on affordable memberships, and the developer of Kaha Tahi Accounts.",
+  "description": "A Palmerston North social enterprise offering tutoring, labour hire, property maintenance, and automotive care, and the developer of Kaha Tahi Accounts.",
   "email": "contact@kahatahi.co.nz",
   "address": {
     "@type": "PostalAddress",
@@ -53,61 +53,141 @@
 }
 </script>
 
-<link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg">
-<link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96">
-<link rel="shortcut icon" href="/favicon/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
-<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+<link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+<link rel="shortcut icon" href="/favicon/favicon.ico" />
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+<link rel="manifest" href="/favicon/site.webmanifest" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;500;600&family=Inter:wght@400;500;600&family=Archivo+Black&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
+<style>
+  @font-face {
+    font-family: 'Kaha Sans';
+    src: url('/assets/fonts/KahaSans-Regular.woff2') format('woff2');
+    font-weight: 400; font-style: normal; font-display: swap;
+  }
+  body { margin: 0; background: oklch(0.16 0.05 255); }
+
+  /* the redesign's top, verbatim inline styles below — these media rules
+     just stack the multi-column bits on small screens */
+  @media (max-width: 768px) {
+    #intro { grid-template-columns: 1fr !important; gap: 24px !important; margin: 0 !important; text-align: center; }
+    #intro > div:first-child { justify-content: center !important; }
+    #services-grid { grid-template-columns: 1fr !important; }
+    #accounting { grid-template-columns: 1fr !important; gap: 32px !important; }
+    .top-nav { padding: 14px 20px !important; }
+    #accounting, #services { padding-left: 20px !important; padding-right: 20px !important; }
+  }
+  .svc-grid-card { text-decoration: none; color: inherit; display: block; }
+  .svc-grid-card h3 { transition: color .15s ease; }
+  .svc-grid-card:hover h3 { color: oklch(0.72 0.13 55); }
+  .svc-grid-card:hover img { opacity: 0.92; }
+</style>
 </head>
 <body>
 
-  <!-- NAV (lean utility bar — brand mark lives in the intro block below) -->
-  <nav class="nav nav--lean">
-    <div class="nav-links">
-      <a href="#services">Services</a>
-      <a href="/membership/">Membership</a>
-      <a href="/journal/">Journal</a>
-      <a href="/booking/">Book a job</a>
-      <a href="#contact">Contact</a>
-      <a class="btn" href="https://accounts.kahatahi.co.nz">Sign in</a>
+<div style="font-family:'Inter',sans-serif; background:oklch(0.16 0.05 255); color:oklch(0.92 0.01 250); min-height:100vh;">
+
+  <!-- NAV (lean utility bar — brand mark lives in the intro block below, not duplicated here) -->
+  <nav class="top-nav" style="display:flex; align-items:center; justify-content:flex-end; padding:16px 48px; border-bottom:1px solid oklch(0.28 0.05 255); flex-wrap:wrap;">
+    <div style="display:flex; gap:28px; align-items:center; flex-wrap:wrap; justify-content:flex-end;">
+      <a href="#services" style="font-size:15px; color:oklch(0.85 0.01 250);">Services</a>
+      <a href="/membership/" style="font-size:15px; color:oklch(0.85 0.01 250);">Membership</a>
+      <a href="/journal/" style="font-size:15px; color:oklch(0.85 0.01 250);">Journal</a>
+      <a href="/booking/" style="font-size:15px; color:oklch(0.85 0.01 250);">Book a job</a>
+      <a href="#contact" style="font-size:15px; color:oklch(0.85 0.01 250);">Contact</a>
+      <a href="https://accounts.kahatahi.co.nz" style="font-size:14px; font-weight:600; background:oklch(0.70 0.14 55); color:oklch(0.14 0.03 60); padding:10px 20px; border-radius:8px;">Sign in</a>
     </div>
   </nav>
 
-  <!-- INTRO -->
-  <header class="intro">
-    <img class="intro-mark" src="/assets/logo-tree.png" alt="Kaha Tahi Ltd." width="300" height="300" />
-    <div class="intro-copy">
-      <p class="kicker">A Palmerston North social enterprise</p>
-      <h1>Professional services supporting the Palmerston North community and businesses.</h1>
+  <!-- INTRO (single compact block: headline + logo badge) -->
+  <section id="intro" style="padding:0 48px; max-width:1280px; margin-top:-60px; margin-bottom:-60px; position:relative; z-index:2; display:grid; grid-template-columns:1fr auto; gap:10px; align-items:center;">
+    <div style="padding-top:2px; display:flex; justify-content:flex-start;">
+      <img src="/assets/logo-tree.png" alt="Kaha Tahi Ltd." style="width:300px; height:300px; object-fit:contain; display:block; max-width:100%;" />
     </div>
-  </header>
+    <div>
+      <p style="font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.72 0.13 55); margin:0 0 10px;">A Palmerston North social enterprise</p>
+      <h1 style="font-family:'Fraunces',serif; font-size:26px; line-height:1.3; font-weight:500; margin:0; text-wrap:pretty; max-width:52ch;">Professional services supporting the Palmerston North community and businesses.</h1>
+    </div>
+  </section>
 
-  <!-- SERVICES GRID (redesign) — cards scroll to the detailed section below -->
-  <div class="svc-grid">
-    <a class="svc-card" href="#pillar-tutoring">
-      <h3>Tutoring</h3>
-      <p>One-on-one and small group tuition supporting local learners. Mathematics support for secondary and undergraduate.</p>
-      <div class="svc-photo"><img src="/assets/tutoring.png" alt="Tutoring session" /></div>
-    </a>
-    <a class="svc-card" href="#pillar-property">
-      <h3>Property Maintenance &amp; Labour Hire</h3>
-      <p>Repairs, upkeep and reliable trained crews for homes and small sites.</p>
-      <div class="svc-photo"><img src="/assets/property-labour.png" alt="Property maintenance work" /></div>
-    </a>
-    <a class="svc-card" href="#pillar-automotive">
-      <h3>Automotive &amp; Equipment</h3>
-      <p>Servicing, repair and equipment work carried out by our qualified team.</p>
-      <div class="svc-photo"><img src="/assets/automotive-equipment.png" alt="Automotive servicing" /></div>
-    </a>
-  </div>
-  <div class="svc-actions">
-    <a class="btn" href="#contact">Get in touch</a>
-    <a class="btn btn-ghost" href="https://accounts.kahatahi.co.nz">Our accounting software</a>
-  </div>
+  <!-- SERVICES GRID — cards scroll down to the detailed section -->
+  <section id="services" style="padding:32px 48px 80px; max-width:1280px; margin:0 auto;">
+    <div id="services-grid" style="display:grid; grid-template-columns:repeat(3,1fr); gap:24px;">
+      <a class="svc-grid-card" href="#pillar-tutoring">
+        <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; border-top:2px solid oklch(0.4 0.03 255); padding-top:14px;">Tutoring</h3>
+        <p style="font-size:14px; line-height:1.55; color:oklch(0.68 0.01 250); margin:0;">One-on-one and small group tuition supporting local learners. Mathematics support for secondary and undergraduate.</p>
+        <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin:12px 0 18px;">
+          <img src="/assets/tutoring.png" alt="Tutoring" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;" />
+        </div>
+      </a>
+      <a class="svc-grid-card" href="#pillar-labour">
+        <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; border-top:2px solid oklch(0.4 0.03 255); padding-top:14px;">Labour Hire</h3>
+        <p style="font-size:14px; line-height:1.55; color:oklch(0.68 0.01 250); margin:0;">Trained, vetted crews and reliable hands for homes, sites and businesses — short or long term.</p>
+        <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin:12px 0 18px;">
+          <img src="/assets/property-labour.png" alt="Labour hire" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;" />
+        </div>
+      </a>
+      <a class="svc-grid-card" href="#pillar-automotive">
+        <h3 style="font-size:17px; font-weight:600; margin:0 0 8px; border-top:2px solid oklch(0.4 0.03 255); padding-top:14px;">Automotive &amp; Equipment</h3>
+        <p style="font-size:14px; line-height:1.55; color:oklch(0.68 0.01 250); margin:0;">Servicing, repair and equipment work carried out by our qualified team.</p>
+        <div style="aspect-ratio:3/4; border-radius:16px; overflow:hidden; margin:12px 0 18px;">
+          <img src="/assets/automotive-equipment.png" alt="Automotive and equipment" style="width:100%; height:100%; object-fit:cover; object-position:center; display:block;" />
+        </div>
+      </a>
+    </div>
+    <div style="display:flex; gap:16px; margin-top:44px; flex-wrap:wrap;">
+      <a href="#contact" style="font-size:15px; font-weight:600; background:oklch(0.70 0.14 55); color:oklch(0.14 0.03 60); padding:14px 28px; border-radius:8px;">Get in touch</a>
+      <a href="#membership-teaser" style="font-size:15px; font-weight:600; border:1px solid oklch(0.4 0.03 255); color:oklch(0.92 0.01 250); padding:14px 28px; border-radius:8px;">How membership works</a>
+    </div>
+  </section>
+
+  <!-- ACCOUNTING SOFTWARE -->
+  <section id="accounting" style="padding:80px 48px; max-width:1280px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:center; border-top:1px solid oklch(0.28 0.05 255);">
+    <div>
+      <div style="border-radius:16px; overflow:hidden; aspect-ratio:16/10; border:1px solid oklch(0.28 0.05 255);">
+        <img src="/assets/accounts-dashboard.png" onerror="this.onerror=null;this.src='/assets/accounts-screenshot.png'" alt="Kaha Tahi Accounts — dashboard" style="width:100%; height:100%; object-fit:cover; object-position:top left; display:block;" />
+      </div>
+
+      <!-- Paper-white invoice preview — a sparing quote of the letterhead stationery. -->
+      <div style="background:#FBF9F2; border-radius:8px; padding:16px; margin-top:20px; box-shadow:0 8px 24px rgba(0,0,0,0.35); max-width:320px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0F1E3D; padding-bottom:8px; margin-bottom:10px;">
+          <span style="font-size:11px; font-weight:600; color:#0F1E3D; letter-spacing:0.03em;">KAHA TAHI</span>
+          <span style="font-size:10px; color:#8A8570;">INV-0064</span>
+        </div>
+        <p style="font-size:11px; color:#6B6656; margin:0 0 2px;">Bill to</p>
+        <p style="font-size:12px; color:#2B2A26; margin:0 0 10px; font-weight:500;">Lian</p>
+        <div style="display:flex; justify-content:space-between; font-size:11px; color:#6B6656; padding:4px 0;">
+          <span>Lucas tutoring</span><span>$44.00</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-top:8px; padding-top:8px; border-top:1px solid #DAD5C4;">
+          <span style="font-size:12px; font-weight:500; color:#0F1E3D;">Total due</span>
+          <span style="font-size:14px; font-weight:600; color:#0F1E3D;">$44.00</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <p style="font-size:14px; letter-spacing:0.08em; text-transform:uppercase; color:oklch(0.72 0.13 55); margin:0 0 16px;">Built in-house</p>
+      <h2 style="font-family:'Fraunces',serif; font-size:32px; font-weight:500; margin:0 0 18px;">Accounting software, made for teams like ours</h2>
+      <p style="font-size:16px; line-height:1.6; color:oklch(0.72 0.01 250); margin:0 0 20px; max-width:48ch;">We kept hitting the same wall with off-the-shelf tools built for accountants, not tradies — so we built our own. Import your bank statements straight from a CSV, code transactions in seconds with a smart categoriser that learns from you, run payroll with PAYE and KiwiSaver handled automatically, and send invoices that look like they came from a real business.</p>
+      <ul style="list-style:none; padding:0; margin:0 0 28px; display:flex; flex-direction:column; gap:8px; font-size:15px; color:oklch(0.82 0.01 250);">
+        <li>✓ Bank statement CSV import — no bank login required to get started</li>
+        <li>✓ GST tracked automatically through every transaction, not just formal invoices</li>
+        <li>✓ Payroll with PAYE, KiwiSaver, and IRD payday filing exports</li>
+        <li>✓ Invoices and bills with your own logo, sent as PDF</li>
+      </ul>
+      <p style="font-size:14px; line-height:1.6; color:oklch(0.68 0.01 250); margin:0 0 24px;">
+        <strong style="color:oklch(0.85 0.01 250);">Free</strong> for businesses under $1,000/month revenue,
+        <strong style="color:oklch(0.85 0.01 250);">$10/month</strong> above that — no tiers, no per-user fees.
+        Seasonal or just starting out? <a href="https://accounts.kahatahi.co.nz" style="text-decoration:underline;">ask about discounted pricing</a> once you're signed in.
+      </p>
+      <a href="https://accounts.kahatahi.co.nz" style="font-size:15px; font-weight:600; background:oklch(0.70 0.14 55); color:oklch(0.14 0.03 60); padding:14px 28px; border-radius:8px; display:inline-block;">Sign up / sign in →</a>
+    </div>
+  </section>
+
+  <!-- ================= MEMBERSHIP + DETAIL (the rest) ================= -->
 
   <!-- MEMBERSHIP TEASER -->
   <section class="section" id="membership-teaser">
@@ -120,19 +200,55 @@
         <p style="margin-top:22px"><a class="btn" href="/membership/">See what's included &amp; indicative pricing</a></p>
       </div>
       <div class="pillar-media">
-        <img src="/assets/maintenance-grid.jpg" alt="Kaha Tahi crew doing property maintenance work" loading="lazy" />
+        <img src="/assets/maintenance-grid.jpg" alt="Kaha Tahi crew at work" loading="lazy" />
       </div>
     </div>
   </section>
 
-  <!-- SERVICES -->
-  <section class="section" id="services">
+  <!-- SERVICE DETAIL -->
+  <section class="section">
     <div class="wrap">
-      <p class="kicker">What we do</p>
-      <h2>Our services</h2>
+      <p class="kicker">In detail</p>
+      <h2>What each service covers</h2>
       <p class="lede">Each of these runs for our own crew and community first, then we make it available more widely — at the same standard.</p>
 
       <div style="margin-top:20px">
+
+        <div class="pillar" id="pillar-tutoring">
+          <div class="pillar-grid">
+            <div class="pillar-media"><img src="/assets/tutoring.png" alt="Tutoring session" loading="lazy" /></div>
+            <div>
+              <p class="kicker">Education &amp; training</p>
+              <h3 style="font-family:var(--font-head);font-size:1.5rem">Patient, structured tutoring built around the learner</h3>
+              <p style="color:var(--text-muted)">One-on-one and small-group tuition for local learners of all ages, with maths support for secondary and undergraduate. A weekly membership locks in a regular slot with the same tutor; casual sessions are there when you need them. Sliding scale — nobody's turned away for cost.</p>
+              <ul>
+                <li>Weekly locked slot, same tutor, progress notes each term</li>
+                <li>Casual sessions by arrangement</li>
+                <li>Flexible around school terms</li>
+                <li>Sliding scale for families who need it</li>
+              </ul>
+              <a class="btn btn-ghost" href="/membership/#tutoring">Tutoring membership</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="pillar" id="pillar-labour">
+          <div class="pillar-grid reverse">
+            <div class="pillar-media"><img src="/assets/maintenance-1.jpg" alt="Labour hire crew on site" loading="lazy" /></div>
+            <div>
+              <p class="kicker">For homes, sites &amp; business</p>
+              <h3 style="font-family:var(--font-head);font-size:1.5rem">Trained crews and reliable hands, when you need them</h3>
+              <p style="color:var(--text-muted)">We staff our own property and maintenance jobs from the same pool of vetted, trained people we make available for hire — so you get people we'd put on our own sites. Charged hourly, with a retainer rate for regular ongoing crews.</p>
+              <ul>
+                <li>Vetted, trained, reliable crews</li>
+                <li>Short or long-term placements</li>
+                <li>General labouring, site work, moves and clean-ups</li>
+                <li>Local labour for local jobs</li>
+              </ul>
+              <a class="btn btn-ghost" href="#contact">Enquire about labour hire</a>
+            </div>
+          </div>
+        </div>
 
         <div class="pillar" id="pillar-automotive">
           <div class="pillar-grid">
@@ -154,7 +270,7 @@
 
         <div class="pillar" id="pillar-property">
           <div class="pillar-grid reverse">
-            <div class="pillar-media"><img src="/assets/maintenance-1.jpg" alt="Property and grounds maintenance" loading="lazy" /></div>
+            <div class="pillar-media"><img src="/assets/labour-1.jpg" alt="Lawn and grounds work" loading="lazy" /></div>
             <div>
               <p class="kicker">Property &amp; grounds</p>
               <h3 style="font-family:var(--font-head);font-size:1.5rem">Lawns, hedges and upkeep, on a regular cycle</h3>
@@ -166,59 +282,6 @@
                 <li>One-off jobs too, member or not</li>
               </ul>
               <a class="btn btn-ghost" href="/membership/#property">Property membership</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="pillar" id="pillar-tutoring">
-          <div class="pillar-grid">
-            <div class="pillar-media"><img src="/assets/tutoring.png" alt="Tutoring session" loading="lazy" /></div>
-            <div>
-              <p class="kicker">Education &amp; training</p>
-              <h3 style="font-family:var(--font-head);font-size:1.5rem">Patient, structured tutoring built around the learner</h3>
-              <p style="color:var(--text-muted)">One-on-one and small-group tuition for local learners of all ages. A weekly membership locks in a regular slot with the same tutor; casual sessions are there when you need them. Sliding scale — nobody's turned away for cost.</p>
-              <ul>
-                <li>Weekly locked slot, same tutor, progress notes each term</li>
-                <li>Casual sessions by arrangement</li>
-                <li>Flexible around school terms</li>
-                <li>Sliding scale for families who need it</li>
-              </ul>
-              <a class="btn btn-ghost" href="/membership/#tutoring">Tutoring membership</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="pillar">
-          <div class="pillar-grid reverse">
-            <div class="pillar-media"><img src="/assets/labour-1.jpg" alt="Labour hire crew" loading="lazy" /></div>
-            <div>
-              <p class="kicker">For business — labour hire</p>
-              <h3 style="font-family:var(--font-head);font-size:1.5rem">Trained, vetted crews for short or long-term work</h3>
-              <p style="color:var(--text-muted)">We staff our own property and maintenance jobs from the same pool of people we make available for hire — so you get people we'd put on our own sites. Charged hourly, with a retainer rate for regular ongoing crews.</p>
-              <ul>
-                <li>Vetted, trained, reliable crews</li>
-                <li>Short or long-term placements</li>
-                <li>Local labour for local jobs</li>
-              </ul>
-              <a class="btn btn-ghost" href="#contact">Enquire about labour hire</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="pillar">
-          <div class="pillar-grid">
-            <div class="pillar-media"><img src="/assets/accounts-screenshot.png" alt="Kaha Tahi Accounts screenshot" loading="lazy" /></div>
-            <div>
-              <p class="kicker">Built in-house — Kaha Tahi Accounts</p>
-              <h3 style="font-family:var(--font-head);font-size:1.5rem">Accounting software made for tradies, not accountants</h3>
-              <p style="color:var(--text-muted)">We kept hitting the same wall with off-the-shelf tools, so we built our own. Import bank statements from a CSV, code transactions in seconds with a categoriser that learns from you, run payroll with PAYE and KiwiSaver handled, and send invoices that look like a real business sent them.</p>
-              <ul>
-                <li>Bank statement CSV import — no bank login needed to start</li>
-                <li>GST tracked automatically through every transaction</li>
-                <li>Payroll with PAYE, KiwiSaver and IRD payday filing exports</li>
-                <li>Invoices and bills with your own logo, sent as PDF</li>
-              </ul>
-              <a class="btn" href="https://accounts.kahatahi.co.nz">Sign up / sign in →</a>
             </div>
           </div>
         </div>
@@ -270,9 +333,6 @@
         </div>
       </div>
       <div>
-        <!-- Formspree CLI project "kaha tahi website" (project 3080013392728031027),
-             form key "contact" — defined in formspree.json, redeploy with:
-             FORMSPREE_DEPLOY_KEY=… npx @formspree/cli deploy -->
         <form class="form" id="contact-form" action="https://formspree.io/p/3080013392728031027/f/contact" method="POST">
           <input type="text" name="name" placeholder="Name" required autocomplete="name" />
           <input type="email" name="email" placeholder="Email" required autocomplete="email" />
@@ -301,35 +361,33 @@
     </div>
   </footer>
 
-  <script>
-    (function () {
-      var form = document.getElementById('contact-form');
-      var status = document.getElementById('form-status');
-      if (!form) return;
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        status.textContent = 'Sending…';
-        status.className = 'form-status';
-        fetch(form.action, {
-          method: 'POST',
-          body: new FormData(form),
-          headers: { 'Accept': 'application/json' }
-        }).then(function (r) {
-          if (r.ok) {
-            form.reset();
-            status.textContent = 'Thanks — we’ll be in touch soon.';
-            status.className = 'form-status ok';
-          } else {
-            status.textContent = 'Something went wrong. Please email contact@kahatahi.co.nz instead.';
-            status.className = 'form-status err';
-          }
-        }).catch(function () {
+</div>
+
+<script>
+  document.addEventListener('submit', function (e) {
+    var form = e.target;
+    if (!form || form.id !== 'contact-form') return;
+    e.preventDefault();
+    var status = document.getElementById('form-status');
+    status.textContent = 'Sending…';
+    status.className = 'form-status';
+    fetch(form.action, { method: 'POST', body: new FormData(form), headers: { 'Accept': 'application/json' } })
+      .then(function (r) {
+        if (r.ok) {
+          form.reset();
+          status.textContent = 'Thanks — we’ll be in touch soon.';
+          status.className = 'form-status ok';
+        } else {
           status.textContent = 'Something went wrong. Please email contact@kahatahi.co.nz instead.';
           status.className = 'form-status err';
-        });
+        }
+      })
+      .catch(function () {
+        status.textContent = 'Something went wrong. Please email contact@kahatahi.co.nz instead.';
+        status.className = 'form-status err';
       });
-    })();
-  </script>
+  });
+</script>
 
 </body>
 </html>
