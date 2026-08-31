@@ -5,8 +5,9 @@ summary: The full constitution for Kaha Tahi membership and the Community Fund �
 ---
 
 <div class="doc-callout">
-This is the working version of our constitution, published in full for members
-and anyone considering joining. It will be reviewed before formal adoption. The
+This constitution is in effect and is published here in full for members and
+anyone considering joining. It remains open to revision, and the membership may
+resolve to adopt a revised or different form as the Fund develops. The
 plain-language summary is on the <a href="/membership/">Membership page</a>.
 </div>
 
@@ -33,41 +34,61 @@ comes (clause 8).
 ## 2. Purpose
 
 2.1 To give members better access to the Company's services — automotive care,
-property and grounds, tutoring, and others added over time — at member pricing,
-on predictable terms.
+labour hire, property and grounds, tutoring, and others added over time — at
+member pricing, on predictable terms.
 
-2.2 To run community programmes and projects that benefit members: shared tools
-and equipment, skills training, hardship support, and the Company's housing-first
-and community-build work.
+2.2 To provide **grants and hardship assistance** to members, and to run
+community programmes and projects that benefit members: shared tools and
+equipment, skills training, and the Company's housing-first and community-build
+work.
 
-2.3 To build, through the Fund, a ring-fenced pool of resources dedicated to
+2.3 To **invest in the Company's own operations, and in the enterprises,
+projects and work of members**, on the terms and process in clause 7 — building
+productive capacity that serves the membership.
+
+2.4 To build, through the Fund, a ring-fenced pool of resources dedicated to
 those purposes and held ready to transfer to a future member-owned credit union
 or community trust.
 
-2.4 The Membership is **not** operated to make a profit from members. The Company
+2.5 The Membership is **not** operated to make a profit from members. The Company
 runs member services at or near cost and absorbs the administration of the
 Membership and the Fund as part of its normal operations.
 
 ## 3. What membership is
 
-3.1 **Membership is a service relationship, not a financial product.** A member
-is a customer of the Company who has chosen to participate in the Membership. In
-return for their contributions (clause 4) a member receives:
+3.1 A member is a customer and participant in the Company's community. In return
+for their contributions (clause 4) a member receives:
 
 - (a) access to member pricing and member service tiers;
-- (b) access to community programmes and Fund-supported initiatives;
-- (c) one vote in the affairs of the Membership (clause 6);
-- (d) the right to stand for and elect the Members' Advisory Committee.
+- (b) access to grants, hardship assistance, community programmes, and
+  Fund-supported initiatives;
+- (c) the ability to seek Fund support or investment for their own work or
+  enterprise (clause 7);
+- (d) one vote in the affairs of the Membership (clause 6);
+- (e) the right to stand for and elect the Members' Advisory Committee.
 
-3.2 **What membership is not.** Membership contributions are **not** a loan to
-the Company, **not** a deposit, **not** shares, and **not** an investment. They
-carry **no interest, no dividend, no return, and no entitlement to repayment**. A
-member has no claim on the assets of the Company or the Fund, whether on leaving
-the Membership, on the Company's wind-up, or at any other time. (On transition to
-a registered entity, clause 8, the position changes — but only then, and only
-under that entity's own rules and regulation.)
+3.2 **Contributions are membership contributions, not a financial product.** They
+carry **no interest, no dividend, and no fixed or promised return**, and a member
+has **no right to repayment**. A member who leaves the Membership **may apply** to
+the Fund for a return of their contribution; the Directors may return all, part,
+or none of it **at their absolute discretion**, having regard to the Fund's
+position and its commitments. This is a discretionary return of an unused
+contribution — a refund as a matter of grace — **not** the repayment of a debt,
+and the member has no entitlement to it and no enforceable claim.
 
-3.3 Membership is personal, non-transferable, and may be ended by the member at
+3.3 **What this is.** The Fund is a **mutual, members-only fund**. It deals only
+with members — supporting them, assisting them, and investing in their work — and
+is closed to outside business. In spirit it is closer to a co-operative or a
+friendly society than to a bank or an investment scheme, and it is a deliberate
+first step toward a registered member-owned entity (clause 8).
+
+3.4 **What this is not.** The Fund is not a bank, not a deposit-taker, not a
+registered or licensed investment scheme, and not a security that can be bought,
+sold or transferred. It does not take deposits, does not make offers of financial
+products to the public, does not trade in listed securities, and is not operated
+as a savings or banking business. Contributions are at risk.
+
+3.5 Membership is personal, non-transferable, and may be ended by the member at
 any time or by the Company for cause (clause 6.5).
 
 ## 4. Membership contributions
@@ -85,42 +106,56 @@ through their subscription.
 for any member on grounds of hardship. **No member is turned away for inability
 to pay.**
 
-4.4 **All contributions are non-refundable** and are consideration for membership
-benefits, not an investment. The Company applies contributions first to the
-direct costs of running member programmes; the balance is allocated to the Fund
-(clause 5). The Company does not charge a separate administration fee.
+4.4 Contributions are consideration for membership and its benefits. The Company
+applies contributions first to the direct costs of running member programmes; the
+balance is allocated to the Fund (clause 5). The Company does not charge a
+separate administration fee. Any return of a contribution is governed by 3.2.
 
-4.5 **Voluntary donations / koha** to the Fund are welcome from members or
-others. They are gifts, carry no rights or return of any kind, and are not
-refundable. They do not increase any person's voting rights.
+4.5 **Voluntary donations / koha** to the Fund are welcome from members. They are
+gifts, carry no rights or return of any kind, are not returnable, and do not
+increase any person's voting rights.
 
 ## 5. The Kaha Tahi Community Fund
 
 5.1 The Fund is a **ring-fenced reserve within the Company's accounts**. It is
 credited with: the balance of membership contributions after direct programme
 costs (4.4); donations and koha (4.5); grants and philanthropic funding received
-for member-benefit purposes; and any trading surplus the Directors resolve to
-allocate to it.
+for member-benefit purposes; returns on Fund investments (5.2(d)); and any
+trading surplus the Directors resolve to allocate to it.
 
-5.2 The Fund may be applied **only** to purposes in clause 2 — member services,
-community programmes and projects, shared productive assets owned by the Company
-for member benefit, hardship support, and the costs of establishing a future
-member-owned entity.
+5.2 The Fund may be applied **only** to the following, and **only for the benefit
+of members**:
 
-5.3 The Fund is **not** a source of loans, credit, or financial facility to any
-person, member or otherwise. The Company does not use the Fund to carry on any
-business of borrowing and lending money.
+- (a) member services and member pricing;
+- (b) **grants and hardship assistance to members** (not repayable);
+- (c) community programmes and projects, shared productive assets, and the
+  Company's housing-first and community-build work;
+- (d) **investment in the Company's own operations, and in the enterprises,
+  projects and work of members**, on the process in clause 7. Any return on such
+  investment belongs to the **Fund** (the collective), not to individual members
+  by reference to their contributions;
+- (e) the costs of establishing a future member-owned entity (clause 8).
 
-5.4 **Members cannot withdraw from the Fund.** The Fund holds no member balances
-and owes no member any sum. It is not a savings account and confers no redemption
-right. Its resources are collective and are directed by the governance process in
-clauses 6 and 7.
+5.3 **The Fund deals only with members.** It does not provide capital, credit,
+grants, or investment to any person who is not a member. A person seeking Fund
+support must be, or become, a member in good standing.
 
-5.5 The Company will keep the Fund in prudent, liquid form (cash and on-call bank
-accounts) and will not place it in market investments, securities, or lending
-instruments while it operates under this document.
+5.4 **Loans and repayable advances.** The Fund may make a repayable advance or
+loan to a member **only** once the Company has put in place whatever registration,
+licensing, disclosure and dispute-resolution arrangements the law requires for
+that activity. Until then the Fund makes grants and investments only, and does
+not lend.
 
-5.6 The Fund's position is reported to members at least annually, and its
+5.5 **No withdrawal on demand.** The Fund holds no member account balances and
+owes no member any sum. It is not a savings account. A member's only route to
+recover a contribution is the discretionary application under 3.2.
+
+5.6 The Company will keep the working portion of the Fund in prudent, liquid form
+(cash and on-call bank accounts), will maintain a reserve sufficient to meet its
+committed obligations, and will not trade in listed securities or operate the
+Fund as a savings or banking business.
+
+5.7 The Fund's position is reported to members at least annually, and its
 accounts are open to the Members' Advisory Committee at any time.
 
 ## 6. Governance
@@ -130,9 +165,9 @@ of membership.
 
 6.2 **Members' Advisory Committee.** Members elect a committee of 3–7 members
 annually. The Committee reviews Fund accounts, considers and recommends on
-funding proposals (clause 7), runs the member vote on major proposals, and
-represents members to the Directors. The Committee is advisory: it does not hold
-the Company's legal or fiduciary powers.
+funding and investment proposals (clause 7), runs the member vote on major
+proposals, and represents members to the Directors. The Committee is advisory: it
+does not hold the Company's legal or fiduciary powers.
 
 6.3 **Interim governance.** Until the Membership transitions to a registered
 entity (clause 8), legal authority and fiduciary duty rest with the **Directors
@@ -147,13 +182,14 @@ of votes cast unless this document says otherwise.
 
 6.5 The Directors may suspend or end a person's membership for non-payment,
 dishonesty, abuse of staff or members, or conduct that damages the Membership,
-with a right of reply to the Committee. No contribution is refunded on exit
-(4.4).
+with a right of reply to the Committee. A return of contribution on exit remains
+governed by 3.2.
 
-## 7. Funding proposals and project approval
+## 7. Grants, assistance, and investment proposals
 
-7.1 Any member may put a proposal to the Committee for the Fund to support a
-project that benefits members.
+7.1 Any member may put a proposal to the Committee for the Fund to give a grant
+or hardship assistance, or to invest in a project, enterprise or piece of work
+that benefits members.
 
 7.2 **Approval thresholds:**
 
@@ -163,9 +199,11 @@ project that benefits members.
 | $2,000 – $10,000 | Committee **and** Directors |
 | Over $10,000 | **Full member vote** (majority of votes cast, quorum per 6.4), then Directors |
 
-7.3 Matters **reserved to a member vote**: any Fund outlay over $10,000; any
-change to contribution amounts in clause 4; adoption of a transition plan under
-clause 8; amendment of this document (clause 9).
+7.3 Matters **reserved to a member vote**: any Fund outlay over $10,000; **any
+investment in an enterprise or venture connected to a member, as distinct from
+the Company's own operations, regardless of amount**; any change to contribution
+amounts in clause 4; adoption of a transition plan under clause 8; amendment of
+this document (clause 9).
 
 7.4 **Proposals connected to the proposer.** If a proposal would direct Fund
 resources to a venture, business, or arrangement in which the proposer (or a
@@ -208,24 +246,30 @@ completed track record with the Fund. **The weaker the bond, the stronger the
 other security the Committee must require.** The bond is never set below $250, and
 any reduction is at the Committee's sole discretion and subject to 7.4(e).
 
-7.7 The Directors may decline or halt any project that would expose the Company
-to legal, financial, or reputational risk, or that falls outside clause 2.
+7.7 The **terms of any investment** — whether it is a grant, an equity stake, a
+revenue share, or (once 5.4 is satisfied) a repayable advance — are set case by
+case by the Directors on the Committee's recommendation, recorded in writing, and
+structured so that returns accrue to the Fund.
+
+7.8 The Directors may decline or halt any grant, assistance or investment that
+would expose the Company to legal, financial, or reputational risk, or that falls
+outside clause 2.
 
 ## 8. Transition to a registered entity
 
 8.1 When the Membership has the scale, capital, and systems to meet the
-requirements for registration as an **accredited credit union** or a
-**registered charitable or community trust**, the Directors will prepare a
-transition plan for a **member vote** (7.3).
+requirements for registration as an **accredited credit union** or a **registered
+charitable or community trust**, the Directors will prepare a transition plan for
+a **member vote** (7.3).
 
 8.2 On transition, the resources of the Fund are transferred to the new entity
 **in trust for the members / the community**, to be held and used under that
 entity's own constitution and regulation.
 
-8.3 **Member saving, deposits, and investment begin only at and after
-transition**, offered by the registered entity under the regulation that applies
-to it. Nothing in this document offers, promises, or implies any such product
-before then.
+8.3 **Member saving, deposits, and regulated investment products begin only at
+and after transition**, offered by the registered entity under the regulation
+that applies to it. Nothing in this document offers, promises, or implies any
+such product before then.
 
 ## 9. Amendment
 
