@@ -345,14 +345,15 @@ img { max-width: 100%; height: auto; display: block; }
 /* service pillar rows */
 .pillar { padding: 40px 0; border-top: 1px solid var(--border-soft); scroll-margin-top: 84px; }
 .pillar:first-child { border-top: 0; }
-.pillar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: center; }
+.pillar-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: stretch; }
 .pillar-grid.reverse > .pillar-media { order: 2; }
+.pillar-media { border-radius: 12px; overflow: hidden; background: var(--bg-card); min-height: 360px; }
+.pillar-media img { width: 100%; height: 100%; object-fit: cover; object-position: center 22%; display: block; }
 @media (max-width: 860px) {
-  .pillar-grid { grid-template-columns: 1fr; gap: 24px; }
+  .pillar-grid { grid-template-columns: 1fr; gap: 24px; align-items: start; }
   .pillar-grid.reverse > .pillar-media { order: 0; }
+  .pillar-media { min-height: 0; aspect-ratio: 4 / 3; }
 }
-.pillar-media { border-radius: 12px; overflow: hidden; aspect-ratio: 4 / 3; background: var(--bg-card); }
-.pillar-media img { width: 100%; height: 100%; object-fit: cover; }
 
 /* pillar: heavy-sans title in a tight paper chip; paragraph on the dark;
    checklist as a blue box (see the .pillar-grid > div > ul rule above) */
