@@ -24,12 +24,14 @@
   --text-muted:    oklch(0.75 0.02 255);
   --text-faint:    oklch(0.60 0.02 255);
 
-  /* paper panels — the letterhead's spare lightness, used selectively */
-  --paper:         oklch(0.975 0.008 85);
-  --paper-edge:    oklch(0.90 0.012 85);
-  --ink:           oklch(0.28 0.04 260);
-  --ink-soft:      oklch(0.46 0.03 260);
-  --ink-faint:     oklch(0.62 0.02 260);
+  /* paper panels — the letterhead's spare lightness, used selectively.
+     A soft warm ecru, not a bright white — reads as paper, not a lightbulb. */
+  --paper:         oklch(0.915 0.014 84);
+  --paper-edge:    oklch(0.84 0.018 84);
+  --ink:           oklch(0.30 0.045 258);
+  --ink-soft:      oklch(0.44 0.04 258);
+  --ink-faint:     oklch(0.58 0.03 258);
+  --ink-link:      oklch(0.42 0.11 252);
 
   --accent:        oklch(0.70 0.14 55);
   --accent-hi:     oklch(0.82 0.12 60);
@@ -56,17 +58,31 @@
 }
 .panel h1, .panel h2, .panel h3, .panel h4 { color: var(--ink); }
 .panel p { color: var(--ink-soft); }
-.panel a { color: oklch(0.5 0.14 45); }
-.panel .kicker { color: oklch(0.55 0.13 50); }
+.panel a { color: var(--ink-link); }
+.panel .kicker { color: var(--ink-link); }
 .panel .tier-price, .panel strong { color: var(--ink); }
 .panel .tier-note { color: var(--ink-faint); }
+/* on paper: a restrained navy button, not a slab of orange */
+.panel .btn {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.panel .btn:hover { background: oklch(0.24 0.05 258); color: var(--paper); }
+.panel .btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--paper-edge);
+}
+.panel .btn-ghost:hover { background: oklch(0.87 0.016 84); color: var(--ink); }
 .panel .form input, .panel .form textarea {
-  background: oklch(1 0 0);
+  background: oklch(0.965 0.008 84);
   border-color: var(--paper-edge);
   color: var(--ink);
 }
 .panel .form input::placeholder, .panel .form textarea::placeholder { color: var(--ink-faint); }
-.panel .contact-lines a { color: oklch(0.5 0.14 45); }
+.panel .form input:focus, .panel .form textarea:focus { outline-color: var(--ink-link); }
+.panel .contact-lines a { color: var(--ink-link); }
 .panel .form-status { color: var(--ink-soft); }
 
 /* wordmark lockup — the letterhead's KAHA TAHI, used sparingly */
@@ -286,9 +302,11 @@ img { max-width: 100%; height: auto; display: block; }
 }
 .card h1, .card h2, .card h3 { color: var(--ink); margin-bottom: 8px; }
 .card p { color: var(--ink-soft); }
-.card a { color: oklch(0.5 0.14 45); }
-.card .kicker { color: oklch(0.55 0.13 50); }
+.card a { color: var(--ink-link); }
+.card .kicker { color: var(--ink-link); }
 .card strong { color: var(--ink); }
+.card .btn { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.card .btn:hover { background: oklch(0.24 0.05 258); color: var(--paper); }
 
 /* service pillar rows */
 .pillar { padding: 40px 0; border-top: 1px solid var(--border-soft); scroll-margin-top: 84px; }
