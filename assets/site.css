@@ -137,6 +137,35 @@
   .panel .form input::placeholder, .panel .form textarea::placeholder { color: var(--text-faint); }
 }
 
+/* wordmark chip in the nav — the letterhead stamp; stays paper in both modes */
+.nav-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.35em;
+  font-family: var(--font-disp);
+  font-size: 1.3rem;
+  line-height: 1;
+  letter-spacing: 0.03em;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  border-radius: 9px;
+  padding: 8px 15px;
+  text-decoration: none;
+  flex: none;
+}
+.nav-wordmark span { font-size: 0.5em; color: var(--ink-faint); letter-spacing: 0.06em; }
+.nav-wordmark:hover { color: var(--ink); background: oklch(0.93 0.018 82); }
+/* on the homepage the big logo floats up into the nav's left corner —
+   push the wordmark clear of it */
+.top-nav .nav-wordmark { margin-left: 300px; }
+@media (max-width: 900px) {
+  .top-nav .nav-wordmark { margin-left: 0; }
+}
+@media (max-width: 720px) {
+  .nav-wordmark { font-size: 1.1rem; padding: 6px 12px; }
+}
+
 /* wordmark lockup — the letterhead's KAHA TAHI, used sparingly */
 .wordmark {
   font-family: var(--font-disp);
