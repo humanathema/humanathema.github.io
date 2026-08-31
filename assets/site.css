@@ -12,7 +12,9 @@
 }
 
 :root {
-  color-scheme: light;
+  /* the site is committed-dark; "only dark" tells browsers not to
+     auto-invert it (Chrome Auto Dark Mode etc.) */
+  color-scheme: only dark;
 
   --bg:            oklch(0.16 0.05 255);
   --bg-raised:     oklch(0.21 0.05 255);
@@ -24,17 +26,18 @@
   --text-muted:    oklch(0.75 0.02 255);
   --text-faint:    oklch(0.60 0.02 255);
 
-  /* paper panels — the letterhead's spare lightness, used selectively.
-     A soft warm ecru, not a bright white — reads as paper, not a lightbulb. */
-  --paper:         oklch(0.915 0.014 84);
-  --paper-edge:    oklch(0.84 0.018 84);
-  --ink:           oklch(0.28 0.05 258);
-  --ink-soft:      oklch(0.35 0.045 258);
-  --ink-faint:     oklch(0.50 0.035 258);
-  --ink-link:      oklch(0.40 0.12 250);
+  /* paper panels — the letterhead's spare lightness (light-mode only;
+     dark-mode visitors get the blue treatment instead, see media query below).
+     A warm aged manila, not a bright white. */
+  --paper:         oklch(0.89 0.02 82);
+  --paper-edge:    oklch(0.80 0.022 82);
+  --ink:           oklch(0.27 0.05 258);
+  --ink-soft:      oklch(0.32 0.05 258);
+  --ink-faint:     oklch(0.46 0.04 258);
+  --ink-link:      oklch(0.40 0.13 248);
 
-  --accent:        oklch(0.70 0.14 55);
-  --accent-hi:     oklch(0.82 0.12 60);
+  --accent:        oklch(0.74 0.16 52);
+  --accent-hi:     oklch(0.83 0.13 58);
   --accent-link:   oklch(0.82 0.05 255);
   --on-accent:     oklch(0.14 0.03 60);
 
@@ -48,16 +51,18 @@
 
 * { box-sizing: border-box; }
 
-/* ---- paper panel: pale box, dark ink, for cards/tiers ---- */
+/* ---- paper panel: aged manila box, dark ink, for cards/tiers (light mode) ---- */
 .panel {
   background: var(--paper);
   color: var(--ink);
   border: 1px solid var(--paper-edge);
   border-radius: 14px;
-  box-shadow: 0 10px 30px -12px oklch(0.10 0.04 260 / 0.55);
+  box-shadow: 0 4px 16px -12px oklch(0.05 0.03 260 / 0.5);
 }
+/* so inline color:var(--text-muted) on paragraphs inside a panel reads as ink */
+.panel, .card { --text-muted: var(--ink); --text-faint: var(--ink-faint); }
 .panel h1, .panel h2, .panel h3, .panel h4 { color: var(--ink); }
-.panel p { color: var(--ink-soft); }
+.panel p { color: var(--ink); }
 .panel a { color: var(--ink-link); }
 .panel .kicker { color: var(--ink-link); }
 .panel .tier-price, .panel strong { color: var(--ink); }
@@ -68,15 +73,15 @@
   color: var(--paper);
   border-color: var(--ink);
 }
-.panel .btn:hover { background: oklch(0.24 0.05 258); color: var(--paper); }
+.panel .btn:hover { background: oklch(0.22 0.05 258); color: var(--paper); }
 .panel .btn-ghost {
   background: transparent;
   color: var(--ink);
   border-color: var(--paper-edge);
 }
-.panel .btn-ghost:hover { background: oklch(0.87 0.016 84); color: var(--ink); }
+.panel .btn-ghost:hover { background: oklch(0.84 0.02 82); color: var(--ink); }
 .panel .form input, .panel .form textarea {
-  background: oklch(0.965 0.008 84);
+  background: oklch(0.95 0.012 82);
   border-color: var(--paper-edge);
   color: var(--ink);
 }
@@ -84,6 +89,39 @@
 .panel .form input:focus, .panel .form textarea:focus { outline-color: var(--ink-link); }
 .panel .contact-lines a { color: var(--ink-link); }
 .panel .form-status { color: var(--ink-soft); }
+
+/* ---- dark-mode / forced-dark visitors: no paper, everything on the blue ---- */
+@media (prefers-color-scheme: dark) {
+  .panel, .card {
+    --text-muted: oklch(0.75 0.02 255);
+    --text-faint: oklch(0.60 0.02 255);
+  }
+  .panel, .card, .tier, .pillar-grid > div > ul {
+    background: var(--bg-raised);
+    color: var(--text);
+    border-color: var(--border-soft);
+    box-shadow: none;
+  }
+  .panel h1, .panel h2, .panel h3, .panel h4,
+  .card h1, .card h2, .card h3,
+  .tier-name, .tier-price, .panel strong, .card strong { color: var(--text); }
+  .panel p, .card p,
+  .pillar-grid > div > ul li, .tier ul { color: var(--text-muted); }
+  .panel .kicker, .card .kicker { color: var(--accent); }
+  .panel a, .card a, .panel .contact-lines a { color: var(--accent-link); }
+  .panel .btn, .card .btn {
+    background: var(--accent); color: var(--on-accent); border-color: transparent;
+  }
+  .panel .btn:hover, .card .btn:hover { background: var(--accent-hi); color: var(--on-accent); }
+  .panel .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
+  .panel .btn-ghost:hover { background: var(--bg-card); }
+  .panel .form input, .panel .form textarea {
+    background: var(--bg-raised); border-color: var(--border); color: var(--text);
+  }
+  .panel .form input::placeholder, .panel .form textarea::placeholder { color: var(--text-faint); }
+  .pillar-grid > div > ul li::before, .tier ul li::before { color: var(--accent); }
+  .tier-note, .panel .form-status { color: var(--text-faint); }
+}
 
 /* wordmark lockup — the letterhead's KAHA TAHI, used sparingly */
 .wordmark {
@@ -301,7 +339,7 @@ img { max-width: 100%; height: auto; display: block; }
   box-shadow: 0 10px 30px -12px oklch(0.10 0.04 260 / 0.55);
 }
 .card h1, .card h2, .card h3 { color: var(--ink); margin-bottom: 8px; }
-.card p { color: var(--ink-soft); }
+.card p { color: var(--ink); }
 .card a { color: var(--ink-link); }
 .card .kicker { color: var(--ink-link); }
 .card strong { color: var(--ink); }
@@ -320,32 +358,28 @@ img { max-width: 100%; height: auto; display: block; }
 .pillar-media { border-radius: 14px; overflow: hidden; aspect-ratio: 4 / 3; background: var(--bg-card); }
 .pillar-media img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Break the pillar text up: title chunk and the checklist sit on paper,
-   the paragraph between stays light-on-dark. */
+/* Break the pillar up lightly: title + paragraph stay on the dark;
+   only the checklist sits on paper (light mode). */
 .pillar-grid > div > h3 {
-  background: var(--paper);
-  color: var(--ink);
-  border: 1px solid var(--paper-edge);
-  border-radius: 12px;
-  padding: 16px 20px;
-  margin: 0 0 18px;
-  box-shadow: 0 8px 24px -14px oklch(0.08 0.04 260 / 0.6);
+  font-family: var(--font-head);
+  color: var(--text);
+  margin: 0 0 14px;
 }
-.pillar-grid > div > p { color: var(--text-muted); margin: 0 0 18px; }
+.pillar-grid > div > p { color: var(--text-muted); margin: 0 0 20px; }
 .pillar-grid > div > ul {
   list-style: none;
   margin: 0 0 22px;
-  padding: 14px 20px;
+  padding: 16px 20px;
   display: flex;
   flex-direction: column;
   gap: 9px;
   background: var(--paper);
   border: 1px solid var(--paper-edge);
   border-radius: 12px;
-  box-shadow: 0 8px 24px -14px oklch(0.08 0.04 260 / 0.6);
+  box-shadow: 0 4px 16px -12px oklch(0.05 0.03 260 / 0.5);
 }
-.pillar-grid > div > ul li { color: var(--ink-soft); font-size: 0.95rem; }
-.pillar-grid > div > ul li::before { content: "✓"; color: var(--ink-link); margin-right: 9px; font-weight: 600; }
+.pillar-grid > div > ul li { color: var(--ink); font-size: 0.95rem; }
+.pillar-grid > div > ul li::before { content: "✓"; color: var(--ink-link); margin-right: 9px; font-weight: 700; }
 
 /* ---- pricing tiers ---- */
 

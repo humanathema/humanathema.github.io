@@ -73,7 +73,7 @@ PAGE = """\
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light">
+<meta name="color-scheme" content="dark">
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18390096781"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
