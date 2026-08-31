@@ -22,9 +22,9 @@
   --border:        oklch(0.32 0.05 255);
   --border-soft:   oklch(0.28 0.05 255);
 
-  --text:          oklch(0.93 0.012 255);
-  --text-muted:    oklch(0.75 0.02 255);
-  --text-faint:    oklch(0.60 0.02 255);
+  --text:          oklch(0.94 0.012 255);
+  --text-muted:    oklch(0.83 0.02 255);
+  --text-faint:    oklch(0.67 0.02 255);
 
   /* paper panels — the letterhead's spare lightness (light-mode only;
      dark-mode visitors get the blue treatment instead, see media query below).
@@ -93,15 +93,17 @@
 /* ---- dark-mode / forced-dark visitors: no paper, everything on the blue ---- */
 @media (prefers-color-scheme: dark) {
   .panel, .card {
-    --text-muted: oklch(0.75 0.02 255);
-    --text-faint: oklch(0.60 0.02 255);
+    --text-muted: oklch(0.83 0.02 255);
+    --text-faint: oklch(0.67 0.02 255);
   }
-  .panel, .card, .tier, .pillar-grid > div > ul {
+  .panel, .card, .tier,
+  .pillar-grid > div > ul, .pillar-grid > div > h3 {
     background: var(--bg-raised);
     color: var(--text);
     border-color: var(--border-soft);
     box-shadow: none;
   }
+  .pillar-grid > div > h3 { color: var(--text); }
   .panel h1, .panel h2, .panel h3, .panel h4,
   .card h1, .card h2, .card h3,
   .tier-name, .tier-price, .panel strong, .card strong { color: var(--text); }
@@ -358,14 +360,23 @@ img { max-width: 100%; height: auto; display: block; }
 .pillar-media { border-radius: 14px; overflow: hidden; aspect-ratio: 4 / 3; background: var(--bg-card); }
 .pillar-media img { width: 100%; height: 100%; object-fit: cover; }
 
-/* Break the pillar up lightly: title + paragraph stay on the dark;
-   only the checklist sits on paper (light mode). */
+/* Break the pillar up: a heavy-sans title in a tight paper chip, the
+   paragraph on the dark, the checklist on paper (light mode). */
 .pillar-grid > div > h3 {
-  font-family: var(--font-head);
-  color: var(--text);
-  margin: 0 0 14px;
+  display: inline-block;
+  font-family: 'Archivo Black', var(--font-disp), sans-serif;
+  font-weight: 400;
+  font-size: 1.35rem;
+  line-height: 1.15;
+  letter-spacing: 0.002em;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--paper-edge);
+  border-radius: 10px;
+  padding: 10px 16px 8px;
+  margin: 0 0 18px;
 }
-.pillar-grid > div > p { color: var(--text-muted); margin: 0 0 20px; }
+.pillar-grid > div > p { color: var(--text); margin: 0 0 20px; }
 .pillar-grid > div > ul {
   list-style: none;
   margin: 0 0 22px;
