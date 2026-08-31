@@ -47,7 +47,7 @@ NAV = """\
       <a href="/journal/"{journal_current}>Journal</a>
       <a href="/booking/">Book a job</a>
       <a href="/#contact">Contact</a>
-      <a class="btn" href="https://accounts.kahatahi.co.nz">Sign in</a>
+      <a class="btn" href="/sign-in/">Sign in</a>
     </div>
   </nav>
 """
