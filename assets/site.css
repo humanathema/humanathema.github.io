@@ -31,10 +31,10 @@
      A warm aged manila, not a bright white. */
   --paper:         oklch(0.89 0.02 82);
   --paper-edge:    oklch(0.80 0.022 82);
-  --ink:           oklch(0.27 0.05 258);
-  --ink-soft:      oklch(0.32 0.05 258);
-  --ink-faint:     oklch(0.46 0.04 258);
-  --ink-link:      oklch(0.40 0.13 248);
+  --ink:           oklch(0.26 0.05 258);
+  --ink-soft:      oklch(0.30 0.05 258);
+  --ink-faint:     oklch(0.39 0.045 258);
+  --ink-link:      oklch(0.38 0.13 248);
 
   --accent:        oklch(0.74 0.16 52);
   --accent-hi:     oklch(0.83 0.13 58);
@@ -51,7 +51,7 @@
 
 * { box-sizing: border-box; }
 
-/* ---- paper panel: aged manila box, dark ink, for cards/tiers (light mode) ---- */
+/* ---- paper panel: aged manila box, dark ink, for panels/cards/tiers (light mode) ---- */
 .panel {
   background: var(--paper);
   color: var(--ink);
@@ -59,27 +59,36 @@
   border-radius: 14px;
   box-shadow: 0 4px 16px -12px oklch(0.05 0.03 260 / 0.5);
 }
-/* so inline color:var(--text-muted) on paragraphs inside a panel reads as ink */
-.panel, .card { --text-muted: var(--ink); --text-faint: var(--ink-faint); }
-.panel h1, .panel h2, .panel h3, .panel h4 { color: var(--ink); }
-.panel p { color: var(--ink); }
-.panel a { color: var(--ink-link); }
-.panel .kicker { color: var(--ink-link); }
-.panel .tier-price, .panel strong { color: var(--ink); }
-.panel .tier-note { color: var(--ink-faint); }
-/* on paper: a restrained navy button, not a slab of orange */
-.panel .btn {
+/* inline color:var(--text-*) inside a paper surface resolves to ink */
+.panel, .card, .tier {
+  --text: var(--ink);
+  --text-muted: var(--ink);
+  --text-faint: var(--ink-faint);
+}
+.panel :where(h1,h2,h3,h4,h5,p,li,span,dt,dd),
+.card :where(h1,h2,h3,p,li,span),
+.tier :where(h1,h2,h3,h4,p,li,span,div) { color: var(--ink); }
+.panel .tier-price, .card .tier-price, .tier-price,
+.panel strong, .card strong, .tier strong { color: var(--ink); }
+.panel .tier-note, .tier-note { color: var(--ink-faint); }
+.panel a, .card a, .tier a, .panel .contact-lines a { color: var(--ink-link); }
+.panel .kicker, .card .kicker, .tier .kicker { color: var(--ink-link); }
+.panel .tier ul li::before, .tier ul li::before,
+.pillar-grid > div > ul li::before { color: var(--ink-link); }
+
+/* on paper: a filled navy button + a legible navy ghost button */
+.panel .btn, .card .btn, .tier .btn {
   background: var(--ink);
   color: var(--paper);
   border-color: var(--ink);
 }
-.panel .btn:hover { background: oklch(0.22 0.05 258); color: var(--paper); }
-.panel .btn-ghost {
-  background: transparent;
+.panel .btn:hover, .card .btn:hover, .tier .btn:hover { background: oklch(0.20 0.05 258); color: var(--paper); }
+.panel .btn-ghost, .card .btn-ghost, .tier .btn-ghost {
+  background: oklch(0.85 0.02 82);
   color: var(--ink);
-  border-color: var(--paper-edge);
+  border-color: var(--ink);
 }
-.panel .btn-ghost:hover { background: oklch(0.84 0.02 82); color: var(--ink); }
+.panel .btn-ghost:hover, .card .btn-ghost:hover, .tier .btn-ghost:hover { background: oklch(0.80 0.024 82); color: var(--ink); }
 .panel .form input, .panel .form textarea {
   background: oklch(0.95 0.012 82);
   border-color: var(--paper-edge);
@@ -87,42 +96,45 @@
 }
 .panel .form input::placeholder, .panel .form textarea::placeholder { color: var(--ink-faint); }
 .panel .form input:focus, .panel .form textarea:focus { outline-color: var(--ink-link); }
-.panel .contact-lines a { color: var(--ink-link); }
 .panel .form-status { color: var(--ink-soft); }
 
 /* ---- dark-mode / forced-dark visitors: no paper, everything on the blue ---- */
 @media (prefers-color-scheme: dark) {
-  .panel, .card {
+  .panel, .card, .tier {
+    --text: oklch(0.94 0.012 255);
     --text-muted: oklch(0.83 0.02 255);
     --text-faint: oklch(0.67 0.02 255);
   }
   .panel, .card, .tier,
   .pillar-grid > div > ul, .pillar-grid > div > h3 {
     background: var(--bg-raised);
-    color: var(--text);
     border-color: var(--border-soft);
     box-shadow: none;
   }
-  .pillar-grid > div > h3 { color: var(--text); }
-  .panel h1, .panel h2, .panel h3, .panel h4,
-  .card h1, .card h2, .card h3,
-  .tier-name, .tier-price, .panel strong, .card strong { color: var(--text); }
-  .panel p, .card p,
-  .pillar-grid > div > ul li, .tier ul { color: var(--text-muted); }
-  .panel .kicker, .card .kicker { color: var(--accent); }
-  .panel a, .card a, .panel .contact-lines a { color: var(--accent-link); }
-  .panel .btn, .card .btn {
+  .panel :where(h1,h2,h3,h4,h5,p,li,span,dt,dd),
+  .card :where(h1,h2,h3,p,li,span),
+  .tier :where(h1,h2,h3,h4,p,li,span,div),
+  .pillar-grid > div > h3,
+  .panel strong, .card strong, .tier strong,
+  .tier-name, .tier-price { color: var(--text); }
+  .panel p, .card p, .tier ul li, .pillar-grid > div > ul li { color: var(--text-muted); }
+  .tier-note, .panel .form-status { color: var(--text-faint); }
+  .panel .kicker, .card .kicker, .tier .kicker { color: var(--accent); }
+  .panel a, .card a, .tier a, .panel .contact-lines a { color: var(--accent-link); }
+  .panel .tier ul li::before, .tier ul li::before,
+  .pillar-grid > div > ul li::before { color: var(--accent); }
+  .panel .btn, .card .btn, .tier .btn {
     background: var(--accent); color: var(--on-accent); border-color: transparent;
   }
-  .panel .btn:hover, .card .btn:hover { background: var(--accent-hi); color: var(--on-accent); }
-  .panel .btn-ghost { background: transparent; color: var(--text); border-color: var(--border); }
-  .panel .btn-ghost:hover { background: var(--bg-card); }
+  .panel .btn:hover, .card .btn:hover, .tier .btn:hover { background: var(--accent-hi); color: var(--on-accent); }
+  .panel .btn-ghost, .card .btn-ghost, .tier .btn-ghost {
+    background: transparent; color: var(--text); border-color: var(--border);
+  }
+  .panel .btn-ghost:hover, .card .btn-ghost:hover, .tier .btn-ghost:hover { background: var(--bg-card); color: var(--text); }
   .panel .form input, .panel .form textarea {
     background: var(--bg-raised); border-color: var(--border); color: var(--text);
   }
   .panel .form input::placeholder, .panel .form textarea::placeholder { color: var(--text-faint); }
-  .pillar-grid > div > ul li::before, .tier ul li::before { color: var(--accent); }
-  .tier-note, .panel .form-status { color: var(--text-faint); }
 }
 
 /* wordmark lockup — the letterhead's KAHA TAHI, used sparingly */
