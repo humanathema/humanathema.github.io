@@ -60,6 +60,25 @@
 .panel .kicker { color: oklch(0.55 0.13 50); }
 .panel .tier-price, .panel strong { color: var(--ink); }
 .panel .tier-note { color: var(--ink-faint); }
+.panel .form input, .panel .form textarea {
+  background: oklch(1 0 0);
+  border-color: var(--paper-edge);
+  color: var(--ink);
+}
+.panel .form input::placeholder, .panel .form textarea::placeholder { color: var(--ink-faint); }
+.panel .contact-lines a { color: oklch(0.5 0.14 45); }
+.panel .form-status { color: var(--ink-soft); }
+
+/* wordmark lockup — the letterhead's KAHA TAHI, used sparingly */
+.wordmark {
+  font-family: var(--font-disp);
+  font-size: 1.7rem;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+.wordmark span { font-size: 0.55em; color: var(--text-muted); letter-spacing: 0.02em; }
 
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
