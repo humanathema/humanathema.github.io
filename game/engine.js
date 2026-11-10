@@ -10,13 +10,13 @@
 
   function newState() {
     const S = {
-      v: 11, turn: 0, act: 1, view: 1, cash: 3, mana: 0, hands: 1, industry: 0, security: 0, tech: 0, influence: 0, voters: 0,
+      v: 12, turn: 0, act: 1, view: 1, cash: 3, mana: 0, hands: 1, industry: 0, security: 0, tech: 0, influence: 0, voters: 0,
       mandate: 0, cohesion: 0, consent: 40, gpa: 45, lean: 0, slots: 2,
       rel: { aus: 30, idn: 10, png: 10, sgp: 15, mys: 10, pac: 30, vnm: 5, phl: 10 },
       policy: { wages: 'fair', prices: 'market', credit: 'normal' },
       won: false, done: {}, active: [], pending: [], log: [], lastEv: {}, crisisIn: 5, electionIn: 12, over: null,
       // the current job run (home street, a suburb or a town)
-      runSite: 'home', runUsed: false, gw: 6, gh: 4, mower: 100, day: 0, jobs: [], you: { x: 0, y: 2 }, crew: [], rivals: [], earned: 0, pendingBuild: null, works: {}, propWorks: 0, roadWorks: 0, siteWorks: 0, siteGuards: 0, shopXp: 0, tutorXp: 0, benched: false, auto: { tutor: false },
+      runSite: 'home', runUsed: false, gw: 6, gh: 4, mower: 100, day: 0, jobs: [], you: { x: 0, y: 2 }, crew: [], rivals: [], earned: 0, pendingBuild: null, works: {}, propWorks: 0, roadWorks: 0, siteWorks: 0, siteGuards: 0, members: 0, met: 0, lawnsDone: 0, mastered: {}, shopXp: 0, tutorXp: 0, benched: false, auto: { tutor: false },
       // city
       net: {}, rivalNet: {}, sent: {}, dispatch: 0, scrap: 0, built: 0, build: null, pool: {}, assign: {},
       // region
@@ -73,7 +73,17 @@
     return all || !handed(S) ? out : out.filter(j => !ROUND[j.kind]);
   }
   // Once there is a second crew, a foreman runs the lawn round without you. It leaves your map for good.
-  const ROUND = { lawn: 1, hedge: 1 }, handed = S => !!S.done.crew2;
+  const ROUND = { lawn: 1, hedge: 1 }, handed = S => !!S.done.crew2 || (S.lawnsDone >= 6 && !!S.done.hire1);
+  // Which machine does which job. Own one and the job takes half the daylight.
+  const MACH_FOR = { drive: 'excavator', road: 'excavator', wall: 'brickpress', path: 'brickpress', fence: 'sawmill', deck: 'sawmill', shed: 'sawmill', garden: 'tractor' };
+  const hasMachine = (S, type) => !!type && ((S.pool[type] || 0) > 0 || Object.keys(S.assign).some(k => S.assign[k] === type));
+  const jobCost = (S, kind) => Math.max(1, Math.ceil(KIND[kind].cost * (hasMachine(S, MACH_FOR[kind]) ? 0.5 : 1)));
+  // A skilled job is yours to do until you have done one of its kind; after that the crew builds them.
+  const masterKey = (S, kind) => (kind === 'road' ? 'road' + roadLevel(S) : kind);
+  // What the job actually is depends on what you have: a driveway is a concrete pour; with a sawmill, timber jobs are
+  // milling; with an excavator, roads and walls are digging. Each is yours the first time, and any time you choose to step in.
+  const jobScene = (S, kind) => (kind === 'drive' ? 'pour' : (kind === 'road' || kind === 'wall') && hasMachine(S, 'excavator') ? 'dig' : (kind === 'fence' || kind === 'deck' || kind === 'shed') && hasMachine(S, 'sawmill') ? 'mill' : 'pull');
+  const isOwn = (S, kind) => { const K = KIND[kind]; if (!K.own) return false; if (kind === 'tutor') return !(S.auto && S.auto.tutor); if (!K.build) return true; const sc = jobScene(S, kind); return !S.mastered[masterKey(S, kind)] || (sc !== 'pull' && (!S.mastered['s:' + sc] || !!(S.auto && S.auto['h:' + sc]))); };
   const roundValue = S => (handed(S) ? homeJobs(S, true).filter(j => ROUND[j.kind]).reduce((a, j) => a + j.val, 0) * 0.85 : 0);
   const siteKind = site => site.split(':')[0], siteId = site => site.split(':')[1];
   function awayJobs(S, site) {
@@ -130,6 +140,12 @@
     if (who === 'rival') return 0;
     const v = j.val * cashMult(S) * (mult || 1); S.cash += v; S.earned += v;
     if (j.kind === 'rubbish') S.scrap++;
+    if (who === 'you') { // every job is a doorstep: this is the door-knocking, and how the club grows
+      S.met++; S.voters += S.act === 1 ? 2 : 14; if (j.kind === 'lawn') S.lawnsDone++;
+      if (S.met % 3 === 0) S.members++;
+      if (S.met % 12 === 0) { S.mana += 1; log(S, `Kaha Tahi kai: ${S.members} households on the books now, and most of them at the table.`, 'good'); }
+    }
+    if (KIND[j.kind].build && j.q === undefined) { S.works[S.runSite + ':' + j.x + ',' + j.y] = { kind: j.kind, q: 0.8, lvl: j.kind === 'road' ? roadLevel(S) : 0 }; if (j.kind === 'road') S.roadWorks++; else S.propWorks++; } // built by the crew, or by you as routine once you know how
     return v;
   }
   const jobAt = (S, x, y) => S.jobs.find(j => j.x === x && j.y === y);
@@ -142,9 +158,9 @@
     if (!j || j.by) return '';
     const k = KIND[j.kind];
     if (k.wear && S.mower <= 0) return S.done.partner ? 'Mower is dead — get it back to base (left)' : 'Mower is dead — push it to the shop (top right)';
-    if (S.day < k.cost) return 'Not enough daylight left for this job';
-    S.day -= k.cost; S.mower = Math.max(0, S.mower - k.wear * (S.done.engshop ? 0.5 : 1));
-    if (k.build || (j.kind === 'tutor' && !(S.auto && S.auto.tutor))) { S.pendingBuild = S.jobs.indexOf(j); return 'BUILD'; } // tutoring is hands-on too, unless you have handed it to your tutors
+    const dc = jobCost(S, j.kind); if (S.day < dc) return 'Not enough daylight left for this job';
+    S.day -= dc; S.mower = Math.max(0, S.mower - k.wear * (S.done.engshop ? 0.5 : 1));
+    if ((k.build && isOwn(S, j.kind)) || (j.kind === 'tutor' && !(S.auto && S.auto.tutor))) { S.pendingBuild = S.jobs.indexOf(j); return 'BUILD'; } // tutoring is hands-on too, unless you have handed it to your tutors
     return '+$' + Math.round(payJob(S, j, 'you') * 1000).toLocaleString();
   }
   const roadLevel = S => (S.done.civil ? 3 : S.done.contractor ? 2 : 1); // patching → resealing → building new road
@@ -153,6 +169,8 @@
     const j = S.jobs[S.pendingBuild]; S.pendingBuild = null; j.q = q;
     if (j.kind === 'tutor') { const lv = tutorLevel(S); S.tutorXp = (S.tutorXp || 0) + 0.5 + q; if (q >= 0.7) S.mana += 0.2; return payJob(S, j, 'you', (0.6 + 0.6 * q) * (1 + 0.15 * lv)); }
     S.works[S.runSite + ':' + j.x + ',' + j.y] = { kind: j.kind, q, lvl: j.kind === 'road' ? roadLevel(S) : 0 }; if (j.kind === 'road') S.roadWorks++; else S.propWorks++;
+    S.mastered['s:' + jobScene(S, j.kind)] = true;
+    if (!S.mastered[masterKey(S, j.kind)]) { S.mastered[masterKey(S, j.kind)] = true; log(S, `${KIND[j.kind].name}: done once with your own hands. The crew builds these from now on.`, 'good'); }
     return payJob(S, j, 'you', 0.5 + 0.7 * q);
   }
   function moveYou(S, dx, dy) {
@@ -168,7 +186,7 @@
     if (a.t < 0 || S.jobs[a.t].by || (!rival && S.jobs[a.t].claim !== idx)) {
       let best = -1, bd = 1e9;
       S.jobs.forEach((j, i) => {
-        if (j.by || i === S.pendingBuild || KIND[j.kind].own || (rival ? a.lawnOnly && j.kind !== 'lawn' && j.kind !== 'hedge' : j.claim >= 0 && j.claim !== idx)) return; // skilled jobs wait for you
+        if (j.by || i === S.pendingBuild || isOwn(S, j.kind) || (rival ? a.lawnOnly && j.kind !== 'lawn' && j.kind !== 'hedge' : j.claim >= 0 && j.claim !== idx)) return; // skilled jobs wait for you
         const d = Math.abs(j.x - a.x) + Math.abs(j.y - a.y);
         if (d < bd) { bd = d; best = i; }
       });
@@ -191,7 +209,7 @@
     for (let g = 0; g < (steps || 200) && S.day > 0 && S.jobs.length; g++) {
       let tgt = null, bd = 1e9;
       if (S.mower <= 0) tgt = S.done.partner ? homeOf(S) : shopOf(S);
-      else S.jobs.forEach(j => { if (j.by || (j.claim >= 0 && !KIND[j.kind].own) || KIND[j.kind].cost > S.day) return; const d = Math.abs(j.x - S.you.x) + Math.abs(j.y - S.you.y); if (d < bd) { bd = d; tgt = j; } });
+      else S.jobs.forEach(j => { if (j.by || (j.claim >= 0 && !isOwn(S, j.kind)) || jobCost(S, j.kind) > S.day) return; const d = Math.abs(j.x - S.you.x) + Math.abs(j.y - S.you.y); if (d < bd) { bd = d; tgt = j; } });
       if (!tgt) break;
       if (S.you.x !== tgt.x) moveYou(S, Math.sign(tgt.x - S.you.x), 0); else if (S.you.y !== tgt.y) moveYou(S, 0, Math.sign(tgt.y - S.you.y)); else break;
       if (S.pendingBuild !== null) finishBuild(S, 0.7);
@@ -208,7 +226,8 @@
     if (S.act >= 4) S.nzWorks = Math.min(4, 1 + (S.done.mow ? 1 : 0) + Math.floor(S.industry / 80));
     if (S.act >= 3) { S.launches = 2 + (S.done.absorb2 ? 1 : 0) + (S.done.regional ? 1 : 0); S.wind = { a: Math.random() * Math.PI * 2, s: Math.random() }; }
   }
-  function setView(S, v) { if (v >= 1 && v <= S.act) { S.view = v; if (v === 2 && S.place && S.place !== 'pn') { S.place = 'pn'; if (S.at) delete S.at[2]; } } }
+  const worldOpen = S => S.act >= 5 && platform(S) >= 3; // the stratospheric platform is what makes a suborbital hop possible
+  function setView(S, v) { if (v >= 1 && v <= S.act + (worldOpen(S) ? 1 : 0)) { S.view = v; if (v === 2 && S.place && S.place !== 'pn') { S.place = 'pn'; if (S.at) delete S.at[2]; } } }
 
   // ───────── Scale 2: the city network ─────────
   const NODE = {}; DATA.city.forEach(n => (NODE[n.id] = n));
@@ -248,6 +267,23 @@
     st.wins++; S.security += 1;
     if (st.wins >= 3 && st.stance === 'war') { st.stance = 'broken'; S.security += 3; S.mana += 4; log(S, GANG[gid].name + ' no longer contest your streets.', 'good'); return 'That is three. They will not contest your streets again. +4 security, +4 mana.'; }
     return `You stood, and they walked. ${st.wins} of 3. +1 security.`;
+  }
+  // Weapons. open = damage to someone caught with no cover at all (99 kills); peek = damage to someone hit while
+  // leaning out to fire. The legal ones will not kill and draw far less attention.
+  const WEAPONS = {
+    air: { name: 'Air pistol', legal: true, wind: 0.32, mag: 8, reload: 1.0, open: 5, peek: 2, heat: 8 },
+    bow: { name: 'Crossbow', legal: true, wind: 0.5, mag: 1, reload: 1.6, open: 9, peek: 4, heat: 12 },
+    printed: { name: '3D-printed pistol', wind: 0.42, mag: 5, reload: 1.3, open: 99, peek: 4, jam: 0.15, heat: 30 },
+    pistol: { name: 'Pistol', wind: 0.34, mag: 7, reload: 1.1, open: 99, peek: 4, heat: 40 },
+    sawnoff: { name: 'Sawn-off shotgun', wind: 0.3, mag: 2, reload: 1.8, open: 99, peek: 6, heat: 45 },
+  };
+  function gunResult(S, gid, win, wid, killed) {
+    const W = WEAPONS[wid], st = gst(S, gid), q = quarter(S); S.heat += W.heat + (killed ? 30 : 0); S.mana -= (W.legal ? 2 : 8) + (killed ? 10 : 0); if (!W.legal) S.corrupt += 1;
+    const cost = `+${W.heat + (killed ? 30 : 0)} heat, −${(W.legal ? 2 : 8) + (killed ? 10 : 0)} mana.`;
+    if (!win) { S.cash -= Math.round(q * 0.3 * 100) / 100; return `You were carried out of it${W.legal ? '' : ', and the weapon is in an evidence bag'}. ${cost}`; }
+    st.wins = Math.min(3, st.wins + (W.legal ? 1 : 2)); S.security += 1;
+    if (st.wins >= 3 && st.stance === 'war') { st.stance = 'broken'; S.security += 3; log(S, GANG[gid].name + ' no longer contest your streets.', 'bad'); return `${killed ? 'One of theirs is dead on the footpath. ' : ''}They will not contest your streets again, and nobody on those streets will forget how. ${cost}`; }
+    return `${killed ? 'One of theirs is dead. ' : ''}They pulled back. ${st.wins} of 3. ${cost}`;
   }
   function brandish(S, gid) { // in Palmerston North a single firearm is close to the end of everything
     const st = gst(S, gid); if (st.stance !== 'war') return false;
@@ -640,6 +676,7 @@
       for (const k in p.inc) { if (k === 'cash' && S.act === 1 && ROUTE.includes(id)) continue; t[k] = (t[k] || 0) + p.inc[k] * S.done[id]; }
     }
     const ny = netYield(S), ty = townYield(S), zy = nzYield(S);
+    t.cash += (S.members || 0) * 0.03 * cashMult(S); // the club: a small monthly payment from every household, set by what it can afford
     t.cash += zy.cash; t.mana += zy.mana; t.voters += zy.voters;
     if (S.act === 1) t.cash += roundValue(S); // the foreman's lawn round
     if (S.patrolWins >= 3 && !patrolDue(S)) { t.mana += 0.5; t.voters += 10; } // patrols your people now run without you
@@ -815,13 +852,13 @@
 
   const API = {
     DATA, P, E, newState, income, quarter, cost, turnsFor, visible, horizon, unmet, blockers, canStart, start, endTurn, currentPending, resolve, windowOpen, pressured, count, platform, keepPlaying, cashMult, setView,
-    homeOf, shopOf, KIND, ROUTE, routeValue, homeValue, dayMax, siteName, moveYou, tick, autoYou, canEnter, enterRun, finishRun, finishBuild, roadLevel, shopLevel, tutorLevel, machineCost, benchStart, benchFinish, crewOut, siteResult,
+    homeOf, shopOf, KIND, ROUTE, routeValue, homeValue, dayMax, siteName, moveYou, tick, autoYou, canEnter, enterRun, finishRun, finishBuild, roadLevel, jobScene, WEAPONS, gunResult, isOwn, jobCost, MACH_FOR, hasMachine, shopLevel, tutorLevel, machineCost, benchStart, benchFinish, crewOut, siteResult,
     NODE, connected, needFor, reachable, sendCrew, nodeMult, netYield, buildMachine, assignMachine, autoCity,
     GANG, turfOf, gst, turfPenalty, stanceOptions, setStance, whanau, whanauCost, fightResult, brandish, escortResult, townNeed,
     RANGE, PN, TOWN, townsNow, hitR, established, launchCost, landing, launch, townMult, devCost, devTown, townYield, autoRegion, trainResult, patrolResult,
     nzRev, located, missionName, liaisons, muster, fieldResult,
     NZN, lkey, nzLink, nzDist, nzOn, nzCost, nzBuildLink, nzElectrify, nzHub, nzPlant, nzChains, nzYield, autoNZ, NZLINE, nzExtend, BARGE, bargeCost, bargeLoad, bargeDeliver, MOUNT, MKIND, mountCost, mountWhy, mountSend,
-    autoTurn, patrolDue, boatTier, boatResult, corridorResult, fleet, watchDue, watchSpec, watchResult, watchAuto, autoMissions, autoPlay, roundValue,
+    autoTurn, worldOpen, patrolDue, boatTier, boatResult, corridorResult, fleet, watchDue, watchSpec, watchResult, watchAuto, autoMissions, autoPlay, roundValue,
   };
   if (typeof module !== 'undefined') module.exports = API; else window.G = API;
 })();

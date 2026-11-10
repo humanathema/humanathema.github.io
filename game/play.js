@@ -9,8 +9,8 @@
   const money = k => '$' + (Math.abs(k) < 10 ? Math.round(k * 1000).toLocaleString() : Math.abs(k) < 1000 ? Math.round(k) + 'k' : (k / 1000).toFixed(1) + 'M');
   const modalUp = () => !!document.querySelector('.modal.show');
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-  const wants = s => s.view <= 5 || s.jobs.length > 0 || !!mode || s.mission.length > 0;
-  const screen = () => (mode ? mode.type : S.jobs.length ? 'run' : S.view === 1 ? 'home' : S.view === 2 ? ((S.place || 'pn') === 'pn' ? 'city' : 'town') : S.view === 3 ? 'region' : S.view === 5 ? 'moana' : 'nz');
+  const wants = s => s.view <= 6 || s.jobs.length > 0 || !!mode || s.mission.length > 0;
+  const screen = () => (mode ? mode.type : S.jobs.length ? 'run' : S.view === 1 ? 'home' : S.view === 2 ? ((S.place || 'pn') === 'pn' ? 'city' : 'town') : S.view === 3 ? 'region' : S.view === 5 ? 'moana' : S.view === 6 ? 'world' : 'nz');
   function text(t, x, y, o = {}) { ctx.font = (o.bold ? 'bold ' : '') + (o.size || 11) * tk + 'px system-ui,sans-serif'; ctx.textAlign = o.align || 'center'; ctx.fillStyle = o.color || '#e6efe9'; ctx.fillText(t, x, y); }
   function bar(x, y, w, h, f, col, label) { ctx.fillStyle = '#0c1a1d'; ctx.fillRect(x, y, w, h); ctx.fillStyle = col; ctx.fillRect(x, y, w * clamp(f, 0, 1), h); ctx.strokeStyle = '#24464a'; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, w, h); if (label) text(label, x + w + 6, y + h - 2, { align: 'left', size: 11 }); }
   function disc(x, y, r, fill, stroke, lw) { ctx.beginPath(); ctx.arc(x, y, r, 0, 7); if (fill) { ctx.fillStyle = fill; ctx.fill(); } if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw || 2; ctx.stroke(); } }
@@ -53,7 +53,7 @@
     g.strokeStyle = 'rgba(255,255,255,.4)'; g.lineWidth = 0.8; g.setLineDash([5, 6]); g.beginPath(); g.moveTo(H.cx[0], H.cy[hy]); g.lineTo(H.cx[S.gw - 1], H.cy[hy]); g.stroke(); g.setLineDash([]);
     g.font = '7.5px system-ui,sans-serif'; g.fillStyle = 'rgba(230,239,233,.6)'; g.textAlign = 'left';
     H.names.r.forEach((nm, y) => g.fillText(nm.toUpperCase(), H.cx[S.gw > 3 ? 1 : 0] + 12, H.cy[y] + 2.6)); H.names.c.forEach((nm, x) => { if (x === S.gw - 1 && S.gw > 3) return; g.save(); g.translate(H.cx[x] + 2.6, H.cy[S.gh - 1] - 12); g.rotate(-Math.PI / 2); g.fillText(nm.toUpperCase(), 0, 0); g.restore(); });
-    H.cv = c; return (hoods[key] = H);
+    H.cv = utilitarian(c); return (hoods[key] = H);
   }
   const KCOL = { lawn: '#5cb85c', hedge: '#3f9b6b', tutor: '#6fb3d9', repair: '#d98f4c', rubbish: '#9aa3a0', garden: '#b6d957', fence: '#c9a36b', drive: '#b9b2a3', wall: '#8b8f8c', path: '#d9c9a0', deck: '#a9825a', shed: '#8fa0b5', road: '#4a5258' };
   const KLET = { lawn: 'L', hedge: 'H', tutor: 'T', repair: 'R', rubbish: 'S', garden: 'G', fence: 'F', drive: 'D', wall: 'W', path: 'P', deck: 'K', shed: 'B', road: 'A' };
@@ -118,7 +118,7 @@
     S.jobs.forEach(j => {
       const x = gx(j.x), y = gy(j.y);
       if (j.by) { disc(x, y, 14, '#1b2d22', j.by === 'rival' ? '#d9634c' : j.by === 'crew' ? '#e6b84a' : '#2f9e7a', 2); text(j.by === 'rival' ? '✗' : '✓', x, y + 5, { bold: true, size: 14, color: j.by === 'rival' ? '#d9634c' : '#9fe0c4' }); return; }
-      disc(x, y, 15, KCOL[j.kind], G.KIND[j.kind].own ? '#ffffff' : '#10201a', 2); text(KLET[j.kind], x, y + 5, { bold: true, size: 13, color: '#10201a' });
+      disc(x, y, 15, KCOL[j.kind], G.isOwn(S, j.kind) ? '#ffffff' : '#10201a', 2); text(KLET[j.kind], x, y + 5, { bold: true, size: 13, color: '#10201a' });
       text(money(j.val * G.cashMult(S)), x, y + 29, { size: 10, color: '#cfe3d6' });
     });
     S.crew.forEach((c, i) => { const d = lerpTo('c' + i, gx(c.x) + (i % 3 - 1) * 7, gy(c.y) - 8 + (i % 2) * 6, dt); disc(d.x, d.y, 6, '#e6b84a', '#3a2c00', 1.5); });
@@ -147,7 +147,7 @@
     road: { t: 'ROAD WORKS', say: '' },
   };
   function startBuild() {
-    const j = S.jobs[S.pendingBuild]; if (!j) return; if (j.kind === 'tutor') return startTutor(); const kind = j.kind, road = kind === 'road', lvl = road ? G.roadLevel(S) : 0, th = (Math.random() - 0.5) * 0.5, r = (a, b) => a + Math.random() * (b - a);
+    const j = S.jobs[S.pendingBuild]; if (!j) return; if (j.kind === 'tutor') return startTutor(); { const sc = G.jobScene(S, j.kind); if (sc === 'mill') return startMill(j.kind); if (sc === 'dig') return startDig(j.kind); if (sc === 'pour') return startPour(j.kind); } const kind = j.kind, road = kind === 'road', lvl = road ? G.roadLevel(S) : 0, th = (Math.random() - 0.5) * 0.5, r = (a, b) => a + Math.random() * (b - a);
     const k = { x: Math.cos(th), y: Math.sin(th) }, n = { x: Math.sin(th), y: -Math.cos(th) }, U = road ? [0, 44, 24, 17][lvl] : 30, O = { x: 360, y: road ? (lvl === 3 ? 330 : 235) : 345 };
     const P = (a, b) => ({ x: O.x + k.x * a * U + n.x * b * U, y: O.y + k.y * a * U + n.y * b * U }), neg = v => ({ x: -v.x, y: -v.y });
     const hx = r(-1, 1), sp = { // A: the peg you pull from · u: the true direction · L: metres · w: width · wd: which side the width falls
@@ -207,7 +207,124 @@
     if (m.done && m.E) { ctx.strokeStyle = 'rgba(255,255,255,.8)'; ctx.lineWidth = 1; ctx.setLineDash([6, 5]); ctx.beginPath(); ctx.moveTo(m.A.x, m.A.y); ctx.lineTo(m.A.x + m.u.x * m.L * U, m.A.y + m.u.y * m.L * U); ctx.stroke(); ctx.setLineDash([]); } // where true was
     if (!m.done) { disc(m.A.x, m.A.y, 8 + 2 * Math.sin(tm * 5), '#e6b84a', '#ffffff', 2); if (m.E && m.drag) { const len = Math.hypot(m.E.x - m.A.x, m.E.y - m.A.y) / U, ok = Math.abs(len - m.L) / m.L < 0.04; ctx.fillStyle = 'rgba(8,18,20,.85)'; ctx.fillRect(m.E.x + 12, m.E.y - 22, 74, 20); text(len.toFixed(1) + ' m', m.E.x + 49, m.E.y - 8, { bold: true, size: 13, color: ok ? '#7dff9a' : '#f2e58a' }); } }
     const what = road ? ['', `POTHOLE · saw-cut and patch: ${m.L.toFixed(1)} m, running with the centreline`, `RESEAL · one lane, ${m.L.toFixed(1)} m, running with the centreline`, `NEW ROAD · ${m.L.toFixed(1)} m into the subdivision, square off the road`][m.lvl] : `${WORKS[m.kind].t} · ${m.L.toFixed(1)} m, ${WORKS[m.kind].say}`;
+    { const mt = G.MACH_FOR[m.kind]; if (G.hasMachine(S, mt)) { drawMachine(mt, CW - 118, CH - 86, 0.32); text(`your ${D.machines[mt].name.toLowerCase()} is on the job: half the day`, CW - 70, CH - 12, { size: 9, color: '#e6d9a8' }); } }
     header(what + ' · press on the peg, pull, let go');
+  }
+
+  // ───────────────── Machine jobs: with the machine, the job is running the machine ─────────────────
+  const jobDone = (m, q, line) => { const paid = G.finishBuild(S, clamp(q, 0, 1)); m.q = q; m.done = `${line} Paid ${money(paid)}.`; light(); };
+
+  // The sawmill. First you set the headrig: the run of cuts that turns the log into slices. Then each slice comes down the
+  // line to you and you send it on: straight out to the markers and the sorting table, left to the twin saws, or right to the bench.
+  const MILL_NEED = { fence: { post: 4, plank: 2, board: 4 }, deck: { post: 2, plank: 6, board: 2 }, shed: { post: 4, plank: 4, board: 4 } }, MT = { 1: [9, 'board', '25'], 2: [18, 'plank', '50'], 3: [36, 'cant', '100'] };
+  function startMill(kind) { mode = { type: 'mill', kind, need: MILL_NEED[kind], have: { post: 0, plank: 0, board: 0 }, waste: 0, logs: 2, R: 62 + Math.random() * 10, cuts: [], stage: 0, line: [], next: 0, gap: 0, done: null }; }
+  const millUsed = m => m.cuts.reduce((a, c) => a + c, 0);
+  function millKey(k) {
+    const m = mode; if (m.done) return;
+    if (m.stage === 0) { if (MT[k]) { if (millUsed(m) + MT[k][0] <= m.R * 2 - 4) m.cuts.push(MT[k][0]); else say('No room left on this log for that. Enter to saw.'); } else if (k === 'Backspace') m.cuts.pop(); else if ((k === ' ' || k === 'Enter') && m.cuts.length) { m.stage = 1; m.next = 0; m.gap = 0.3; } return; }
+    const pc = m.line.find(q => q.x > 318 && q.x < 420 && !q.sent); if (!pc || !/^[awd]$/.test(k)) return;
+    pc.sent = k; const t = pc.kind; let msg = '';
+    if (pc.wane) { if (k === 'd') { m.have.board++; msg = 'Edged on the bench: a board.'; } else { m.waste++; msg = 'Bark on it. That wanted the bench.'; } }
+    else if (t === 'cant') { if (k === 'a') { m.have.post += 2; msg = 'Through the twin saws: two posts.'; } else if (k === 'w') { m.have.post++; msg = 'Out as it is: one heavy post.'; } else { m.waste++; msg = 'Too big for the bench.'; } }
+    else if (t === 'plank') { if (k === 'w') { m.have.plank++; msg = 'A plank, marked and out.'; } else if (k === 'a') { m.have.board += 2; msg = 'Split on the twin saws: two boards.'; } else { m.waste++; msg = 'Clean timber, chewed up on the bench.'; } }
+    else { if (k === 'w') { m.have.board++; msg = 'A board, marked and out.'; } else { m.waste++; msg = 'Too thin for that. Firewood.'; } }
+    say(msg);
+  }
+  function stepMill(dt) {
+    const m = mode; if (m.done) return;
+    if (m.stage === 0) return;
+    m.gap -= dt; if (m.gap <= 0 && m.next < m.cuts.length) { let d0 = -m.R + (m.R * 2 - millUsed(m)) / 2; for (let i = 0; i < m.next; i++) d0 += m.cuts[i]; const c = m.cuts[m.next], mid = d0 + c / 2, chord = 2 * Math.sqrt(Math.max(0, m.R * m.R - mid * mid)), far = 2 * Math.sqrt(Math.max(0, m.R * m.R - Math.max(Math.abs(d0), Math.abs(d0 + c)) ** 2)); m.line.push({ x: 150, th: c, w: chord, kind: c === 9 ? 'board' : c === 18 ? 'plank' : 'cant', wane: far < chord * 0.72 || chord < m.R * 1.1, sent: null, y: 0 }); m.next++; m.gap = 1.5; }
+    for (let i = m.line.length - 1; i >= 0; i--) { const q = m.line[i]; if (!q.sent) { q.x += 62 * dt; if (q.x > 440) { q.sent = 'x'; m.waste++; say('Nobody sent it anywhere. Onto the floor.'); } } else { q.y += dt; if (q.y > 0.7) m.line.splice(i, 1); } }
+    if (m.next >= m.cuts.length && !m.line.length) { m.logs--; if (m.logs > 0) { m.stage = 0; m.cuts = []; m.R = 62 + Math.random() * 10; say('Next log on the carriage.'); } else { const need = m.need, tot = need.post + need.plank + need.board, got = Math.min(need.post, m.have.post) + Math.min(need.plank, m.have.plank) + Math.min(need.board, m.have.board), q = got / tot * (1 - Math.min(0.3, m.waste * 0.05)); jobDone(m, q, `${got} of the ${tot} pieces the job wanted, ${m.waste} wasted. ${q > 0.85 ? 'Cut to the order, nothing bought in.' : q > 0.5 ? 'The shortfall comes from the yard at retail.' : 'Most of the timber for this job is being bought.'}`); } }
+  }
+  function drawMill() {
+    const m = mode, cx = 150, cy = 190; ctx.fillStyle = '#1c1f22'; ctx.fillRect(0, 0, CW, CH); ctx.fillStyle = '#26292d'; ctx.fillRect(0, 300, CW, 140);
+    const used = millUsed(m), d0 = -m.R + (m.R * 2 - used) / 2; disc(cx, cy, m.R, '#b08a5a', '#6b4f2e', 4); for (let r = m.R - 10; r > 6; r -= 11) disc(cx, cy, r, null, 'rgba(90,60,30,.45)', 1);
+    let d = d0; m.cuts.forEach((c, i) => { const done = m.stage === 1 && i < m.next, h1 = Math.sqrt(Math.max(0, m.R * m.R - d * d)), h2 = Math.sqrt(Math.max(0, m.R * m.R - (d + c) * (d + c))); if (done) { ctx.fillStyle = '#1c1f22'; ctx.fillRect(cx + d, cy - m.R - 2, c, m.R * 2 + 4); } ctx.strokeStyle = '#ffd300'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.moveTo(cx + d, cy - h1); ctx.lineTo(cx + d, cy + h1); ctx.moveTo(cx + d + c, cy - h2); ctx.lineTo(cx + d + c, cy + h2); ctx.stroke(); if (!done) text(c === 9 ? '25' : c === 18 ? '50' : '100', cx + d + c / 2, cy + 3, { size: c === 9 ? 6.5 : 9, color: '#1c1f22', bold: true }); d += c; });
+    text('headrig', cx, cy + m.R + 22, { size: 10, color: '#8aa69d' });
+    ctx.fillStyle = '#111416'; ctx.fillRect(230, 176, 210, 28); ctx.strokeStyle = '#ffd300'; ctx.lineWidth = 2; ctx.strokeRect(318, 164, 102, 52); text('you', 369, 158, { size: 10, color: '#ffd300' });
+    [['W  markers → sorting table', 369, 96, '#00a94f'], ['A  twin saws', 250, 262, '#0098d4'], ['D  bench', 500, 262, '#ee7c0e']].forEach(q => text(q[0], q[1], q[2], { size: 11, bold: true, color: q[3] }));
+    ctx.strokeStyle = '#00a94f'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(369, 164); ctx.lineTo(369, 106); ctx.stroke(); ctx.strokeStyle = '#0098d4'; ctx.beginPath(); ctx.moveTo(318, 216); ctx.lineTo(262, 250); ctx.stroke(); ctx.strokeStyle = '#ee7c0e'; ctx.beginPath(); ctx.moveTo(420, 216); ctx.lineTo(488, 250); ctx.stroke();
+    m.line.forEach(q => { const ox = q.sent === 'a' ? -q.y * 120 : q.sent === 'd' ? q.y * 120 : 0, oy = q.sent === 'w' ? -q.y * 110 : q.sent && q.sent !== 'x' ? q.y * 80 : q.sent === 'x' ? q.y * 90 : 0, w = Math.max(14, q.w * 0.5); ctx.fillStyle = '#c9a36b'; ctx.fillRect(q.x + ox - w / 2, 190 + oy - q.th / 2, w, q.th); if (q.wane) { ctx.fillStyle = '#5d4826'; ctx.fillRect(q.x + ox - w / 2, 190 + oy - q.th / 2, 4, q.th); ctx.fillRect(q.x + ox + w / 2 - 4, 190 + oy - q.th / 2, 4, q.th); } ctx.strokeStyle = '#6b4f2e'; ctx.lineWidth = 1; ctx.strokeRect(q.x + ox - w / 2, 190 + oy - q.th / 2, w, q.th); });
+    let y = 70; text('THE ORDER', 560, 56, { align: 'left', size: 10, bold: true, color: '#8aa69d' }); for (const k in m.need) { const ok = m.have[k] >= m.need[k]; text(`${k}s  ${m.have[k]} of ${m.need[k]}`, 560, y + 4, { align: 'left', size: 12, bold: true, color: ok ? '#7dff9a' : '#f2f2f2' }); y += 18; } text(`wasted  ${m.waste}`, 560, y + 6, { align: 'left', size: 11, color: m.waste ? '#f0a898' : '#8aa69d' }); text(`logs left  ${m.logs}`, 560, y + 24, { align: 'left', size: 11, color: '#8aa69d' });
+    text(m.stage === 0 ? `1 = 25 mm board · 2 = 50 mm plank · 3 = 100 mm cant · Backspace takes one back · Space saws it (${Math.round((m.R * 2 - used) / 0.36)} mm of log unspoken for)` : 'A cant goes to the twin saws for two posts. Anything with bark on its edges goes to the bench. Clean boards and planks go straight out.', CW / 2, CH - 16, { size: 10.5, color: '#cfe3d6' });
+    header(`THE SAWMILL · ${WORKS[m.kind].t.toLowerCase()} timber · ${m.stage === 0 ? 'set the headrig: call the cuts across the log' : 'tailing out: send each piece on'}`);
+  }
+
+  // The excavator. A trench has a depth and a fall. Dig each metre to its mark and no deeper, then load the barrows with
+  // metal for the bedding and send your barrowhands along it.
+  function startDig(kind) {
+    const n = 14, d0 = 3 + Math.floor(Math.random() * 2), fall = Math.random() < 0.5 ? 1 : 2, tgt = []; for (let i = 0; i < n; i++) tgt.push(d0 + Math.round(i * fall / (n - 1) * 2));
+    mode = { type: 'dig', kind, n, tgt, dug: new Array(n).fill(0), bed: new Array(n).fill(0), at: 0, bucket: 0, t: 70, T: 70, barrows: [], hands: 2 + Math.min(2, Math.floor(G.crewOut(S) / 4)), spoil: 0, d0, fall, cd: 0, done: null };
+  }
+  function digKey(k) {
+    const m = mode; if (m.done) return;
+    if (k === 'a' || k === 'd') m.at = clamp(m.at + (k === 'd' ? 1 : -1), 0, m.n - 1);
+    else if (k === 'j' && m.cd <= 0) { if (m.bucket >= 3) return say('Bucket full. K to tip it.'); m.dug[m.at]++; m.bucket++; m.cd = 0.22; if (m.dug[m.at] > m.tgt[m.at]) say('Too deep there. It will have to be made up.'); }
+    else if (k === 'k' && m.cd <= 0) { if (m.bucket > 0) { m.spoil += m.bucket; m.bucket = 0; m.cd = 0.3; } else { const free = m.hands - m.barrows.length, i = m.bed.findIndex((b, x) => b < 1 && m.dug[x] >= m.tgt[x] && !m.barrows.some(q => q.to === x)); if (free <= 0) return say('Every barrow is out. Wait for one.'); if (i < 0) return say(m.bed.every(b => b >= 1) ? 'Bedded end to end.' : 'Nothing dug to depth and waiting for metal yet.'); m.barrows.push({ to: i, x: 60, st: 'out' }); m.cd = 0.5; } }
+  }
+  const DX = i => 150 + i * 36;
+  function stepDig(dt) {
+    const m = mode; if (m.done) return; m.t -= dt; m.cd -= dt;
+    for (let i = m.barrows.length - 1; i >= 0; i--) { const b = m.barrows[i], tx = b.st === 'out' ? DX(b.to) : 60; if (Math.abs(tx - b.x) < 130 * dt) { if (b.st === 'out') { m.bed[b.to] = 1; b.st = 'back'; b.x = tx; } else m.barrows.splice(i, 1); } else b.x += Math.sign(tx - b.x) * 130 * dt; }
+    const all = m.bed.every(b => b >= 1) && !m.barrows.length;
+    if (all || m.t <= 0) { let err = 0, donec = 0; for (let i = 0; i < m.n; i++) { err += Math.abs(m.dug[i] - m.tgt[i]); donec += m.bed[i]; } const q = clamp(1 - err / (m.n * 1.2), 0, 1) * (0.4 + 0.6 * donec / m.n); jobDone(m, q, `${err === 0 ? 'To the mark the whole way' : err + ' bucket' + (err === 1 ? '' : 's') + ' off grade along the run'}, ${Math.round(donec)} of ${m.n} metres bedded${m.t <= 0 ? ' when the light went' : ''}.`); }
+  }
+  function drawDig() {
+    const m = mode, gy0 = 150, u = 16; ctx.fillStyle = '#1c1f22'; ctx.fillRect(0, 0, CW, CH); ctx.fillStyle = '#5a5347'; ctx.fillRect(0, gy0, CW, CH - gy0); ctx.fillStyle = '#6a7a52'; ctx.fillRect(0, gy0 - 5, CW, 5);
+    for (let i = 0; i < m.n; i++) { const x = DX(i) - 17; ctx.fillStyle = '#1c1f22'; ctx.fillRect(x, gy0 - 5, 34, m.dug[i] * u + 5); if (m.dug[i] > m.tgt[i]) { ctx.fillStyle = 'rgba(227,32,23,.45)'; ctx.fillRect(x, gy0 + m.tgt[i] * u, 34, (m.dug[i] - m.tgt[i]) * u); } if (m.bed[i]) { ctx.fillStyle = '#9aa3a0'; ctx.fillRect(x, gy0 + m.dug[i] * u - 7, 34, 7); } }
+    ctx.strokeStyle = '#ffd300'; ctx.lineWidth = 1.5; ctx.setLineDash([5, 4]); ctx.beginPath(); for (let i = 0; i < m.n; i++) { const x = DX(i), y = gy0 + m.tgt[i] * u; i ? ctx.lineTo(x - 17, y) : ctx.moveTo(x - 17, y); ctx.lineTo(x + 17, y); } ctx.stroke(); ctx.setLineDash([]);
+    for (let i = 0; i < m.n; i++) text(m.tgt[i] * 100 + '', DX(i), gy0 + m.tgt[i] * u + 13, { size: 8, color: m.dug[i] === m.tgt[i] ? '#7dff9a' : '#ffd300' });
+    const bx = DX(m.at), by = gy0 + m.dug[m.at] * u - 4; ctx.strokeStyle = '#e6b84a'; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(bx - 60, 92); ctx.lineTo(bx - 8, 70); ctx.lineTo(bx, by - 14); ctx.stroke(); ctx.fillStyle = '#e6b84a'; ctx.fillRect(bx - 92, 84, 44, 28); ctx.fillStyle = '#1c1f22'; ctx.fillRect(bx - 84, 88, 16, 12); ctx.fillStyle = '#39424a'; ctx.fillRect(bx - 98, 112, 56, 10); ctx.fillStyle = '#39424a'; ctx.beginPath(); ctx.moveTo(bx - 10, by - 14); ctx.lineTo(bx + 10, by - 14); ctx.lineTo(bx + 6, by); ctx.lineTo(bx - 6, by); ctx.fill(); for (let i = 0; i < m.bucket; i++) { ctx.fillStyle = '#8a7a55'; ctx.fillRect(bx - 8 + i * 5.5, by - 20, 5, 5); }
+    ctx.fillStyle = '#8a7a55'; ctx.beginPath(); ctx.moveTo(8, gy0 - 5); ctx.lineTo(30 + Math.min(40, m.spoil * 1.5), gy0 - 8 - Math.min(40, m.spoil * 1.6)); ctx.lineTo(70 + Math.min(40, m.spoil * 2), gy0 - 5); ctx.fill(); ctx.fillStyle = '#9aa3a0'; ctx.beginPath(); ctx.moveTo(40, gy0 - 5); ctx.lineTo(62, gy0 - 30); ctx.lineTo(92, gy0 - 5); ctx.fill(); text('metal', 66, gy0 - 34, { size: 9, color: '#cfe3d6' });
+    m.barrows.forEach(b => { figure(b.x - 8, gy0 - 4, 0.2, b.st === 'out' ? 1 : -1, 'shove', '#ff9d6b'); ctx.fillStyle = '#39424a'; ctx.fillRect(b.x, gy0 - 14, 14, 8); if (b.st === 'out') { ctx.fillStyle = '#9aa3a0'; ctx.fillRect(b.x + 2, gy0 - 18, 10, 5); } disc(b.x + 12, gy0 - 5, 3, '#0c0f12'); });
+    bar(506, 36, 200, 9, m.t / m.T, '#e6b84a'); text('daylight', 500, 44, { align: 'right', size: 10 });
+    text(`Trench: ${m.d0 * 100} mm at this end, falling ${m.fall * 200} mm over the run. The numbers are the depth each metre wants. Barrowhands free: ${m.hands - m.barrows.length} of ${m.hands}.`, CW / 2, CH - 34, { size: 10.5, color: '#cfe3d6' });
+    text('A/D: track along · J: take a bucket (100 mm) · K: tip a full bucket, or with it empty load a barrow with metal and send it', CW / 2, CH - 16, { size: 10.5, color: '#8aa69d' });
+    header(`THE EXCAVATOR · ${m.kind === 'road' ? 'road' : 'footing'} trench · dig each metre to its mark and no deeper, then bed it`);
+  }
+
+  // Concrete. Nothing about a pour is hard except the order and the clock: boxing, base and mesh done before the truck
+  // is on the street, then get it in and floated before it goes off. A pump puts it where you point; without one it is barrows.
+  function startPour(kind) {
+    const n = G.crewOut(S), m = { type: 'pour', kind, crew: [], prep: [0, 0, 0], truck: 'none', eta: 0, life: 1, bays: [], hose: 0, pump: !!S.done.contractor, t: 0, done: null };
+    for (let i = 0; i < n; i++) m.crew.push(i % 3); for (let i = 0; i < 6; i++) m.bays.push({ fill: 0, fin: 0, age: 0, rough: false }); mode = m;
+  }
+  const PREP = ['boxing', 'base', 'mesh'], PJOB = ['barrows', 'floats'];
+  function pourKey(k) {
+    const m = mode; if (m.done) return; const here = m.truck === 'here', roles = here ? 2 : 3;
+    if (/^[123]$/.test(k) && +k <= roles) { const r = +k - 1, cnt = []; for (let q = 0; q < roles; q++) cnt.push(m.crew.filter(c => c === q).length); const from = cnt.map((c, q) => q).filter(q => q !== r).sort((a, b) => cnt[b] - cnt[a])[0], i = m.crew.indexOf(from); if (i >= 0) { m.crew[i] = r; say(`One more on ${(here ? PJOB : PREP)[r]}.`); } }
+    else if (k === 't') { if (m.truck !== 'none') return; m.truck = 'coming'; m.eta = 10; say('Truck ordered. Ten seconds out, and the drum is turning.'); }
+    else if ((k === 'a' || k === 'd') && m.pump) m.hose = clamp(m.hose + (k === 'd' ? 1 : -1), 0, 5);
+  }
+  function stepPour(dt) {
+    const m = mode; if (m.done) return; m.t += dt;
+    if (m.truck !== 'here') { for (let r = 0; r < 3; r++) { const ok = r === 0 || m.prep[r - 1] >= 0.5; if (ok) m.prep[r] = Math.min(1, m.prep[r] + dt * 0.03 * m.crew.filter(c => c === r).length); } }
+    if (m.truck === 'coming' && (m.eta -= dt) <= 0) { m.truck = 'here'; m.crew = m.crew.map((c, i) => (m.pump ? 1 : i % 2)); say(m.prep.every(p => p >= 1) ? 'Truck is here. Go.' : 'Truck is here and you are not ready. It is going off in the drum.'); }
+    if (m.truck === 'here') {
+      const ready = m.prep.every(p => p >= 1); m.life = Math.max(0, m.life - dt / (m.pump ? 46 : 62)); if (!ready) { for (let r = 0; r < 3; r++) m.prep[r] = Math.min(1, m.prep[r] + dt * 0.02 * Math.ceil(m.crew.length / 3)); }
+      else if (m.life > 0) { if (m.pump) { const b = m.bays[m.hose]; b.fill = Math.min(1, b.fill + dt * 0.26); } else { const b = m.bays.find(q => q.fill < 1); if (b) b.fill = Math.min(1, b.fill + dt * 0.058 * m.crew.filter(c => c === 0).length); } }
+      const fl = m.crew.filter(c => c === 1).length; let left = fl; m.bays.forEach(b => { if (b.fill >= 1 && b.fin < 1) { b.age += dt; if (b.age > 17) b.rough = true; if (left > 0) { const use = Math.min(left, 2); b.fin = Math.min(1, b.fin + dt * 0.075 * use); left -= use; } } });
+      const over = m.bays.every(b => b.fill >= 1 && b.fin >= 1) || (m.life <= 0 && m.bays.every(b => b.fill < 1 || b.fin >= 1 || b.age > 30)) || m.t > 150;
+      if (over) { let sc = 0, good = 0, rough = 0; m.bays.forEach(b => { if (b.fill >= 1 && b.fin >= 1) { if (b.rough) { sc += 0.55; rough++; } else { sc += 1; good++; } } else if (b.fill >= 1) { sc += 0.3; rough++; } }); jobDone(m, sc / 6, `${good} of 6 bays placed and floated in time${rough ? ', ' + rough + ' gone off rough' : ''}${6 - good - rough ? ', ' + (6 - good - rough) + ' never poured' : ''}. ${good === 6 ? 'One slab, no cold joints.' : 'It will be looked at every time they park on it.'}`); }
+    }
+  }
+  function drawPour() {
+    const m = mode, here = m.truck === 'here', bx = i => 210 + i * 70, tm = performance.now() / 1000;
+    ctx.fillStyle = '#1c1f22'; ctx.fillRect(0, 0, CW, CH); ctx.fillStyle = '#2f3337'; ctx.fillRect(0, 300, CW, 60); ctx.fillStyle = '#35553c'; ctx.fillRect(0, 60, CW, 240);
+    ctx.fillStyle = '#6a6f74'; ctx.fillRect(40, 90, 120, 110); ctx.fillStyle = '#4a4f54'; ctx.fillRect(40, 145, 120, 55);
+    m.bays.forEach((b, i) => { const x = bx(i), y = 110, w = 66, h = 170; ctx.fillStyle = m.prep[1] >= 1 ? '#8a7a55' : '#5a5347'; ctx.fillRect(x, y, w, h); if (m.prep[2] > 0) { ctx.strokeStyle = `rgba(20,20,20,${0.25 + 0.5 * m.prep[2]})`; ctx.lineWidth = 0.7; ctx.beginPath(); for (let q = 8; q < w; q += 10) { ctx.moveTo(x + q, y); ctx.lineTo(x + q, y + h * m.prep[2]); } for (let q = 8; q < h * m.prep[2]; q += 10) { ctx.moveTo(x, y + q); ctx.lineTo(x + w, y + q); } ctx.stroke(); }
+      if (b.fill > 0) { ctx.fillStyle = b.rough ? '#77736a' : b.fin >= 1 ? '#c9c5ba' : '#a39f95'; ctx.fillRect(x, y + h * (1 - b.fill), w, h * b.fill); if (b.fin > 0 && b.fin < 1) { ctx.fillStyle = '#c9c5ba'; ctx.fillRect(x, y + h * (1 - b.fill), w * b.fin, h * b.fill); } if (b.fill >= 1 && b.fin < 1) bar(x + 6, y + 6, w - 12, 5, 1 - b.age / 17, b.age > 12 ? '#e32017' : '#ffd300'); }
+      if (m.prep[0] > 0) { ctx.strokeStyle = '#c9a36b'; ctx.lineWidth = 3; ctx.strokeRect(x + 1, y + 1, w - 2, (h - 2) * Math.min(1, m.prep[0] * 1.2)); } });
+    if (m.truck !== 'none') { const tx = here ? 60 : 60 - m.eta * 30; ctx.fillStyle = '#e6efe9'; ctx.fillRect(tx, 308, 36, 30); ctx.fillStyle = '#9aa3a0'; ctx.save(); ctx.translate(tx + 70, 322); ctx.rotate(tm * 2); ctx.beginPath(); ctx.ellipse(0, 0, 30, 17, 0, 0, 7); ctx.fill(); ctx.strokeStyle = '#6a6f74'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(-30, 0); ctx.lineTo(30, 0); ctx.stroke(); ctx.restore(); disc(tx + 14, 342, 7, '#0c0f12'); disc(tx + 84, 342, 7, '#0c0f12'); }
+    if (here && m.pump) { const hx = bx(m.hose) + 33; ctx.strokeStyle = '#0c0f12'; ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(130, 316); ctx.quadraticCurveTo(hx - 60, 60, hx, 150); ctx.stroke(); disc(hx, 152, 5, '#ffd300'); }
+    const cnt = []; for (let q = 0; q < 3; q++) cnt.push(m.crew.filter(c => c === q).length);
+    if (!here) PREP.forEach((nm, r) => { for (let i = 0; i < cnt[r]; i++) figure(230 + r * 160 + i * 16, 296, 0.2, 1, Math.sin(tm * 8 + i + r) > 0 ? 'wpunch' : 'idle', SCOL[r]); });
+    else { for (let i = 0; i < cnt[0]; i++) { const f = (tm * 0.35 + i / Math.max(1, cnt[0])) % 1, tgt = m.bays.findIndex(b => b.fill < 1), tx = tgt < 0 ? 200 : bx(tgt) + 30, x = f < 0.5 ? 150 + (tx - 150) * f * 2 : tx - (tx - 150) * (f - 0.5) * 2; figure(x, 300, 0.2, f < 0.5 ? 1 : -1, 'shove', SCOL[0]); if (!m.pump) { ctx.fillStyle = f < 0.5 ? '#a39f95' : '#39424a'; ctx.fillRect(x + (f < 0.5 ? 6 : -18), 290, 12, 6); } } const fb = m.bays.findIndex(b => b.fill >= 1 && b.fin < 1); for (let i = 0; i < cnt[1]; i++) figure((fb < 0 ? 620 : bx(fb) + 14) + i * 16, 286, 0.2, 1, Math.sin(tm * 6 + i) > 0 ? 'shove' : 'idle', SCOL[1]); }
+    const names = here ? PJOB : PREP; names.forEach((nm, q) => { ctx.fillStyle = 'rgba(8,10,12,.85)'; ctx.fillRect(8 + q * 150, CH - 54, 144, 20); ctx.fillStyle = SCOL[q]; ctx.fillRect(12 + q * 150, CH - 50, 12, 12); text(`${q + 1}  ${nm}: ${cnt[q]}${!here ? '  ' + Math.round(m.prep[q] * 100) + '%' : ''}`, 30 + q * 150, CH - 40, { align: 'left', size: 11, bold: true }); });
+    if (m.truck !== 'none') { text(here ? 'workable' : 'truck in ' + Math.ceil(m.eta) + 's', 500, 44, { align: 'right', size: 10 }); bar(506, 36, 200, 9, here ? m.life : 1 - m.eta / 10, m.life < 0.3 ? '#e32017' : '#ffd300'); }
+    text(here ? (m.pump ? 'A/D: swing the pump hose bay to bay · 1/2: put one more on barrows or floats · each poured bay must be floated before its bar runs out' : '1/2: one more on barrows or on floats · barrows fill the bays in order · each poured bay must be floated before its bar runs out') : 'Boxing, then base, then mesh, each needs the one before half done. 1/2/3: one more on that. T: order the truck (10 s). Do not order it early.', CW / 2, CH - 16, { size: 10.5, color: '#cfe3d6' });
+    header(`CONCRETE · driveway · ${here ? (m.pump ? 'pump truck on site' : 'no pump yet: it goes in by wheelbarrow') : m.truck === 'coming' ? 'truck on its way' : 'prep'}`);
   }
 
   // ───────────────── The bench: scrap in at one end, a machine out at the other ─────────────────
@@ -362,8 +479,21 @@
     // the main trunk line and the station
     g.beginPath(); [[40, 150], [300, 95], [520, 40], [720, 10]].forEach((q, i) => (i ? g.lineTo(q[0], q[1]) : g.moveTo(q[0], q[1]))); g.strokeStyle = '#0e1315'; g.lineWidth = 4.5; g.stroke(); g.setLineDash([3, 3]); g.strokeStyle = '#b9c0c3'; g.lineWidth = 1.6; g.stroke(); g.setLineDash([]); g.fillStyle = '#b5694f'; g.fillRect(318, 84, 18, 6); lab('Station', 327, 80); lab('MAIN TRUNK LINE', 160, 112, 'rgba(230,239,233,.6)', 6.5);
     lab('The Square', R(0, 30).x + 4, R(0, 30).y + 4, '#cfe8d4', 7); lab('Lagoon', R(150, 95).x, R(150, 95).y + 24);
-    return c;
+    return utilitarian(c);
   }
+  // Maps are drawn in colour and then drained: grey ground and footprints, water left faintly blue, so that the only
+  // strong colour on screen is the network you are building (tube-map lines) and the things that need you.
+  function utilitarian(c) {
+    const g = c.getContext('2d'), im = g.getImageData(0, 0, c.width, c.height), d = im.data;
+    for (let i = 0; i < d.length; i += 4) { const r = d[i], gg = d[i + 1], b = d[i + 2], l = 0.3 * r + 0.59 * gg + 0.11 * b, water = b > gg + 10 && b > r + 24, k = water ? 0.5 : 0.1, m = water ? 0.82 : 1; d[i] = (l + (r - l) * k) * m; d[i + 1] = (l + (gg - l) * k) * m; d[i + 2] = (l + (b - l) * k) * (water ? 0.95 : 1.04); }
+    g.putImageData(im, 0, 0); return c;
+  }
+  const TUBE = ['#e32017', '#0098d4', '#00a94f', '#ffd300', '#9b0056', '#ee7c0e', '#7156a5', '#f3a9bb', '#95cdba', '#b36305'];
+  const CLINES = [['yard', 'milson', 'takaro', 'highbury', 'westend', 'awapuni', 'massey'], ['yard', 'roslyn', 'square', 'westend'], ['yard', 'kelvin', 'terrace', 'hokowhitu', 'massey'], ['roslyn', 'terrace'], ['takaro', 'square'], ['square', 'hokowhitu']];
+  const HLINES = [['marton', 'bulls', 'foxton', 'levin', 'otaki', 'kapiti', 'wellington'], ['whanganui', 'bulls', 'pn', 'woodville'], ['dannevirke', 'woodville', 'pahiatua', 'masterton', 'wellington'], ['pn', 'levin'], ['pn', 'feilding', 'marton'], ['pn', 'ramp', 'foxton']];
+  const lineOf = (L, a, b) => { const i = L.findIndex(q => q.some((x, k) => (x === a && q[k + 1] === b) || (x === b && q[k + 1] === a))); return TUBE[(i < 0 ? 7 : i) % TUBE.length]; };
+  function tube(a, b, col, w, dash) { ctx.lineCap = 'round'; ctx.setLineDash([]); ctx.strokeStyle = '#0c0f12'; ctx.lineWidth = w + 3; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); ctx.strokeStyle = col; ctx.lineWidth = w; if (dash) ctx.setLineDash(dash); ctx.stroke(); ctx.setLineDash([]); }
+  function station(x, y, r, on, ring) { disc(x, y, r, on ? '#ffffff' : '#2b3035', ring || '#0c0f12', Math.max(2, r * 0.36)); }
   function clickCity(x, y) {
     const n = D.city.find(n => Math.hypot(n.x - x, n.y - y) < 20); if (!n) { sel = null; return full(); }
     if (selMachine) { if (G.assignMachine(S, n.id, selMachine)) { say(D.machines[selMachine].name + ' → ' + n.name + (n.aff === selMachine ? ': a perfect fit, yield doubled' : ': it helps (+30%), but something else would fit better')); if (!(S.pool[selMachine] > 0)) selMachine = null; } else say('Machines can only go to suburbs you have connected.'); return full(); }
@@ -372,16 +502,16 @@
   }
   function drawCity(dt) {
     if (!cityMap) cityMap = buildCity(); ctx.imageSmoothingEnabled = true; ctx.drawImage(cityMap, 0, 0, CW, CH);
-    ctx.strokeStyle = '#14181b'; ctx.lineWidth = 7; ctx.lineCap = 'round'; ctx.beginPath(); D.city.forEach(n => n.adj.forEach(a => { if (a < n.id) return; const m = G.NODE[a]; ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); })); ctx.stroke(); ctx.strokeStyle = '#6a747a'; ctx.lineWidth = 4.5; ctx.stroke(); // the routes you drive between suburbs
+    D.city.forEach(n => n.adj.forEach(a => { if (a < n.id) return; const m = G.NODE[a], ca = G.connected(S, n.id), cb = G.connected(S, a), col = lineOf(CLINES, n.id, a); if (ca && cb) tube(n, m, col, 4.5); else if (ca || cb) tube(n, m, col, 3, [5, 5]); else tube(n, m, 'rgba(160,165,169,.55)', 1.6); })); // the network, as lines on a tube map
     { let left = Math.floor((S.roadWorks || 0) / 2); D.city.forEach(n => n.adj.forEach(a => { if (a < n.id || left <= 0 || !G.connected(S, n.id) || !G.connected(S, a)) return; left--; const m = G.NODE[a]; ctx.strokeStyle = '#14171a'; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke(); ctx.strokeStyle = '#e6efe9'; ctx.lineWidth = 1; ctx.setLineDash([6, 6]); ctx.stroke(); ctx.setLineDash([]); })); } // roads your crews have resealed
     { const yd = D.city.find(n => n.home), nl = S.nz ? S.nz.hub * 2 + ((S.nz.line || {}).pn || 0) : 0; if (nl) { archLine(yd.x - 26, yd.y - 14, Math.PI + 0.24, nl, 2.3, false); text('the hub line', yd.x - 60, yd.y - 34, { size: 9, color: '#e6d9a8' }); } }
-    D.city.forEach(n => n.adj.forEach(a => { if (a < n.id) return; const m = G.NODE[a], both = G.connected(S, n.id) && G.connected(S, a); ctx.strokeStyle = both ? '#e6b84a' : 'rgba(230,239,233,.35)'; ctx.lineWidth = both ? 2.5 : 1.2; ctx.setLineDash(both ? [] : [4, 5]); ctx.beginPath(); ctx.moveTo(n.x, n.y); ctx.lineTo(m.x, m.y); ctx.stroke(); }));
+    ctx.setLineDash([]);
     ctx.setLineDash([]);
     const pulse = 0.5 + 0.5 * Math.sin(performance.now() / 250), stack = {};
     D.city.forEach(n => {
       const conn = G.connected(S, n.id), reach = G.reachable(S, n.id), need = n.home ? 0 : G.needFor(S, n.id), prog = S.net[n.id] || 0;
       if (sel === n.id) disc(n.x, n.y, 19, null, '#ffffff', 1.5);
-      disc(n.x, n.y, 13, n.home ? '#e6b84a' : conn ? '#2f9e7a' : 'rgba(16,28,32,.85)', S.rivalNet[n.id] ? '#d9634c' : reach ? `rgba(230,184,74,${0.4 + 0.6 * pulse})` : '#3f5d55', S.rivalNet[n.id] || reach ? 3 : 1.5);
+      disc(n.x, n.y, 12, n.home ? '#e6b84a' : conn ? '#ffffff' : '#2b3035', S.rivalNet[n.id] ? '#e32017' : reach ? `rgba(255,211,0,${0.4 + 0.6 * pulse})` : '#0c0f12', 3.5);
       if (!conn && prog) { ctx.strokeStyle = '#e6b84a'; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.arc(n.x, n.y, 9.5, -Math.PI / 2, -Math.PI / 2 + (prog / need) * Math.PI * 2); ctx.stroke(); }
       text(n.home ? 'YARD' : conn ? (S.assign[n.id] ? MLET[S.assign[n.id]] : '·') : prog + '/' + need, n.x, n.y + 3.5, { bold: true, size: 9.5, color: n.home || conn ? '#06231a' : '#cfe3d6' });
       { ctx.font = 'bold 11px system-ui,sans-serif'; const tw = ctx.measureText(n.name).width * tk + 8; ctx.fillStyle = 'rgba(8,18,20,.72)'; ctx.fillRect(n.x - tw / 2, n.y - 30, tw, 14); } text(n.name, n.x, n.y - 19.5, { bold: true, color: conn || n.home ? '#ffffff' : '#b9c7c2' });
@@ -420,7 +550,7 @@
     { const n = N.rail; g.strokeStyle = '#11181b'; g.lineWidth = 5; g.beginPath(); g.moveTo(n.x - 70, n.y + 26); g.lineTo(n.x + 70, n.y + 34); g.stroke(); g.strokeStyle = '#b9c0c3'; g.lineWidth = 1; g.setLineDash([2, 3]); g.stroke(); g.setLineDash([]); house(n.x - 18, n.y + 10, 30, 10, '#8f5a48'); }
     { const n = N.res; g.fillStyle = d.res ? '#6a5a36' : '#3f4a40'; g.fillRect(n.x - 34, n.y + 12, 68, 36); if (d.res) { house(n.x - 28, n.y + 16, 26, 14, '#ff9d6b'); for (let i = 0; i < 8; i++) { g.fillStyle = ['#c9a36b', '#b6d957', '#8a6f3c'][i % 3]; g.fillRect(n.x + 4 + (i % 4) * 7, n.y + 18 + Math.floor(i / 4) * 8, 6, 6); } } else { g.strokeStyle = 'rgba(255,255,255,.25)'; g.setLineDash([3, 3]); g.strokeRect(n.x - 28, n.y + 16, 26, 14); g.setLineDash([]); } }
     { const n = N.dom; g.fillStyle = '#3d7a45'; g.fillRect(n.x - 34, n.y + 12, 68, 40); g.strokeStyle = 'rgba(255,255,255,.45)'; g.lineWidth = 0.8; g.strokeRect(n.x - 28, n.y + 17, 36, 22); for (let i = 0; i < 7; i++) { g.fillStyle = '#2a6a3a'; g.beginPath(); g.arc(n.x + 14 + r() * 16, n.y + 16 + r() * 32, 3 + r() * 2, 0, 7); g.fill(); } }
-    return c;
+    return utilitarian(c);
   }
   function drawMachineOn(g, type, ox, oy, sc) { const keep = ctx; ctx = g; try { drawMachine(type, ox, oy, sc); } finally { ctx = keep; } }
   function drawTown() {
@@ -469,11 +599,11 @@
     g.restore();
     g.fillStyle = '#1f3d31'; g.beginPath(); g.ellipse(262, 332, 13, 4.5, -0.9, 0, 7); g.fill(); g.strokeStyle = '#d6c69a'; g.lineWidth = 0.8; g.stroke(); lab('Kāpiti Island', 246, 318, '#7fb8a6', 7);
     lab('South Taranaki Bight', 118, 196, '#5fa8c4', 12); lab('Cook Strait', 120, 420, '#5fa8c4', 9); lab('TARARUA RANGE', 470, 284, 'rgba(200,225,210,.55)', 7.5, 2.15 - Math.PI); lab('RUAHINE RANGE', 546, 84, 'rgba(200,225,210,.55)', 7.5, 1.37); lab('the gorge', 536, 166, 'rgba(200,225,210,.7)', 6.5); lab('Manawatū R.', 430, 236, '#8fd0ea', 6.5, 0.4); lab('Rangitīkei R.', 438, 78, '#8fd0ea', 6.5, -0.95); lab('Whanganui R.', 312, 52, '#8fd0ea', 6.5, 0.85); lab('WAIRARAPA', 640, 330, 'rgba(200,225,210,.4)', 9); lab('MANAWATŪ', 428, 150, 'rgba(200,225,210,.4)', 9);
-    return c;
+    return utilitarian(c);
   }
   function drawRegion(dt) {
     if (!regionMap) regionMap = buildRegion(); ctx.imageSmoothingEnabled = true; ctx.drawImage(regionMap, 0, 0, CW, CH);
-    { const g = graphOf(3), tm = performance.now() / 1000, now = G.townsNow(S);
+    { const g = graphOf(3), tm = performance.now() / 1000, now = G.townsNow(S); D.roads.forEach(q => tube(g.nodes[q[0]], g.nodes[q[1]], lineOf(HLINES, q[0], q[1]), 2.6));
       D.towns.forEach(t => { if (!now.includes(t)) disc(t.x, t.y, 2.5, '#6f7d80'); });
       ctx.fillStyle = '#d6c08a'; ctx.fillRect(RAMP.x - 9, RAMP.y - 2.5, 24, 5); ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(RAMP.x - 11, RAMP.y - 4 + Math.sin(tm * 2), 2, 8); text('Himatangi ramp', RAMP.x - 14, RAMP.y + 3, { align: 'right', size: 8.5, color: '#e6d9a8' });
       if (S.done.himatangi) { // the barge: a standing platform, a module at a time
@@ -486,10 +616,10 @@
       } }
     const pn = G.PN;
     G.townsNow(S).forEach(t => {
-      if (t.home) { disc(t.x, t.y, 13, '#e6b84a', '#fff4cf', 2); text('Palmerston North', t.x, t.y - 20, { bold: true }); return; }
+      if (t.home) { disc(t.x, t.y, 10, '#e6b84a', '#0c0f12', 3.5); text('Palmerston North', t.x, t.y - 20, { bold: true }); return; }
       const est = G.established(S, t.id), got = S.towns[t.id] || 0, r = G.hitR(t), d = S.townDev[t.id] || {};
       ctx.setLineDash([4, 4]); disc(t.x, t.y, r, est ? 'rgba(47,158,122,.35)' : null, est ? '#2f9e7a' : '#8aa69d', 1.5); ctx.setLineDash([]);
-      disc(t.x, t.y, 6, est ? '#2f9e7a' : '#cfe3d6');
+      station(t.x, t.y, 5, est);
       if (d.shop) { ctx.fillStyle = '#e6b84a'; ctx.fillRect(t.x + 8, t.y - 12, 7, 7); } if (d.res) { ctx.fillStyle = '#ff9d6b'; ctx.fillRect(t.x + 8, t.y + 4, 7, 7); }
       text(t.name, t.x, t.y - r - 6, { bold: est, size: t.infill ? 10 : 11 });
       text(est ? `+${money(t.yl.cash * G.townMult(S, t.id))} · +${Math.round(t.yl.voters * G.townMult(S, t.id))} list` : `${got}/${G.townNeed(S, t.id)} convoys`, t.x, t.y + r + 13, { size: 9.5, color: est ? '#e6b84a' : '#8aa69d' });
@@ -514,7 +644,7 @@
 
   // ───────────────── Gym: sparring ─────────────────
   const MOVES = { punch: { range: 58, wind: 0.14, rec: 0.28 }, kick: { range: 86, wind: 0.3, rec: 0.42 }, shove: { range: 54, wind: 0.2, rec: 0.36 } };
-  function startSpar(gang) { const lvl = gang ? Math.min(8, 3 + G.gst(S, gang).wins * 2) : Math.min(6, S.sparWins), f = (x, slow) => ({ x, st: 'idle', tm: 0, mv: null, guard: false, grap: 0, open: 0, score: 0, flash: 0, slow }); mode = { type: 'spar', gang, lvl, a: f(250, 1), b: f(470, 2.4 - 0.18 * lvl), t: 45, ai: 1, aiGuard: 0, done: null }; }
+  function startSpar(gang) { const lvl = gang ? Math.min(8, 3 + G.gst(S, gang).wins * 2) : Math.min(6, S.sparWins), f = (x, slow) => ({ x, st: 'idle', tm: 0, mv: null, guard: false, grap: 0, open: 0, score: 0, flash: 0, slow }); mode = { type: 'spar', gang, lvl, a: f(250, 1), b: f(470, 2.4 - 0.18 * lvl), t: 60, ai: 1, aiGuard: 0, done: null }; }
   function attack(f, mv) { if (f.st === 'idle') { f.st = 'wind'; f.mv = mv; f.tm = MOVES[mv].wind * f.slow; f.guard = false; f.grap = 0; } }
   // Block stops a strike. A shove breaks a block. A grapple catches a shove. A strike beats a grapple.
   // A clean hit leaves them open for a moment: land a second before they cover up and it counts double.
@@ -527,14 +657,15 @@
       if (Math.abs(f.x - o.x) > MOVES[f.mv].range || o.st === 'down') return;
       if (f.mv === 'shove') {
         if (o.grap > 0 && o.st === 'idle') { // caught: they had shifted from the block to a grip
-          o.grap = 0; o.score++; f.flash = 0.25;
+          o.grap = 0; o.score += 2; f.flash = 0.25;
           if (o.thr) { f.st = 'stun'; f.tm = 0.9; f.x -= dir * 120; mode.note = { t: 1, m: 'THROWN' }; } else { f.st = 'down'; f.tm = 1.1; mode.note = { t: 1, m: 'TAKEDOWN' }; }
         } else if (o.guard && o.st === 'idle') { o.guard = false; o.st = 'stun'; o.tm = 0.5; o.open = 0.75; o.x += dir * 30; mode.note = { t: 0.7, m: 'GUARD BROKEN' }; }
         else { o.x += dir * 46; if (o.st === 'idle') { o.st = 'stun'; o.tm = 0.16; } }
       } else if (o.guard && o.st === 'idle') { f.st = 'stun'; f.tm = 0.8; }
-      else { const combo = o.open > 0; f.score += combo ? 2 : 1; o.flash = 0.25; o.st = 'stun'; o.tm = combo ? 0.5 : 0.3; o.open = combo ? 0 : 0.8; o.grap = 0; o.x += dir * (combo ? 50 : 22); if (combo) mode.note = { t: 0.8, m: 'COMBO' }; }
+      else { const combo = o.open > 0; f.score += (f.mv === 'kick' ? 2 : 1) * (combo ? 2 : 1); o.flash = 0.25; o.st = 'stun'; o.tm = combo ? 0.5 : 0.3; o.open = combo ? 0 : 0.8; o.grap = 0; o.x += dir * (combo ? 50 : 22); if (combo) mode.note = { t: 0.8, m: 'COMBO' }; }
     } else f.st = 'idle';
   }
+  const HP = 12; // a fight is a dozen points of health, not five touches: a punch takes 1, a kick 2, a combo doubles it, a takedown 2
   function stepSpar(dt) {
     const m = mode, a = m.a, b = m.b, L = m.lvl; if (m.done) return;
     m.t -= dt; if (m.note) { m.note.t -= dt; if (m.note.t <= 0) m.note = null; }
@@ -552,7 +683,7 @@
     }
     stepFighter(a, b, dt); stepFighter(b, a, dt);
     a.x = Math.max(40, Math.min(b.x - 26, a.x)); b.x = Math.min(CW - 40, Math.max(a.x + 26, b.x));
-    if (a.score >= 5 || b.score >= 5 || m.t <= 0) { m.done = (m.gang ? G.fightResult(S, m.gang, a.score > b.score) : G.trainResult(S, a.score > b.score)) || 'Round over.'; light(); }
+    if (a.score >= HP || b.score >= HP || m.t <= 0) { m.done = (m.gun ? G.gunResult(S, m.gang, a.score > b.score, m.gun, false) : m.gang ? G.fightResult(S, m.gang, a.score > b.score) : G.trainResult(S, a.score > b.score)) || 'Round over.'; light(); }
   }
   // A person: a rounded body, a head, two arms and two legs. No face. Feet at (x, y), facing dir, s = size.
   function figure(x, y, s, dir, pose, col) {
@@ -568,15 +699,108 @@
     arms.forEach(a => limb(0, -68, a[0], a[1], a[2], a[3], 8)); ctx.strokeStyle = ctx.fillStyle = col; arms.forEach(a => limb(0, -68, a[0], a[1], a[2], a[3], 6.5));
     ctx.restore();
   }
+  // The fighters are drawings: rotoscoped, pen and marker on dot-grid paper. You are the one in the purple hoodie.
+  const SMAN = {"you": {"neutral": [336, 359, 236], "midhit": [342, 360, 236], "lowkick": [459, 357, 221], "dash": [231, 360, 136], "death": [331, 319, 118], "block": [358, 356, 240], "hit": [366, 359, 240], "punch": [421, 358, 240], "fram1": [171, 329, 164], "frame2": [215, 360, 138], "frame3": [308, 359, 70], "midblock": [236, 349, 134]}, "them": {"neutral": [255, 357, 114], "frame4": [355, 356, 120], "death": [379, 360, 174], "block": [367, 353, 127], "hit": [274, 360, 131], "punch": [285, 353, 184], "fram1": [171, 329, 6], "frame2": [220, 356, 110], "frame3": [309, 357, 239], "lowkick": [354, 347, 226], "dash": [280, 356, 94]}}, SPR = {};
+  const SPOSE = { you: { idle: 'neutral', guard: 'block', punch: 'punch', wpunch: 'neutral', kick: 'lowkick', wkick: 'frame2', shove: 'dash', wshove: 'dash', grapple: 'midblock', stun: 'hit', down: 'death' }, them: { idle: 'neutral', guard: 'block', punch: 'punch', wpunch: 'neutral', kick: 'lowkick', wkick: 'frame4', shove: 'dash', wshove: 'dash', grapple: 'block', stun: 'hit', down: 'death' } };
+  for (const who in SMAN) for (const nm in SMAN[who]) { const im = new Image(); im.src = 'art/fighter/' + who + '-' + nm + '.png'; SPR[who + '-' + nm] = im; }
+  function sprite(who, pose, x, y, hgt, dir) { // feet at (x, y); false if the drawing has not loaded, so the caller can fall back
+    const nm = SPOSE[who][pose] || 'neutral', im = SPR[who + '-' + nm], mm = SMAN[who][nm]; if (!im || !im.complete || !im.naturalWidth) return false;
+    const sc = hgt / 360, flip = dir !== (who === 'you' ? 1 : -1); ctx.save(); ctx.translate(x, y); if (flip) ctx.scale(-1, 1); ctx.imageSmoothingEnabled = true; ctx.drawImage(im, -mm[2] * sc, -mm[1] * sc, mm[0] * sc, mm[1] * sc); ctx.restore(); return true;
+  }
   const poseOf = f => (f.st === 'down' ? 'down' : f.st === 'stun' ? 'stun' : f.st === 'wind' ? 'w' + f.mv : f.st === 'rec' ? f.mv : f.grap > 0 ? 'grapple' : f.guard ? 'guard' : 'idle');
-  function drawFighter(f, dir, col) { figure(f.x, 300, 1, dir, poseOf(f), f.flash > 0 ? '#ffffff' : f.st === 'stun' || f.st === 'down' ? '#77807a' : f.st === 'wind' ? '#ff9d6b' : f.grap > 0 ? '#9fe0c4' : col); if (f.open > 0 && f.st !== 'down') text('open', f.x, 196, { size: 10, color: '#ff9d6b' }); }
+  function drawFighter(f, dir, col) { const x = f.x - dir * 24; ctx.fillStyle = f.st === 'wind' ? 'rgba(255,157,107,.75)' : f.grap > 0 ? 'rgba(159,224,196,.7)' : f.flash > 0 ? 'rgba(255,255,255,.8)' : 'rgba(0,0,0,.35)'; ctx.beginPath(); ctx.ellipse(x, 303, f.st === 'wind' ? 44 : 34, f.st === 'wind' ? 9 : 6, 0, 0, 7); ctx.fill(); if (f.st === 'wind') text('!', x, 150, { bold: true, size: 22, color: '#ff9d6b' }); if (f.flash > 0) ctx.globalAlpha = 0.6; if (!sprite(dir === 1 ? 'you' : 'them', poseOf(f), x, 304, 138, dir)) figure(f.x, 300, 1, dir, poseOf(f), f.flash > 0 ? '#ffffff' : f.st === 'stun' || f.st === 'down' ? '#77807a' : f.st === 'wind' ? '#ff9d6b' : f.grap > 0 ? '#9fe0c4' : col); ctx.globalAlpha = 1; if (f.open > 0 && f.st !== 'down') text('open', f.x, 196, { size: 10, color: '#ff9d6b' }); }
   function drawSpar() {
     const m = mode; ctx.fillStyle = '#1a1f24'; ctx.fillRect(0, 0, CW, CH); ctx.fillStyle = '#2a3138'; ctx.fillRect(0, 300, CW, 140); ctx.fillStyle = '#3d4852'; ctx.fillRect(60, 300, CW - 120, 6);
     text(m.gang ? `${G.GANG[m.gang].name.toUpperCase()} · hands only, in front of everyone` : `${S.runSite === 'home' ? 'GARAGE GYM' : 'A LOCAL GYM'} · round ${S.sparWins + 1}`, CW / 2, 40, { bold: true, size: 16, color: '#e6b84a' });
-    text(`You ${m.a.score}`, 120, 80, { bold: true, size: 20, color: '#6fb3d9' }); text(`${m.b.score} ${m.gang ? 'Enforcer' : 'Partner'}`, CW - 120, 80, { bold: true, size: 20, color: '#e6b84a' }); text(Math.ceil(Math.max(0, m.t)) + 's', CW / 2, 80, { size: 16 });
+    text('You', 60, 86, { bold: true, size: 15, color: '#6fb3d9', align: 'left' }); bar(100, 74, 200, 14, 1 - m.b.score / HP, '#6fb3d9'); text(m.gang ? 'Enforcer' : 'Partner', CW - 60, 86, { bold: true, size: 15, color: '#e6b84a', align: 'right' }); bar(CW - 300 - 28, 74, 200, 14, 1 - m.a.score / HP, '#e6b84a'); text(Math.ceil(Math.max(0, m.t)) + 's', CW / 2, 86, { size: 16 });
     drawFighter(m.a, 1, '#6fb3d9'); drawFighter(m.b, -1, '#e6b84a'); if (m.note) text(m.note.m, CW / 2, 130, { bold: true, size: 18, color: '#fff4cf' });
     text('Block (S or Space) stops a strike · a shove (L) breaks a block · L while blocking takes a grip, and a grip catches a shove: takedown, or hold D to throw', CW / 2, CH - 34, { size: 10, color: '#cfe3d6' });
-    text('A/D move · J punch · K kick · a second hit while they are open counts double · a strike beats a grip · first to 5', CW / 2, CH - 16, { size: 10, color: '#8aa69d' });
+    text('A/D move · J punch · K kick · a kick hurts twice as much as a punch · a second hit while they are open doubles it · a strike beats a grip', CW / 2, CH - 16, { size: 10, color: '#8aa69d' });
+  }
+
+  // ───────────────── A gunfight: the same fight, with cover where the block was ─────────────────
+  // In cover you cannot be hit. To fire you lean out, and for that moment you can be. A shot at someone in cover pins
+  // them, which is how you move up. Caught with no cover at all, a real gun ends it. Close enough, it is hands again.
+  const GCOV = [150, 290, 430, 570];
+  function startGun(gid, wid) {
+    const W = G.WEAPONS[wid], f = (ci, w) => ({ ci, x: GCOV[ci], st: 'cover', tm: 0, dmg: 0, ammo: w.mag, supp: 0, w });
+    mode = { type: 'gun', gang: gid, wid, lvl: Math.min(6, 2 + G.gst(S, gid).wins * 2), a: f(0, W), b: f(3, G.WEAPONS.pistol), t: 75, ai: 1.8, shots: [], note: null, killed: false, seen: false, done: null };
+  }
+  const gExposed = f => f.st === 'aim' || f.st === 'rec' || f.st === 'move' || f.st === 'rush', gOpen = f => f.st === 'move' || f.st === 'rush';
+  function gunShot(m, f, o, aimed) {
+    const dir = f === m.a ? 1 : -1, hx = f.x + dir * 10, W = f.w; f.ammo--;
+    if (aimed && W.jam && Math.random() < W.jam) { m.note = { t: 1, m: 'JAMMED' }; return; }
+    let dmg = 0; if (aimed) dmg = gOpen(o) ? W.open : gExposed(o) ? W.peek : 0; else dmg = gExposed(o) ? 3 : 0;
+    m.shots.push({ x1: hx + dir * 30, y1: aimed ? 191 : 262, x2: dmg ? o.x - dir * 20 : o.x - dir * 34 + (aimed ? 0 : (Math.random() - 0.5) * 90), y2: dmg ? 235 : aimed ? 268 : 150 + Math.random() * 120, t: 0.14, hit: dmg > 0 });
+    if (!dmg) { if (aimed && !gExposed(o)) { o.supp = 0.95; if (o.st === 'reload') o.tm += 0.3; } return; }
+    if (dmg >= 99) { o.dmg = HP; if (o === m.b) m.killed = true; m.note = { t: 1.2, m: o === m.a ? 'CAUGHT IN THE OPEN' : 'IN THE OPEN' }; } else { o.dmg += dmg; m.note = { t: 0.8, m: aimed ? 'HIT' : 'SNAP SHOT' }; }
+    if (o.st === 'move' || o.st === 'rush') { o.x = GCOV[o.ci]; } o.st = 'hit'; o.tm = 0.45; o.flash = 0.25;
+  }
+  function gunKey(k) {
+    const m = mode, a = m.a, b = m.b; if (m.done || a.st !== 'cover') return;
+    if (a.supp > 0 && k !== 'r') return say('Pinned. Wait for it to lift.');
+    if (k === 'j') { if (a.ammo <= 0) { a.st = 'reload'; a.tm = a.w.reload; } else { a.st = 'aim'; a.tm = a.w.wind; m.seen = false; } }
+    else if (k === 'k') { if (a.ammo > 0) { a.st = 'snap'; a.tm = 0.15; } else say('Empty. R to reload.'); }
+    else if (k === 'r') { a.st = 'reload'; a.tm = a.w.reload; }
+    else if (k === 'a' || k === 'd') { const to = a.ci + (k === 'd' ? 1 : -1); if (to < 0 || to >= b.ci) return say(to < 0 ? 'Nowhere further back.' : 'They are behind that one. L to rush them.'); a.to = to; a.st = 'move'; }
+    else if (k === 'l') { if (b.ci - a.ci !== 1) return say('Too far to rush. Move up first.'); a.st = 'rush'; }
+  }
+  function gunMelee(byYou) { // close enough: weapons swing away on their slings and it is the fighter from here
+    const g = mode, held = !byYou ? false : g.b.st === 'reload' || g.b.supp > 0 || Math.random() < 0.5;
+    startSpar(g.gang); const m = mode; m.gun = g.wid; m.a.x = 310; m.b.x = 380; m.a.score = Math.min(HP - 1, Math.round(g.b.dmg)); m.b.score = Math.min(HP - 1, Math.round(g.a.dmg)); m.t = 40;
+    if (held) { m.b.slow *= 1.7; say('They are still trying to bring the gun up. Hands are faster.'); } else say('Close enough. The weapon is on its sling: this is hands now.');
+    m.note = { t: 1.4, m: 'HAND TO HAND' }; full();
+  }
+  function stepGun(dt) {
+    const m = mode, a = m.a, b = m.b; if (m.done) return;
+    m.t -= dt; if (m.note && (m.note.t -= dt) <= 0) m.note = null; m.shots = m.shots.filter(q => (q.t -= dt) > 0);
+    for (const f of [a, b]) {
+      const o = f === a ? b : a, dir = f === a ? 1 : -1; f.supp = Math.max(0, f.supp - dt); f.flash = Math.max(0, (f.flash || 0) - dt);
+      if (f.st === 'move') { const tx = GCOV[f.to], st = 175 * dt; if (Math.abs(tx - f.x) <= st) { f.x = tx; f.ci = f.to; f.st = 'cover'; } else f.x += Math.sign(tx - f.x) * st; continue; }
+      if (f.st === 'rush') { const tx = o.x - dir * 96, st = 230 * dt; if (Math.abs(tx - f.x) <= st) return gunMelee(f === a); f.x += Math.sign(tx - f.x) * st; continue; }
+      if (f.st === 'cover') continue;
+      f.tm -= dt; if (f.tm > 0) continue;
+      if (f.st === 'aim') { gunShot(m, f, o, true); f.st = 'rec'; f.tm = 0.4; }
+      else if (f.st === 'snap') { gunShot(m, f, o, false); f.st = 'snapr'; f.tm = 0.28; }
+      else { if (f.st === 'reload') f.ammo = f.w.mag; f.st = 'cover'; }
+    }
+    // the other side: answers when you lean out, pins you, moves up when you are pinned or reloading
+    if (b.st === 'cover' && b.supp <= 0) {
+      if ((a.st === 'aim' || a.st === 'rec') && !m.seen) { m.seen = true; if (b.ammo > 0 && Math.random() < 0.2 + 0.07 * m.lvl) { b.st = 'snap'; b.tm = 0.15; } }
+      else if ((m.ai -= dt) <= 0) {
+        m.ai = 1.5 + Math.random() * 1.3 - 0.09 * m.lvl; const busy = a.supp > 0 || a.st === 'reload';
+        if (b.ammo <= 0) { b.st = 'reload'; b.tm = b.w.reload; }
+        else if (busy && b.ci - a.ci > 1 && Math.random() < 0.55) { b.to = b.ci - 1; b.st = 'move'; }
+        else if (busy && b.ci - a.ci === 1 && Math.random() < 0.3) b.st = 'rush';
+        else { b.st = 'aim'; b.tm = b.w.wind + 0.12; }
+      }
+    }
+    if (a.dmg >= HP || b.dmg >= HP || m.t <= 0) { m.done = (m.t <= 0 && a.dmg < HP && b.dmg < HP ? 'Sirens. Everyone scatters. ' : '') + G.gunResult(S, m.gang, a.dmg < HP && b.dmg > a.dmg, m.wid, m.killed); light(); }
+  }
+  function drawGun() {
+    const m = mode, tm = performance.now() / 1000;
+    ctx.fillStyle = '#16191c'; ctx.fillRect(0, 0, CW, CH); ctx.fillStyle = '#22262a'; for (let i = 0; i < 6; i++) ctx.fillRect(20 + i * 120, 120, 96, 180); ctx.fillStyle = '#2a2f34'; ctx.fillRect(0, 300, CW, 140); ctx.fillStyle = '#3d4852'; ctx.fillRect(0, 300, CW, 4);
+    const who = f => (f === m.a ? 'you' : 'them'), dirOf = f => (f === m.a ? 1 : -1);
+    [m.a, m.b].forEach(f => {
+      const dir = dirOf(f), up = f.st === 'aim' || f.st === 'rec', run = f.st === 'move' || f.st === 'rush', x = run ? f.x : f.x - dir * 44, pose = up ? 'punch' : run ? 'shove' : f.st === 'hit' ? 'stun' : 'guard', hgt = up || run ? 138 : 104;
+      if (f.flash > 0) ctx.globalAlpha = 0.55; if (!sprite(who(f), pose, x, 304, hgt, dir)) figure(x, 300, hgt / 110, dir, pose, f === m.a ? '#6fb3d9' : '#e6b84a'); ctx.globalAlpha = 1;
+      if (up) { ctx.fillStyle = '#0c0f12'; ctx.fillRect(x + dir * 58 - (dir < 0 ? 16 : 0), 189, 16, 5); ctx.fillRect(x + dir * 58 - (dir < 0 ? 4 : 0), 189, 4, 10); }
+      if (f.st === 'aim') text('!', x, 150, { bold: true, size: 22, color: '#ff9d6b' });
+      if (f.supp > 0) text('PINNED', f.x, 236, { bold: true, size: 10, color: '#ffd300' });
+      if (f.st === 'reload') text('reloading', f.x, 236, { size: 10, color: '#cfe3d6' });
+    });
+    GCOV.forEach((x, i) => { // what there is to get behind
+      if (i % 3 === 0) { ctx.fillStyle = '#4a5258'; ctx.fillRect(x - 46, 268, 92, 26); ctx.fillStyle = '#5b646b'; ctx.fillRect(x - 28, 250, 54, 20); ctx.fillStyle = '#1d2226'; ctx.fillRect(x - 22, 254, 20, 13); ctx.fillRect(x + 2, 254, 18, 13); disc(x - 28, 296, 9, '#0c0f12', '#3d4348', 2); disc(x + 28, 296, 9, '#0c0f12', '#3d4348', 2); }
+      else if (i === 1) { ctx.fillStyle = '#6a6f74'; ctx.fillRect(x - 36, 252, 72, 50); ctx.strokeStyle = '#4a4f54'; ctx.lineWidth = 1; ctx.beginPath(); for (let r = 0; r < 4; r++) { ctx.moveTo(x - 36, 264 + r * 12); ctx.lineTo(x + 36, 264 + r * 12); } ctx.stroke(); }
+      else { ctx.fillStyle = '#3f6b52'; ctx.fillRect(x - 38, 256, 76, 44); ctx.fillStyle = '#2f5140'; ctx.fillRect(x - 42, 252, 84, 7); }
+    });
+    m.shots.forEach(q => { ctx.strokeStyle = q.hit ? '#ffffff' : 'rgba(255,244,207,.7)'; ctx.lineWidth = q.hit ? 2 : 1.2; ctx.beginPath(); ctx.moveTo(q.x1, q.y1); ctx.lineTo(q.x2, q.y2); ctx.stroke(); if (!q.hit) disc(q.x2, q.y2, Math.max(1, 3 + (0.14 - q.t) * 40), null, 'rgba(200,200,190,.5)', 1); });
+    text('You', 60, 62, { bold: true, size: 15, color: '#6fb3d9', align: 'left' }); bar(100, 50, 200, 14, 1 - m.a.dmg / HP, '#6fb3d9'); text(G.GANG[m.gang].name, CW - 60, 62, { bold: true, size: 13, color: '#e6b84a', align: 'right' }); bar(CW - 372, 50, 200, 14, 1 - m.b.dmg / HP, '#e6b84a');
+    for (let i = 0; i < m.a.w.mag; i++) { ctx.fillStyle = i < m.a.ammo ? '#ffd300' : '#3d4348'; ctx.fillRect(100 + i * 9, 70, 6, 9); } text(m.a.w.name, 100, 94, { align: 'left', size: 10, color: '#cfe3d6' });
+    text(Math.ceil(Math.max(0, m.t)) + 's until sirens', CW / 2, 40, { size: 11, color: '#cfe3d6' }); if (m.note) text(m.note.m, CW / 2, 128, { bold: true, size: 18, color: '#fff4cf' });
+    text('J or click: lean out and fire · K: snap shot from cover, hits only someone who is leaning out · R: reload', CW / 2, CH - 34, { size: 10.5, color: '#cfe3d6' });
+    text('A/D: move to the next cover, in the open · L: rush them from the cover beside theirs · a shot at someone in cover pins them', CW / 2, CH - 16, { size: 10.5, color: '#8aa69d' });
+    header(`${G.GANG[m.gang].name.toUpperCase()} · a gunfight on a Palmerston North street · never move or lean out while they are aiming`);
   }
 
   // ───────────────── The strip: patrol ─────────────────
@@ -871,7 +1095,7 @@
     coast(); g.lineWidth = 1; g.strokeStyle = 'rgba(214,198,154,.7)'; g.stroke();
     [[175.9, -38.8, 5, 4], [168.5, -45.1, 2.2, 5], [167.7, -45.3, 1.8, 4.5], [169.1, -44.5, 1.6, 3.6], [170.5, -43.95, 1.6, 2.6]].forEach(q => { const p = NP(q[0], q[1]); g.fillStyle = '#3aa0c8'; g.beginPath(); g.ellipse(p.x, p.y, q[2], q[3], 0.4, 0, 7); g.fill(); }); // Taupō and the southern lakes
     g.font = 'italic 11px system-ui,sans-serif'; g.textAlign = 'center'; g.fillStyle = '#5fa8c4'; g.fillText('Tasman Sea', 250, 250); g.fillText('Pacific Ocean', 640, 300); g.font = 'italic 8px system-ui,sans-serif'; { const p = NP(174.45, -41.05); g.fillText('Cook Strait', p.x - 30, p.y + 2); }
-    return c;
+    return utilitarian(c);
   }
   // A processing line: half-round arch sheds end to end, a rail down the middle, a machine working up and down it.
   // Where a road crosses there is a gap, and a short rail reaches across it when nothing is coming.
@@ -1038,7 +1262,7 @@
       else if (e.mor > 0) { const col = e.flash > 0 ? '#fff' : e.down > 0 ? '#77807a' : e.w > 0.5 ? '#ff9d6b' : m.kind === 'fascist' ? '#8a4a44' : G.GANG[m.arg].col; figure(e.x, e.y + 9, 0.2, e.x > y.x ? -1 : 1, e.down > 0 ? 'down' : e.gd > 0 ? 'guard' : e.w > 0.5 ? 'wpunch' : e.w > 0 && e.w < 0.12 ? 'punch' : 'idle', col); if (e.open > 0 && !(e.down > 0)) disc(e.x, e.y - 14, 2.5, '#ff9d6b'); bar(e.x - 9, e.y - 19, 18, 3, e.mor / (m.kind === 'gang' ? 2.4 : 2), '#d9634c'); }
     });
     if (m.kind === 'raid') { ctx.strokeStyle = '#3b5fa8'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(60, m.lineY); ctx.lineTo(660, m.lineY); ctx.stroke(); }
-    const unit = (p, me) => { if (m.veh) { ctx.fillStyle = me ? '#e6efe9' : '#e6b84a'; ctx.fillRect(p.x - 9, p.y - 12, 18, 24); ctx.fillStyle = '#39424a'; ctx.fillRect(p.x - 7, p.y - 10, 14, 6); } else { const f = nearest(m.foes, p, e => e.mor > 0), near = f && Math.hypot(f.x - p.x, f.y - p.y) < 30, dir = f ? (f.x >= p.x ? 1 : -1) : (y.fx >= 0 ? 1 : -1), pose = me ? (y.down > 0 ? 'down' : y.act ? y.act.mv : y.grap > 0 ? 'grapple' : y.guard ? 'guard' : 'idle') : m.passive ? (m.form === 1 ? 'guard' : 'idle') : near && !m.passive ? (Math.sin(tm * 9 + p.x) > 0.3 ? 'punch' : 'guard') : 'idle'; if (me) disc(p.x, p.y + 8, 9, 'rgba(255,255,255,.18)', '#ffffff', 1); figure(p.x, p.y + 9, me ? 0.23 : 0.2, dir, pose, me ? (y.flash > 0 ? '#fff' : y.grap > 0 ? '#9fe0c4' : '#6fb3d9') : p.grp === 1 ? '#9fe0c4' : '#d7e84a'); if (p.stam < 1) bar(p.x - 9, p.y + 12, 18, 3, p.stam, '#2f9e7a'); } };
+    const unit = (p, me) => { if (m.veh) { ctx.fillStyle = me ? '#e6efe9' : '#e6b84a'; ctx.fillRect(p.x - 9, p.y - 12, 18, 24); ctx.fillStyle = '#39424a'; ctx.fillRect(p.x - 7, p.y - 10, 14, 6); } else { const f = nearest(m.foes, p, e => e.mor > 0), near = f && Math.hypot(f.x - p.x, f.y - p.y) < 30, dir = f ? (f.x >= p.x ? 1 : -1) : (y.fx >= 0 ? 1 : -1), pose = me ? (y.down > 0 ? 'down' : y.act ? y.act.mv : y.grap > 0 ? 'grapple' : y.guard ? 'guard' : 'idle') : m.passive ? (m.form === 1 ? 'guard' : 'idle') : near && !m.passive ? (Math.sin(tm * 9 + p.x) > 0.3 ? 'punch' : 'guard') : 'idle'; if (me) disc(p.x, p.y + 8, 10, y.grap > 0 ? 'rgba(159,224,196,.4)' : 'rgba(255,255,255,.18)', '#ffffff', 1); if (!(me && sprite('you', pose, p.x, p.y + 11, 34, dir))) figure(p.x, p.y + 9, me ? 0.23 : 0.2, dir, pose, me ? (y.flash > 0 ? '#fff' : y.grap > 0 ? '#9fe0c4' : '#6fb3d9') : p.grp === 1 ? '#9fe0c4' : '#d7e84a'); if (p.stam < 1) bar(p.x - 9, p.y + 12, 18, 3, p.stam, '#2f9e7a'); } };
     m.mates.forEach(a => { if (a.out) { if (m.veh) disc(a.x, a.y, 5, '#4a5560'); else figure(a.x, a.y + 9, 0.2, 1, 'down', '#4a5560'); return; } unit(a, false); if (a.arr > 0) bar(a.x - 9, a.y - 15, 18, 3, a.arr / 3, '#3b5fa8'); });
     unit(y, true);
     if (m.split && m.anchor) { ctx.setLineDash([3, 4]); disc(m.anchor.x, m.anchor.y, 6, null, '#9fe0c4', 1); ctx.setLineDash([]); }
@@ -1083,7 +1307,7 @@
     if (works) {
       if (Math.abs(y.y - 262) < 40 && y.x > 230 && y.x < 490) lab++; // you pitch in where you stand
       const geared = m.stack + (10 - m.stack - m.crates - m.lost) >= 2 ? 1 : 0.3; // slow going until the tools are off the truck
-      if (m.dig < 1) m.dig = Math.min(1, m.dig + dt * 0.008 * lab * geared); else m.build = Math.min(1, Math.max(0, (10 - m.crates - m.lost)) / 10, m.build + dt * 0.008 * lab);
+      const dg = G.hasMachine(S, 'excavator') ? 1.6 : 1; if (m.dig < 1) m.dig = Math.min(1, m.dig + dt * 0.008 * lab * geared * dg); else m.build = Math.min(1, Math.max(0, (10 - m.crates - m.lost)) / 10, m.build + dt * 0.008 * lab);
     } else m.lights = Math.min(1, m.lights + dt * 0.02 * lab);
     // people who would like what is on the site
     m.spawn -= dt;
@@ -1106,6 +1330,7 @@
     ctx.fillStyle = '#3d4348'; ctx.fillRect(0, 205, SITE.x0, 40); ctx.fillRect(340, SITE.y1, 40, CH - SITE.y1); if (!works) ctx.fillRect(SITE.x1, 205, CW - SITE.x1, 40);
     if (works) { // the job itself: a trench, then the road base laid in it
       ctx.fillStyle = '#6b5d3f'; ctx.fillRect(240, 240, 250, 44); ctx.fillStyle = '#3a3122'; ctx.fillRect(240, 240, 250 * m.dig, 44); ctx.fillStyle = '#9d978a'; ctx.fillRect(240, 244, 250 * m.build, 36); if (m.build > 0) { ctx.strokeStyle = '#6f6a5e'; ctx.lineWidth = 1; ctx.beginPath(); for (let x = 260; x < 240 + 250 * m.build; x += 20) { ctx.moveTo(x, 244); ctx.lineTo(x, 280); } ctx.stroke(); }
+      if (G.hasMachine(S, 'excavator')) drawMachine('excavator', 240 + 250 * Math.min(0.9, m.dig) - 10, 196, 0.2);
       ctx.fillStyle = '#e6efe9'; ctx.fillRect(SITE.truck.x - 22, SITE.truck.y - 14, 60, 28); ctx.fillStyle = '#d9634c'; ctx.fillRect(SITE.truck.x + 38, SITE.truck.y - 12, 18, 24);
       for (let i = 0; i < m.crates; i++) { ctx.fillStyle = '#c9a36b'; ctx.fillRect(SITE.truck.x - 18 + (i % 5) * 11, SITE.truck.y - 10 + Math.floor(i / 5) * 11, 9, 9); }
       text('laydown', SITE.stack.x + 10, SITE.stack.y - 22, { size: 9, color: '#3a3122' });
@@ -1138,7 +1363,8 @@
     return { nodes, adj, first: 'm0' };
   }
   function graphOf(v) {
-    const pl = S.place || 'pn', key = v === 2 ? 'c:' + pl : v === 3 ? 'r' : ''; if (!key) return null; if (graphs[key]) return graphs[key];
+    const pl = S.place || 'pn', key = v === 2 ? 'c:' + pl : v === 3 ? 'r' : v === 6 ? 'w' : ''; if (!key) return null; if (graphs[key]) return graphs[key];
+    if (v === 6) { const nodes = {}, adj = {}, lk = (a, b) => { (adj[a] = adj[a] || []).push(b); (adj[b] = adj[b] || []).push(a); }; WORLD.forEach(c => { nodes[c.id] = c; if (c.up) lk(c.id, c.up); }); lk('nyc', 'lon'); lk('lon', 'hkg'); lk('nyc', 'hkg'); return (graphs[key] = { nodes, adj, first: 'pn' }); }
     const nodes = {}, adj = {}, link = (a, b) => { (adj[a] = adj[a] || []).push(b); (adj[b] = adj[b] || []).push(a); };
     if (v === 3) { D.towns.forEach(t => (nodes[t.id] = { id: t.id, x: t.x, y: t.y, name: t.name })); nodes.ramp = { id: 'ramp', x: RAMP.x + 15, y: RAMP.y, name: 'Himatangi ramp' }; D.roads.forEach(r => link(r[0], r[1])); return (graphs[key] = { nodes, adj, first: 'pn' }); }
     if (pl === 'pn') { D.city.forEach(n => { nodes[n.id] = n; adj[n.id] = n.adj; }); return (graphs[key] = { nodes, adj, first: D.city.find(n => n.home).id }); }
@@ -1172,7 +1398,7 @@
     say(G.missionName(S, ms)); full();
   }
   // On the ground you keep to the roads, junction to junction. On the water and in the air you are free, and you have weight.
-  const trail = {}, GRIP = [0, 0, 6, 3, 2.2, 1.6];
+  const trail = {}, GRIP = [0, 0, 6, 3, 2.2, 1.6, 2];
   const aboard = () => { const p = S.at && S.at[3]; return !!p && p.m === 'sea' && Math.hypot(p.x - BARGE_AT.x, p.y - BARGE_AT.y) < 18; };
   function toggleAir() {
     if (mode || modalUp() || S.view !== 3 || S.jobs.length) return; const p = whereYou(3);
@@ -1191,7 +1417,7 @@
       return;
     }
     const mx = (keys.d || keys.ArrowRight ? 1 : 0) - (keys.a || keys.ArrowLeft ? 1 : 0), my = (keys.s || keys.ArrowDown ? 1 : 0) - (keys.w || keys.ArrowUp ? 1 : 0), l = Math.hypot(mx, my), ux = l ? mx / l : 0, uy = l ? my / l : 0;
-    const sp = [0, 0, 120, 95, 80, 95][v] / Math.pow(zoom[v] || 1, 0.7);
+    const sp = [0, 0, 120, 95, 80, 95, 210][v] / Math.pow(zoom[v] || 1, 0.7);
     if (g && p.m !== 'air' && p.m !== 'sea') { // on the road
       if (!g.nodes[p.a] || (p.b && !g.nodes[p.b])) arrive(v, false);
       if (l) {
@@ -1251,36 +1477,65 @@
     ctx.restore();
   }
 
+  // ───────────────── The World: not countries but a hierarchy of cities, each hanging off the one above it ─────────────────
+  const WORLD = [ // id, name, tier, parent, x, y
+    ['nyc', 'New York', 1, null, 170, 150], ['lon', 'London', 1, null, 340, 118], ['hkg', 'Hong Kong', 1, null, 540, 190],
+    ['tor', 'Toronto', 2, 'nyc', 150, 92], ['chi', 'Chicago', 2, 'nyc', 92, 128], ['lax', 'Los Angeles', 2, 'nyc', 66, 204], ['mex', 'Mexico City', 2, 'nyc', 122, 256], ['sao', 'São Paulo', 2, 'nyc', 216, 322],
+    ['par', 'Paris', 2, 'lon', 318, 184], ['fra', 'Frankfurt', 2, 'lon', 398, 148], ['dxb', 'Dubai', 2, 'lon', 428, 232], ['los', 'Lagos', 2, 'lon', 318, 282], ['jnb', 'Johannesburg', 3, 'los', 372, 352], ['bom', 'Mumbai', 3, 'dxb', 474, 276],
+    ['sha', 'Shanghai', 2, 'hkg', 576, 132], ['sel', 'Seoul', 3, 'sha', 606, 94], ['tyo', 'Tokyo', 2, 'hkg', 652, 150], ['sin', 'Singapore', 2, 'hkg', 516, 280], ['kul', 'Kuala Lumpur', 3, 'sin', 468, 318], ['jkt', 'Jakarta', 3, 'sin', 536, 334],
+    ['syd', 'Sydney', 2, 'hkg', 618, 318], ['mel', 'Melbourne', 3, 'syd', 580, 384], ['pom', 'Port Moresby', 3, 'syd', 648, 262], ['akl', 'Auckland', 3, 'syd', 672, 352], ['ham', 'Hamilton', 4, 'akl', 704, 322], ['wlg', 'Wellington', 4, 'akl', 676, 396], ['pn', 'Palmerston North', 5, 'wlg', 628, 420],
+  ].map(q => ({ id: q[0], name: q[1], tier: q[2], up: q[3], x: q[4], y: q[5] }));
+  const WCITY = {}; WORLD.forEach(c => (WCITY[c.id] = c));
+  const hubOf = c => { while (c.up) c = WCITY[c.up]; return c.id; }, WCOL = { nyc: '#0098d4', lon: '#e32017', hkg: '#00a94f' };
+  function drawWorld() {
+    const tm = performance.now() / 1000, here = whereYou(6), home = ['pn', 'wlg', 'akl', 'syd', 'hkg'];
+    ctx.fillStyle = '#1a1d20'; ctx.fillRect(0, 0, CW, CH);
+    ctx.strokeStyle = 'rgba(255,255,255,.045)'; ctx.lineWidth = 1; ctx.beginPath(); for (let x = 0; x <= CW; x += 40) { ctx.moveTo(x, 24); ctx.lineTo(x, CH); } for (let y = 40; y <= CH; y += 40) { ctx.moveTo(0, y); ctx.lineTo(CW, y); } ctx.stroke();
+    [['THE AMERICAS', 110, 60], ['EUROPE · AFRICA · GULF', 372, 60], ['ASIA · PACIFIC', 600, 60]].forEach(q => text(q[0], q[1], q[2], { size: 9, color: 'rgba(255,255,255,.28)' }));
+    [['nyc', 'lon'], ['lon', 'hkg'], ['nyc', 'hkg']].forEach(q => tube(WCITY[q[0]], WCITY[q[1]], '#f2f2f2', 6)); // the three that everything else hangs off
+    WORLD.forEach(c => { if (c.up) tube(c, WCITY[c.up], home.includes(c.id) && home.includes(c.up) ? '#ffd300' : WCOL[hubOf(c)], c.tier <= 2 ? 4 : 3); });
+    WORLD.forEach(c => {
+      const r = [0, 11, 7.5, 5.5, 4.5, 4.5][c.tier], at = here.a === c.id && !here.b;
+      station(c.x, c.y, r, true, c.id === 'pn' ? '#ffd300' : '#0c0f12'); if (c.tier === 1) disc(c.x, c.y, r - 5, '#0c0f12');
+      if (at) disc(c.x, c.y, r + 5 + 2 * Math.sin(tm * 5), null, '#ffd300', 1.5);
+      const right = c.x < 600 || c.tier === 1, lx = c.x + (right ? r + 5 : -r - 5); text(c.name, lx, c.y + 3.5, { align: right ? 'left' : 'right', size: c.tier === 1 ? 12 : c.tier === 2 ? 10 : 9, bold: c.tier <= 2 || c.id === 'pn', color: c.id === 'pn' ? '#ffd300' : '#f2f2f2' });
+    });
+    hud(() => { ctx.fillStyle = 'rgba(8,10,12,.8)'; ctx.fillRect(8, CH - 62, 180, 54); [['#f2f2f2', 'the three world cities'], ['#e32017', 'a city and the hub it answers to'], ['#ffd300', 'your line home']].forEach((q, i) => { ctx.fillStyle = q[0]; ctx.fillRect(16, CH - 53 + i * 15, 16, 4); text(q[1], 38, CH - 48 + i * 15, { align: 'left', size: 9 }); }); });
+    header('The World · a network of cities, not countries · WASD rides a line to the next city: a suborbital hop');
+  }
+
   // ───────────────── Altitude: one continuous zoom from the street to Te Moana ─────────────────
   // Each map has a height band. Descend and the camera closes in and follows you; push past the bottom over
   // somewhere with detail and you come down onto the next map; push past the top and you climb onto the one above.
-  const ZMAX = { 2: 2.6, 3: 5, 4: 9, 5: 5.25 }, zoom = {}, zgoal = {}, CAMV = { city: 2, town: 2, region: 3, nz: 4, moana: 5 };
+  const ZMAX = { 2: 2.6, 3: 5, 4: 9, 5: 5.25, 6: 2.6 }, zoom = {}, zgoal = {}, CAMV = { city: 2, town: 2, region: 3, nz: 4, moana: 5, world: 6 };
   const K4 = 9.8, A4 = () => NP(175.61, -40.35); let fade = 0, hop = 0;
   const fit = p => ({ x: clamp(p.x, 10, CW - 10), y: clamp(p.y, 32, CH - 10) });
   function climbTo(v, p) { // where you come out on the next map up
     if (v === 1) { const h = D.city.find(n => n.home); return { x: h.x, y: h.y }; }
     if (v === 2) { const t = G.TOWN[S.place || 'pn'] || G.PN; return { x: t.x, y: t.y }; }
     if (v === 3) { const a = A4(); return { x: a.x + (p.x - G.PN.x) / K4, y: a.y + (p.y - G.PN.y) / K4 }; }
+    if (v === 5) return { x: WCITY.pn.x, y: WCITY.pn.y };
     return PX(166 + (p.x - 215) / 24.5, -34 - (p.y - 6) / 32);
   }
   function descendTo(v, p) { // where you come out on the next map down; null when there is nothing mapped below you
     const h = D.city.find(n => n.home); let q;
     if (v === 2) return (S.place || 'pn') === 'pn' && Math.hypot(p.x - h.x, p.y - h.y) < 42 ? {} : null;
     if (v === 3) { const t = G.townsNow(S).find(t => Math.hypot(t.x - p.x, t.y - p.y) < 18); return t ? { place: t.id } : null; }
+    if (v === 6) return ['pn', 'wlg', 'akl', 'ham'].some(id => Math.hypot(WCITY[id].x - p.x, WCITY[id].y - p.y) < 14) ? PX(175.6, -40.3) : null;
     if (v === 4) { const a = A4(); q = { x: G.PN.x + (p.x - a.x) * K4, y: G.PN.y + (p.y - a.y) * K4 }; }
     else q = NP(94 + p.x / 6.1, 24 - p.y / 6.1);
     return q.x >= 0 && q.x <= CW && q.y >= 0 && q.y <= CH ? q : null;
   }
-  const BELOW = ['', '', 'Come down over your yard to reach your street.', 'Come down over a town to drive its streets.', 'Come down over the Manawatū.', 'Come down over Aotearoa.'];
+  const BELOW = ['', '', 'Come down over your yard to reach your street.', 'Come down over a town to drive its streets.', 'Come down over the Manawatū.', 'Come down over Aotearoa.', 'Come down over a New Zealand city.'];
   function zoomBy(f) { // f > 1 descends, f < 1 climbs
     if (!S || mode || modalUp()) return; const sc = screen(), v = sc === 'home' ? 1 : CAMV[sc]; if (!v) return;
     const max = ZMAX[v] || 1; let g = (zgoal[v] || 1) * f;
     if (g < 0.82 && hop <= 0) {
-      if (v < 5 && v < S.act) {
+      if (v < 5 ? v < S.act : v === 5 && G.worldOpen(S)) {
         const q = climbTo(v, v > 1 ? whereYou(v) : null); G.setView(S, v + 1); Object.assign(whereYou(v + 1), fit(q)); arrive(v + 1, v === 3 ? false : v + 1 === 3 && whereYou(3).m === 'air');
         zgoal[v + 1] = ZMAX[v + 1]; zoom[v + 1] = ZMAX[v + 1] * 1.3; zgoal[v] = 1; fade = 1; hop = 0.7; return full();
       }
-      if (v < 5) say('You cannot get that high yet.');
+      if (v < 6) say(v === 5 ? 'The world opens once you have a platform in the stratosphere.' : 'You cannot get that high yet.');
     }
     if (g > max * 1.22 && hop <= 0 && v > 1) {
       const q = descendTo(v, whereYou(v));
@@ -1304,7 +1559,7 @@
   }
   function mapMouse() { const c = S && !mode && CAMV[screen()] === cam.v; mouse.x = c ? cam.x + (mouse.sx - CW / 2) / cam.z : mouse.sx; mouse.y = c ? cam.y + (mouse.sy - CH / 2) / cam.z : mouse.sy; }
   function drawAlt(v) { // altimeter: where you are between the street and the top of the sky you have reached
-    const x = v === 1 ? CW - 82 : 12, y0 = CH - 26, hgt = 112, alt = v === 1 ? 1 : v - Math.log(clamp(zoom[v] || 1, 1, ZMAX[v])) / Math.log(ZMAX[v]), yy = a => y0 - (a - 1) / 4 * hgt;
+    if (v === 6) return; const x = v === 1 ? CW - 82 : 12, y0 = CH - 26, hgt = 112, alt = v === 1 ? 1 : v - Math.log(clamp(zoom[v] || 1, 1, ZMAX[v])) / Math.log(ZMAX[v]), yy = a => y0 - (a - 1) / 4 * hgt;
     ctx.fillStyle = 'rgba(8,18,20,.7)'; ctx.fillRect(x - 6, y0 - hgt - 22, 86, hgt + 44);
     ctx.fillStyle = '#24464a'; ctx.fillRect(x, y0 - hgt, 4, hgt); ctx.fillStyle = '#6fd0e8'; ctx.fillRect(x, yy(Math.min(5, S.act)), 4, yy(1) - yy(Math.min(5, S.act)));
     ['street', 'city', 'region', 'Aotearoa', 'Te Moana'].forEach((n, i) => { ctx.fillStyle = i < S.act ? '#cfe3d6' : '#4f6468'; ctx.fillRect(x - 2, yy(i + 1) - 0.5, 8, 1); text(n, x + 11, yy(i + 1) + 3, { align: 'left', size: 8.5, color: i < S.act ? (i + 1 === v ? '#e6b84a' : '#cfe3d6') : '#4f6468' }); });
@@ -1327,7 +1582,7 @@
     raf = requestAnimationFrame(frame);
   }
   function render(dt) {
-    if (mode && (mode.type === 'build' || mode.type === 'tutor') && !mode.done && S.pendingBuild === null) mode = null;
+    if (mode && /^(build|tutor|mill|dig|pour)$/.test(mode.type) && !mode.done && S.pendingBuild === null) mode = null;
     if (!mode && !modalUp() && S.mission.length && !S.over) { // things that come to you, whether you were ready or not
       const mi = S.mission.findIndex(x => !G.located(x)), ms = mi < 0 ? '' : S.mission.splice(mi, 1)[0];
       if (ms === 'escort') { startEscort(); say('Your rotation in Papua New Guinea: a convoy needs escorting.'); }
@@ -1340,11 +1595,16 @@
     else if (sc === 'boat') { if (!modalUp()) stepBoat(dt); drawBoat(); }
     else if (sc === 'field') { if (!modalUp()) stepField(dt); drawField(); }
     else if (sc === 'site') { if (!modalUp()) stepSite(dt); drawSite(); }
+    else if (sc === 'gun') { if (!modalUp()) stepGun(dt); drawGun(); }
+    else if (sc === 'mill') { if (!modalUp()) stepMill(dt); drawMill(); }
+    else if (sc === 'dig') { if (!modalUp()) stepDig(dt); drawDig(); }
+    else if (sc === 'pour') { if (!modalUp()) stepPour(dt); drawPour(); }
     else if (sc === 'bench') { if (!modalUp()) stepBench(dt); drawBench(); }
     else if (sc === 'tutor') { if (!modalUp()) stepTutor(dt); drawTutor(); }
     else if (sc === 'corridor') { if (!modalUp()) stepCorridor(dt); drawCorridor(); }
     else if (sc === 'watch') { if (!modalUp()) stepWatch(dt); drawSea(); }
     else if (sc === 'moana') flown(5, dt, drawSea);
+    else if (sc === 'world') flown(6, dt, drawWorld);
     else if (sc === 'nz') flown(4, dt, drawNZ);
     else if (sc === 'spar') { if (!modalUp()) stepSpar(dt); drawSpar(); }
     else if (sc === 'patrol') { if (!modalUp()) stepPatrol(dt); drawPatrol(); }
@@ -1369,9 +1629,13 @@
     if (!S || !wants(S) || modalUp()) return;
     if (e.key === 'Enter' && mode) { e.stopImmediatePropagation(); endMode(); return; }
     const k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
-    if (/^(Arrow|[wasdjkqel ]$)/.test(k)) { keys[k] = true; if (k.startsWith('Arrow') || (k === ' ' && mode)) e.preventDefault(); }
+    if (/^(Arrow|[wasdjkqelt ]$)/.test(k)) { keys[k] = true; if (k.startsWith('Arrow') || (k === ' ' && mode)) e.preventDefault(); }
     if (mode && mode.type === 'field' && !e.repeat && /^[fgjkl123]$/.test(k)) fieldKey(k);
     if (mode && mode.type === 'site' && !e.repeat && /^[123]$/.test(k)) siteKey(k);
+    if (mode && mode.type === 'gun' && !e.repeat && /^[jklrad]$/.test(k)) gunKey(k);
+    if (mode && mode.type === 'mill' && !e.repeat && !mode.done) { if (e.key === 'Enter' || e.key === 'Backspace' || k === ' ') { e.preventDefault(); e.stopImmediatePropagation(); millKey(e.key === ' ' ? ' ' : e.key); } else if (/^[123awd]$/.test(k)) millKey(k); }
+    if (mode && mode.type === 'dig' && /^[adjk]$/.test(k)) digKey(k);
+    if (mode && mode.type === 'pour' && !e.repeat && /^[123tad]$/.test(k)) pourKey(k);
     if (mode && mode.type === 'bench' && !e.repeat && /^[jkl ]$/.test(k)) benchKey(k);
     if (!mode && k === 'v' && !e.repeat) toggleAir();
     if (mode && mode.type === 'boat' && !e.repeat && k === 'f') { mode.form = 1 - (mode.form || 0); say(mode.form ? 'Fleet: line abreast' : 'Fleet: wedge'); }
@@ -1385,6 +1649,7 @@
     if (endMode()) return;
     const s = screen();
     if (s === 'build') buildDown();
+    else if (s === 'gun') gunKey('j');
     else if (s === 'bench') benchDown();
     else if (s === 'tutor') { for (let i = 0; i < 3; i++) if (mouse.x > 210 && mouse.x < 610 && mouse.y > 146 + i * 50 && mouse.y < 188 + i * 50) tutorPick(i); }
     else if (s === 'escort') shootEscort();
@@ -1413,7 +1678,7 @@
         if (st.stance !== 'broken') {
           h += G.stanceOptions(S, g.id).filter(o => o.id !== st.stance).map(o => `<button data-stance="${g.id}:${o.id}" ${o.ok ? '' : 'disabled'} title="${o.ok ? o.note : o.why}">${o.t}</button>`).join('');
           if (st.stance !== 'war') h += `<button data-whanau="${g.id}" ${S.cash >= G.whanauCost(S) ? '' : 'disabled'}>Work with their whānau · ${money(G.whanauCost(S))}</button>`;
-          else h += `<button data-brandish="${g.id}" style="border-color:#d9634c;color:#f0a898">Bring a firearm</button>`;
+          else h += `<p style="margin:6px 0 2px">Bring a weapon:</p>` + Object.keys(G.WEAPONS).map(w => `<button data-gun="${g.id}:${w}" style="${G.WEAPONS[w].legal ? '' : 'border-color:#d9634c;color:#f0a898'}" title="+${G.WEAPONS[w].heat} heat">${G.WEAPONS[w].name}${G.WEAPONS[w].legal ? ' (legal)' : ''}</button>`).join('');
         }
         h += `</details>`;
       });
@@ -1440,8 +1705,10 @@
     if (s === 'run' || s === 'build') {
       h += `<h2>${G.siteName(S.runSite)}</h2><p>Each move costs 1 daylight; jobs cost 2–5. Reach the most value before dark.</p>`;
       h += `<p>` + Object.keys(KLET).filter(k => S.jobs.some(j => j.kind === k)).map(k => `<b style="color:${KCOL[k]}">${KLET[k]}</b> ${G.KIND[k].name.toLowerCase()}`).join(' · ') + `</p>`;
+      ['mill', 'dig', 'pour'].forEach(sc => { if (S.mastered['s:' + sc]) h += `<p><button data-auto="h:${sc}">${{ mill: 'Sawmill', dig: 'Excavator', pour: 'Concrete pours' }[sc]}: ${S.auto && S.auto['h:' + sc] ? 'you run it yourself. Hand it back to the foreman' : 'the foreman runs it. Run it yourself'}</button></p>`; });
       if (S.done.tutoring) h += `<p>Tutoring level <b>${G.tutorLevel(S)}</b> of 5. <button data-auto="tutor">${S.auto && S.auto.tutor ? 'Your tutors take the sessions (flat pay, nothing learned). Take them back' : 'You take the sessions yourself. Hand them to your tutors'}</button></p>`;
-      h += `<p>Jobs ringed in white (tutoring, repairs, property works, road works) are skilled work only you can do. What you build stays on the street, as true or as crooked as you set it out.${S.done.fences ? ` Property works built: <b>${S.propWorks}</b> · road jobs: <b>${S.roadWorks}</b>${S.done.contractor ? '' : ' (4 and 2 to go contracting)'}.` : ''} Your crew handles the rest, as far as their legs carry them.</p>`;
+      h += `<p style="color:#e6b84a">Every job you do yourself is a doorstep. Households met: <b>${S.met}</b> · on the Kaha Tahi books: <b>${S.members}</b> (${money(S.members * 0.03 * G.cashMult(S))} a season, each paying what they can afford).</p>`;
+      h += `<p>Jobs ringed in white (tutoring, repairs, property works, road works) are skilled work that waits for you. Each kind of property job is yours once: build one and the crew builds the rest, and you move on to the next size up. With the right machine from your shop the job becomes running that machine: timber jobs are milled on your sawmill, roads and walls are dug with your excavator, and a driveway is a concrete pour. What gets built stays on the street, as true or as crooked as you set it out.${S.done.fences ? ` Property works built: <b>${S.propWorks}</b> · road jobs: <b>${S.roadWorks}</b>${S.done.contractor ? '' : ' (4 and 2 to go contracting)'}.` : ''} Your crew handles the rest, as far as their legs carry them.</p>`;
       if (S.runSite === 'home' && S.done.crew2) h += `<p style="color:#e6b84a">A foreman runs the lawn round now (${money(G.roundValue(S) * G.cashMult(S))} a season, without you). What is left here is the contract work, and other firms want it.</p>`;
       h += `<p>${S.crew.length ? `<b>${S.crew.length}</b> of your crew (gold) are working here.` : S.act === 1 ? 'Hire a worker and they will run the circuit with you.' : 'None of your crews are here: you are on your own.'}${S.rivals.length ? ` <span style="color:#f0a898"><b>${S.rivals.length}</b> rival worker${S.rivals.length > 1 ? 's' : ''} (red) will take what they reach first.</span>` : ''}</p>`;
       h += `<p>${S.done.partner ? 'Your mechanic services the mower nightly; mid-day, get it back to base.' : 'Lawns wear the mower out. The SHOP (top right) fixes it for $200 until you have a mechanic.'}</p>`;
@@ -1511,6 +1778,12 @@
       ch.filter(c => c.at === n.id || c.res === n.id).forEach(c => { h += `<p style="color:#e6b84a">${D.nz.goods[c.good].name} from ${G.NZN[c.res].name}: ${c.at ? `${D.nz.goods[c.good].plant.toLowerCase()} at ${G.NZN[c.at].name}, ${money(c.cash)}${c.mana ? `, ${c.mana > 0 ? '+' : ''}${c.mana} mana` : ''}` : `trucked out raw, ${money(c.cash)}`}</p>`; });
       h += `<p>Each hop a good travels costs 10% of its value; electrified rail is free. Processing a Māori-land resource somewhere else costs 0.5 mana a season; a partnership plant on the land earns it instead. A plant in a rural district or on Māori land revives the place over three years (the lit houses around it): each step adds 12% to its chain, and more supporters or mana. Regions revived so far: <b>${S.revived}</b>. Two partnership plants make the state–iwi enterprises; the whole trunk under the wire is its own milestone.</p>`;
     }
+    else if (s === 'world') {
+      const p = S.at && S.at[6], c = p && !p.b ? WCITY[p.a] : null;
+      h += `<h2>The World</h2><p>Seen from high enough, the world is not countries. It is a ladder of cities: three at the top, the cities that answer to them, and the ones that answer to those. Palmerston North hangs off Wellington, which hangs off Auckland, which hangs off Sydney, which hangs off Hong Kong.</p>`;
+      if (c) { const kids = WORLD.filter(q => q.up === c.id); h += `<h2>${c.name}</h2><p>${['', 'One of the three world cities.', 'A second-tier city.', 'A third-tier city.', 'A regional city.', 'Home.'][c.tier]}${c.up ? ` Answers to <b>${WCITY[c.up].name}</b>.` : ' Answers to nobody.'}${kids.length ? ` Below it: ${kids.map(q => q.name).join(', ')}.` : ''}</p>`; } else h += `<p>In flight.</p>`;
+      h += `<p>WASD rides a line to the next city. From your platform a suborbital hop reaches anywhere in under an hour. For now this level is for travelling and seeing where you sit; trade and politics between cities are not built yet.</p><p>Descend (Q) over a New Zealand city to come home.</p>`;
+    }
     else if (s === 'moana' || s === 'watch') {
       if (s === 'moana') h += offshoreHTML();
       const us = G.fleet(S), n = t => us.filter(u => u.type === t).length;
@@ -1527,6 +1800,7 @@
       h += `<p><b>F</b> (or 1, 2, 3) changes formation:<br><b>Wedge</b>: they follow behind you; you hit hardest at the tip.<br><b>Line</b>: shoulder to shoulder across your front; takes half the punishment and nothing walks through it.<br><b>Encircle</b>: they close a ring on whoever is in front of you; three or more around one person ends it twice as fast.</p><p><b>G</b> splits off half to hold where you are standing, on their own. G again calls them back.</p>`;
       h += m.kind === 'levin' ? `<p>They are kids in cars, not enemies. Nobody gets hit. Get two trucks beside a car and hold them there to box it in. A line across a street turns them; a ring stops them. The disturbance bar is the town's patience.</p>` : m.kind === 'raid' ? `<p>You cannot win this by force and must not try. Every second they are held up in front of neighbours and cameras costs them. Community out on the street: <b>${m.comm}</b> (from mana). People who would have to answer for it: <b>${m.lia}</b> (a council seat, allies on council, patrol relationships, the BID).</p><p>Those who stand in the line too long are arrested, which costs them more still. Fall back to the next line and reform.</p>` : `<p>Hands only, and the same moves as the gym. Hold the ground: a place goes to whoever has more people standing on it. Some cover up after the first hit: shove (L) to break the guard, then strike while they are open for nearly double. They turn orange before they swing at you: block it (Space), or take a grip (L while blocking) and whoever swings goes down and takes a neighbour with them. Shove at the wrong moment and you are the one pulled over.</p>`;
     }
+    if (s === 'gun') { const W = mode.a.w; h += `<h2>A gunfight</h2><p>It is the gym with cover where the block was.</p><p><b>Behind cover</b> you cannot be hit. <b>J</b> (or click) leans out and fires; for that moment you can be hit, and if they are tucked in they get a snap shot at you. A shot at someone in cover does not hurt them but <b>pins</b> them for a second.</p><p><b>K</b> is your own snap shot from cover: it only lands on someone leaning out, and it wounds, never kills.</p><p><b>A/D</b> moves you to the next cover, across open ground. Do it while they are pinned or reloading. ${W.open >= 99 ? 'Anyone caught in the open by an aimed shot from a real gun is finished, and that includes you.' : `Your ${W.name.toLowerCase()} will not kill: someone caught in the open takes ${W.open} of 12.`}</p><p><b>L</b> rushes them from the cover beside theirs. Arrive and it is hand to hand, with the damage so far carried over; someone still fumbling with a gun at arm's length is slow.</p><p>${W.name}: ${W.mag} shot${W.mag === 1 ? '' : 's'} before reloading${W.jam ? ', and it jams about one time in seven' : ''}.</p>`; }
     if (s === 'site') { const m = mode, w = m.kind === 'works'; h += `<h2>${w ? 'Contract site' : 'Site security'}</h2><p>${m.crew.length} of your people came out with you, and every one of them holds all three tickets. Press <b>1</b>, <b>2</b> or <b>3</b> to put one more on that trade; they come off whichever trade has the most.</p>` + (w ? `<p><b>1 Logistics</b> carry the load from the truck to the laydown. Until the first loads are off, digging crawls, and the build can only go as far as what has been unloaded.<br><b>2 Labour</b> dig the trench, then lay the base in it. Stand in the trench yourself and you count as one more.<br><b>3 Security</b> stand the gates. A gate with nobody on it is open, and as the light goes more people try it.</p><p>Finished before dark pays in full; every load that walks off costs 8%.</p>` : `<p><b>1 Rovers</b> walk the fence and catch anyone cutting through it.<br><b>2 Lights</b> rig the towers: once all four are up, intruders move slower.<br><b>3 Gates</b> stand the three gates.</p><p>Lose no more than one item by morning and the contract is kept.</p>`) + `<p>Walk into an intruder yourself and they are turned round; if they were carrying something, it goes back.</p>`; }
     if (s !== 'field' && s !== 'site') { const cs = S.over ? [] : calls(); if (cs.length) h = `<h2 style="color:#ffb199">Where you are needed</h2>` + cs.map(c => `<button data-view="${c.view}">${G.missionName(S, c.ms)} · ${c.name} (${D.acts[c.view].name})</button>`).join('') + `<p>Travel there with WASD before the season ends: climb (E or scroll) to cross to another map, descend (Q) to close in. Not going counts as a loss.</p>` + h; }
     return h + (s === 'spar' || s === 'patrol' ? '' : afterWork()) + window.VIEW.gauge(S);
@@ -1552,7 +1826,7 @@
     else if (d.nzplant) { const [a, g] = d.nzplant.split(':'); if (!G.nzPlant(S, a, g)) say('Not possible yet.'); }
     else if (d.stance) { const [g, st] = d.stance.split(':'); G.setStance(S, g, st); }
     else if (d.whanau) say(G.whanau(S, d.whanau));
-    else if (d.brandish) { if (confirm('In Palmerston North, showing a single firearm ends the fight and very nearly ends you. Do it?')) G.brandish(S, d.brandish); }
+    else if (d.gun) { const [gid, w] = d.gun.split(':'), W = G.WEAPONS[w]; if (W.legal || confirm(`A ${W.name.toLowerCase()} on a Palmerston North street. Whatever happens, the police will be told, and so will every parent whose kid trains at your gym. Do it?`)) { startGun(gid, w); say('Stay behind something.'); } }
     full();
   }
 
@@ -1570,6 +1844,6 @@
     if (!raf) raf = requestAnimationFrame(frame);
   }
   // test hook: run the current scene forward without waiting for animation frames
-  function _tick(n, dt) { const f = { field: stepField, site: stepSite, bench: stepBench, tutor: stepTutor, boat: stepBoat, corridor: stepCorridor, watch: stepWatch, escort: stepEscort, patrol: stepPatrol, spar: stepSpar }; for (let i = 0; i < n && mode && !mode.done && f[mode.type]; i++) f[mode.type](dt || 0.05); return mode; }
-  window.PLAY = { mount, wants, endSeason, _tick, _render: render, _end: () => { mode = null; }, _zoom: zoomBy, _build: kind => { S.jobs = [{ kind, val: 5, x: 2, y: 2, by: null, claim: -1 }]; S.pendingBuild = 0; S.runSite = 'home'; startBuild(); return mode; }, _pull: (x, y) => { mouse.x = mode.A.x; mouse.y = mode.A.y; buildDown(); mouse.x = x; mouse.y = y; buildMove(); buildUp(); return mode; }, _S: () => S, _cam: cam, _zooms: zoom, _keys: keys, _mouse: mouse, _start: (k, a) => ({ field: () => startField(a || 'fascist', 'bp'), boat: startBoat, escort: startEscort, bench: () => startBench(a || 'tractor'), tutor: () => { S.jobs = [{ kind: 'tutor', val: 2, x: 1, y: 1, by: null, claim: -1 }]; S.pendingBuild = 0; startTutor(); }, site: () => startSite(a || 'works', 'levin'), spar: () => startSpar(), corridor: startCorridor, watch: () => startWatch(() => {}) })[k]() };
+  function _tick(n, dt) { const f = { field: stepField, mill: stepMill, dig: stepDig, pour: stepPour, gun: stepGun, site: stepSite, bench: stepBench, tutor: stepTutor, boat: stepBoat, corridor: stepCorridor, watch: stepWatch, escort: stepEscort, patrol: stepPatrol, spar: stepSpar }; for (let i = 0; i < n && mode && !mode.done && f[mode.type]; i++) f[mode.type](dt || 0.05); return mode; }
+  window.PLAY = { mount, wants, endSeason, _tick, _render: render, _end: () => { mode = null; }, _zoom: zoomBy, _build: kind => { S.jobs = [{ kind, val: 5, x: 2, y: 2, by: null, claim: -1 }]; S.pendingBuild = 0; S.runSite = 'home'; startBuild(); return mode; }, _pull: (x, y) => { mouse.x = mode.A.x; mouse.y = mode.A.y; buildDown(); mouse.x = x; mouse.y = y; buildMove(); buildUp(); return mode; }, _S: () => S, _cam: cam, _zooms: zoom, _keys: keys, _mouse: mouse, _start: (k, a) => ({ field: () => startField(a || 'fascist', 'bp'), boat: startBoat, gun: () => startGun('bp', a || 'pistol'), escort: startEscort, bench: () => startBench(a || 'tractor'), tutor: () => { S.jobs = [{ kind: 'tutor', val: 2, x: 1, y: 1, by: null, claim: -1 }]; S.pendingBuild = 0; startTutor(); }, site: () => startSite(a || 'works', 'levin'), spar: () => startSpar(), corridor: startCorridor, watch: () => startWatch(() => {}) })[k]() };
 })();

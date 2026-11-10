@@ -1,11 +1,11 @@
 // KAITIAKI — interface
 (function () {
   const G = window.G, D = G.DATA, $ = id => document.getElementById(id);
-  const KEY = 'kaitiaki-save-v12';
+  const KEY = 'kaitiaki-save-v13';
   let S = load() || G.newState(), tab = 'All', result = null;
   { const m = /[?&]start=([2-5])/.exec(location.search); if (m) { S = G.newState(); Object.assign(S.policy, { wages: 'max', prices: 'low', credit: 'generous' }); G.autoPlay(S, +m[1]); history.replaceState(null, '', location.pathname); } } // ?start=5 lets the bot play up to a scale
 
-  function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); return s && s.v === 11 ? s : null; } catch (e) { return null; } }
+  function load() { try { const s = JSON.parse(localStorage.getItem(KEY)); return s && s.v === 12 ? s : null; } catch (e) { return null; } }
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
 
   function money(k) { // k = thousands of dollars
@@ -20,7 +20,7 @@
   const NAMES = { cash: 'Cash', mana: 'Mana', hands: 'Hands', industry: 'Industry', security: 'Security', tech: 'Tech', influence: 'Influence', voters: 'List', mandate: 'Mandate', cohesion: 'Cohesion', consent: 'Consent', slots: 'slots', built: 'machines built', sparWins: 'sparring wins', patrolWins: 'clean patrols', boatWins: 'sea patrols', propWorks: 'property works you built', roadWorks: 'road jobs you ran', corridorLegs: 'corridor convoys driven', sealanes: 'open sea lanes (of 6)', footholds: 'foothold to remove', timber: 'timber supply (a sawmill fed on the map)', steel: 'steel supply (a steel mill fed on the map)', food: 'food chains on the map', revived: 'regions brought back (a plant there for two years)' };
   const nm = k => (k === 'voters' ? listName() : k.startsWith('rel:') ? D.partners[k.slice(4)] + ' ≥ 60' : NAMES[k] || k);
   const SEASONS = ['Raumati · summer', 'Ngahuru · autumn', 'Takurua · winter', 'Kōanga · spring'];
-  const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V'];
+  const ROMAN = ['', 'I', 'II', 'III', 'IV', 'V', 'VI'];
 
   function chips(p) {
     const c = G.cost(S, p), out = [], bad = G.blockers(S, p);
@@ -56,7 +56,7 @@
     const inc = G.income(S), act = D.acts[S.act];
     $('scale').textContent = `Scale ${ROMAN[S.view]} · ${D.acts[S.view].sub}`;
     $('date').textContent = `${SEASONS[S.turn % 4]} ${2027 + Math.floor(S.turn / 4)}`;
-    $('steps').innerHTML = [1, 2, 3, 4, 5].map(i => `<button data-view="${i}" ${i <= S.act ? '' : 'disabled'} class="${i === S.view ? 'now' : i <= S.act ? 'past' : ''}" title="${i <= S.act ? 'Zoom to this scale' : 'Not reached yet'}">${D.acts[i].name}</button>`).join('');
+    $('steps').innerHTML = [1, 2, 3, 4, 5].concat(G.worldOpen(S) ? [6] : []).map(i => `<button data-view="${i}" ${i <= S.act || i === 6 ? '' : 'disabled'} class="${i === S.view ? 'now' : i <= S.act || i === 6 ? 'past' : ''}" title="${i <= S.act || i === 6 ? 'Zoom to this scale' : 'Not reached yet'}">${D.acts[i].name}</button>`).join('');
     $('goal').textContent = S.done.ring ? 'The Compact is signed and the ring is up. There is nothing left to build; the watch keeps itself.' : S.won ? 'The Compact is signed and the watch runs itself. One thing left: the sky tether, then the orbital ring.' : act.goal;
 
     const stat = (label, val, d) => `<div class="stat"><small>${label}</small><b>${val}</b>${d ? `<i class="${d.startsWith('−') ? 'neg' : ''}">${d}</i>` : ''}</div>`;
