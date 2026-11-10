@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kaitiaki — from the street to the sea</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <div class="brand"><h1>KAITIAKI</h1><span id="scale"></span></div>
+  <div id="steps" class="steps"></div>
+  <div class="head-r"><span id="date"></span><button id="end" class="primary">End season ▸</button><button id="menu" title="New game">⟲</button></div>
+</header>
+<div id="stats" class="stats"></div>
+<main>
+  <aside class="left">
+    <section><h2>Objective</h2><p id="goal"></p></section>
+    <section><h2>Kaupapa</h2><div id="policies"></div></section>
+    <section id="meters"></section>
+    <section><h2>Log</h2><div id="log" class="log"></div></section>
+  </aside>
+  <div class="centre">
+    <div id="scene" class="scene"></div>
+    <div class="bar"><div id="tabs" class="tabs"></div><div id="slots" class="slots"></div></div>
+    <div id="active" class="active"></div>
+    <div id="cards" class="cards"></div>
+    <details id="horizon" class="horizon"><summary>On the horizon</summary><div id="horizon-list"></div></details>
+  </div>
+</main>
+<div id="modal" class="modal"><div class="box"><h2 id="m-title"></h2><p id="m-text"></p><div id="m-choices"></div></div></div>
+<script src="data.js"></script>
+<script src="engine.js"></script>
+<script src="play.js"></script>
+<script src="view.js"></script>
+<script src="ui.js"></script>
+</body>
+</html>
