@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Kaitiaki — from the street to the sea</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -15,10 +17,10 @@
 <div id="stats" class="stats"></div>
 <main>
   <aside class="left">
-    <section><h2>Objective</h2><p id="goal"></p></section>
-    <section><h2>Kaupapa</h2><div id="policies"></div></section>
-    <section id="meters"></section>
-    <section><h2>Log</h2><div id="log" class="log"></div></section>
+    <details class="sec" open><summary>Objective</summary><p id="goal"></p></details>
+    <details class="sec" open><summary>Kaupapa</summary><div id="policies"></div></details>
+    <details class="sec" open><summary>Powers and partners</summary><div id="meters"></div></details>
+    <details class="sec" open><summary>Log</summary><div id="log" class="log"></div></details>
   </aside>
   <div class="centre">
     <div id="scene" class="scene"></div>
@@ -29,6 +31,7 @@
   </div>
 </main>
 <div id="modal" class="modal"><div class="box"><h2 id="m-title"></h2><p id="m-text"></p><div id="m-choices"></div></div></div>
+<script>if (innerWidth < 860) document.querySelectorAll("details.sec").forEach(d => d.removeAttribute("open"));</script>
 <script src="data.js"></script>
 <script src="engine.js"></script>
 <script src="play.js"></script>

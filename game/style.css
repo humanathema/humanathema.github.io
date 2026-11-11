@@ -144,3 +144,48 @@ svg.sea .river { stroke-width:2; }
 #m-choices small { display:block; color:var(--muted); font-size:11.5px; }
 
 .side details { margin-bottom:6px; } .side summary { cursor:pointer; margin-bottom:4px; }
+
+/* ── collapsible side sections, phone layout, fullscreen map, touch controls ── */
+details.sec { background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:8px 12px; margin-bottom:12px; }
+details.sec > summary { cursor:pointer; font-size:11px; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); font-weight:700; padding:2px 0; }
+details.sec[open] > summary { margin-bottom:8px; }
+details.sec:has(> #meters:empty) { display:none; }
+.modal { z-index:100; }
+.cv-wrap { position:relative; display:inline-block; width:100%; max-width:760px; line-height:0; }
+.cv-wrap canvas.play { max-width:none; }
+.cv-btns { position:absolute; top:30px; right:6px; display:flex; flex-direction:column; gap:6px; line-height:1; }
+.cv-btns button, .touch button { background:rgba(8,12,14,.62); border:1px solid rgba(255,255,255,.28); color:#fff; border-radius:8px; font-size:15px; line-height:1; padding:7px 9px; -webkit-user-select:none; user-select:none; touch-action:none; -webkit-tap-highlight-color:transparent; }
+.cv-btns .fs-only { display:none; }
+.touch { position:absolute; inset:0; pointer-events:none; display:none; line-height:1; }
+.scene.touchy .touch { display:block; }
+.touch .pad { position:absolute; left:8px; bottom:8px; width:132px; height:132px; pointer-events:none; }
+.touch .pad button { position:absolute; width:44px; height:44px; padding:0; font-size:18px; pointer-events:auto; }
+.touch .pad .u { left:44px; top:0; } .touch .pad .d { left:44px; top:88px; } .touch .pad .l { left:0; top:44px; } .touch .pad .r { left:88px; top:44px; }
+.touch .acts { position:absolute; right:8px; bottom:8px; display:flex; flex-wrap:wrap-reverse; justify-content:flex-end; gap:6px; max-width:52%; pointer-events:none; }
+.touch .acts button { min-width:44px; min-height:40px; font-size:12px; font-weight:700; pointer-events:auto; }
+.touch button.held { background:rgba(255,211,0,.55); color:#111; }
+.scene.full { position:fixed; inset:0; z-index:60; margin:0; border:0; border-radius:0; padding:0; background:#0c0f12; align-items:center; justify-content:center; }
+.scene.full .scene-main { flex:none; display:flex; align-items:center; justify-content:center; width:100%; height:100%; }
+.scene.full .cv-wrap { width:min(100vw, calc(100dvh * 720 / 440)); max-width:none; }
+.scene.full .cv-btns .fs-only { display:block; }
+.scene.full .side { display:none; position:absolute; right:0; top:0; bottom:0; width:min(280px, 78vw); overflow:auto; background:var(--panel); border-left:1px solid var(--line); padding:12px; z-index:2; }
+.scene.full.showside .side { display:block; }
+body.fs { overflow:hidden; }
+@media (max-width:860px) {
+  header { gap:8px; padding:8px 10px; }
+  .brand h1 { font-size:15px; letter-spacing:.14em; } .brand span { display:block; margin:0; font-size:11px; }
+  .steps { order:3; flex-basis:100%; min-width:0; overflow-x:auto; } .steps button { flex:none; padding:5px 10px; }
+  .stats { flex-wrap:nowrap; overflow-x:auto; padding:6px 10px; -webkit-overflow-scrolling:touch; } .stat { flex:none; min-width:74px; padding:3px 8px; } .stat b { font-size:13px; }
+  main { padding:8px; gap:8px; } .centre { order:-1; min-width:0; }
+  .scene { padding:6px; flex-direction:column; } .side { width:auto; }
+  .side button { padding:9px 10px; font-size:13px; }
+  .cards { grid-template-columns:1fr; }
+}
+/* portrait phones: controls sit under the map, not over it; in fullscreen they overlay, clear of the altimeter */
+@media (max-width:860px) {
+  .scene.touchy:not(.full) .touch { position:static; display:flex; justify-content:space-between; align-items:flex-end; gap:8px; padding-top:8px; pointer-events:auto; }
+  .scene.touchy:not(.full) .touch .pad { position:relative; left:auto; bottom:auto; flex:none; }
+  .scene.touchy:not(.full) .touch .acts { position:static; max-width:none; flex:1; }
+  .scene.touchy:not(.full) .touch button { background:var(--panel2); border-color:var(--line); }
+}
+.scene.full .touch .pad { left:100px; }

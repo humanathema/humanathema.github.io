@@ -1582,6 +1582,7 @@
     raf = requestAnimationFrame(frame);
   }
   function render(dt) {
+    touchSync();
     if (mode && /^(build|tutor|mill|dig|pour)$/.test(mode.type) && !mode.done && S.pendingBuild === null) mode = null;
     if (!mode && !modalUp() && S.mission.length && !S.over) { // things that come to you, whether you were ready or not
       const mi = S.mission.findIndex(x => !G.located(x)), ms = mi < 0 ? '' : S.mission.splice(mi, 1)[0];
@@ -1830,12 +1831,33 @@
     full();
   }
 
+  // On-screen controls and the fullscreen map. The buttons press the same keys the keyboard does, so nothing else changes.
+  let touchOn = null, fullOn = false, touchSig = '';
+  function setFull(on) { fullOn = on; if (!host) return; host.classList.toggle('full', on); host.classList.remove('showside'); document.body.classList.toggle('fs', on); const de = document.documentElement; try { if (on && de.requestFullscreen && !document.fullscreenElement) de.requestFullscreen().catch(() => { }); else if (!on && document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => { }); } catch (x) { } }
+  document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement && fullOn) setFull(false); });
+  const TACT = { // which buttons each scene needs: [label, key]
+    map: [['Down', 'q'], ['Up', 'e']], region: [['Down', 'q'], ['Up', 'e'], ['Fly', 'v']], run: [], home: [['Up', 'e']],
+    spar: [['Punch', 'j'], ['Kick', 'k'], ['Shove', 'l'], ['Block', ' ']], field: [['Punch', 'j'], ['Kick', 'k'], ['Shove', 'l'], ['Block', ' '], ['Form', 'f'], ['Split', 'g']],
+    gun: [['Fire', 'j'], ['Snap', 'k'], ['Rush', 'l'], ['Reload', 'r']], site: [['1', '1'], ['2', '2'], ['3', '3']], bench: [['Plate', 'j'], ['Shaft', 'k'], ['Gear', 'l'], ['Seat', ' ']],
+    mill: [['25', '1'], ['50', '2'], ['100', '3'], ['Undo', 'Backspace'], ['Saw', ' ']], dig: [['Dig', 'j'], ['Tip/Load', 'k']], pour: [['1', '1'], ['2', '2'], ['3', '3'], ['Truck', 't']], boat: [['Fleet', 'f']],
+  };
+  function touchSync() {
+    if (!host || !touchOn) return; const sc = screen(), key = TACT[sc] ? sc : sc === 'region' ? 'region' : CAMV[sc] ? 'map' : sc, sig = key + (mode && mode.done ? ':done' : '');
+    if (sig === touchSig) return; touchSig = sig; const acts = host.querySelector('.touch .acts'), pad = host.querySelector('.touch .pad'); if (!acts) return;
+    const list = mode && mode.done ? [['Continue', 'Enter']] : TACT[key] || [];
+    acts.innerHTML = list.map(q => `<button data-k="${q[1]}">${q[0]}</button>`).join('');
+    pad.style.display = /^(build|tutor|escort|watch|bench)$/.test(sc) ? 'none' : '';
+  }
   function mount(state, el, lightCb, fullCb) {
     S = state; light = lightCb; full = fullCb;
     if (S.act !== seenAct) { selMachine = null; charge = -1; seenAct = S.act; }
     if (!cv || !cv.isConnected || host !== el) {
       host = el;
-      el.innerHTML = `<div class="scene-main"><canvas width="${CW}" height="${CH}" class="play"></canvas></div><div class="side"></div>`;
+      el.innerHTML = `<div class="scene-main"><div class="cv-wrap"><canvas width="${CW}" height="${CH}" class="play"></canvas><div class="touch"><div class="pad"><button class="u" data-k="w">▲</button><button class="l" data-k="a">◀</button><button class="r" data-k="d">▶</button><button class="d" data-k="s">▼</button></div><div class="acts"></div></div><div class="cv-btns"><button data-ui="full" title="Fullscreen map">⛶</button><button data-ui="touch" title="On-screen controls">🎮</button><button data-ui="side" class="fs-only" title="Panel">☰</button><button data-ui="end" class="fs-only" title="End season">▸▸</button></div></div></div><div class="side"></div>`;
+      touchSig = ''; if (touchOn === null) touchOn = matchMedia('(pointer: coarse)').matches || innerWidth < 860; el.classList.toggle('touchy', touchOn); el.classList.toggle('full', fullOn);
+      el.querySelector('.cv-btns').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; const u = b.dataset.ui; if (u === 'full') setFull(!fullOn); else if (u === 'touch') { touchOn = !touchOn; host.classList.toggle('touchy', touchOn); } else if (u === 'side') host.classList.toggle('showside'); else if (u === 'end') { const eb = document.getElementById('end'); if (eb) eb.click(); } });
+      const tc = el.querySelector('.touch'), press = (e, down) => { const b = e.target.closest('button'); if (!b || !b.dataset.k) return; e.preventDefault(); b.classList.toggle('held', down); const k = b.dataset.k; window.dispatchEvent(new KeyboardEvent(down ? 'keydown' : 'keyup', { key: k, bubbles: true })); if (down && b.setPointerCapture) { try { b.setPointerCapture(e.pointerId); } catch (x) { } } };
+      tc.addEventListener('pointerdown', e => press(e, true)); tc.addEventListener('pointerup', e => press(e, false)); tc.addEventListener('pointercancel', e => press(e, false)); tc.addEventListener('contextmenu', e => e.preventDefault());
       cv = el.querySelector('canvas'); ctx = cv.getContext('2d'); side = el.querySelector('.side');
       cv.addEventListener('pointerdown', onDown); cv.addEventListener('pointermove', pos); side.addEventListener('click', onSide);
       cv.addEventListener('wheel', e => { if (mode || modalUp() || (S.view === 1 && (S.jobs.length || S.act < 2))) return; e.preventDefault(); zoomBy(Math.exp(-clamp(e.deltaY, -60, 60) * 0.004)); }, { passive: false });
