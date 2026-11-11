@@ -569,13 +569,15 @@
   }
   function nzChains(S) { // which resource feeds which plant, and what each is worth
     const on = nzDist(S, 'pn'), used = {}, out = [], unit = 2000, hubM = 1 + 0.15 * S.nz.hub;
-    for (const id in S.nz.fac) S.nz.fac[id].forEach(good => {
+    // A plant out where the resource is gets first call on it: a rural or Māori-land plant takes its goods back from
+    // whichever city was processing them, so building in the cities first never locks a region out of reviving.
+    Object.keys(S.nz.fac).sort((x, y) => (NZN[x].kind === 'city') - (NZN[y].kind === 'city')).forEach(id => S.nz.fac[id].forEach(good => {
       const d = nzDist(S, id), f = NZN[id], cap = f.kind === 'city' && S.nz.hub >= 2 ? 2 : 1;
       DATA.nz.nodes.filter(r => r.res === good && !used[r.id] && d[r.id] !== undefined && on[id] !== undefined).sort((a, b) => d[a.id] - d[b.id]).slice(0, cap).forEach(r => {
         used[r.id] = true; const loc = f.kind === 'city' ? 1 : f.kind === 'rural' ? 0.85 : 0.7, lv = nzRev(S, id);
         out.push({ res: r.id, at: id, good, hops: d[r.id], cash: unit * Math.max(0.4, 1 - 0.1 * d[r.id]) * loc * hubM * (1 + 0.12 * lv) * (1 + 0.05 * ((S.nz.line || {})[id] || 0)), mana: (f.kind === 'iwi' ? 0.5 + 0.2 * lv : 0) - (r.kind === 'iwi' && f.kind !== 'iwi' ? 0.5 : 0), voters: f.kind === 'rural' ? 300 + 150 * lv : 0 });
       });
-    });
+    }));
     DATA.nz.nodes.forEach(r => { if (r.res && !used[r.id] && on[r.id] !== undefined) out.push({ res: r.id, at: null, good: r.res, hops: 0, cash: unit * 0.25, mana: 0, voters: 0 }); }); // trucked out raw
     return out;
   }
